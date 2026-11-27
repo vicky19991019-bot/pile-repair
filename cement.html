@@ -88,14 +88,15 @@ function lnd(x){const r={A1:0,A2:0,B1:0,B2:0};(x.ln||[]).forEach(l=>{if(r[l.b]!=
 function calc(){
   const st={};BR.forEach(b=>st[b]=num(S.base[b]));let last=null;
   Object.keys(D).sort().forEach(d=>{if(d<=S.baseDate)return;const x=D[d],bi=bin(x),lo=lnd(x);
-    const u=U(x);BR.forEach(b=>st[b]+=bi[b]-u[b]+lo[b]);if(u.A1>0||u.B1>0||u.B2>0)last=d});
-  const o={},GR={A1:['A1'],B1:['B1','B2'],B2:['B1','B2']};
+    const u=U(x);BR.forEach(b=>st[b]+=bi[b]-u[b]+lo[b]);if(u.A1>0||u.A2>0||u.B1>0||u.B2>0)last=d});
+  const o={},GR={A1:['A1','A2'],A2:['A1','A2'],B1:['B1','B2'],B2:['B1','B2']};
   BR.forEach(b=>{const r={stock:st[b],act:!!GR[b],grp:GR[b]&&GR[b].length>1};
     if(r.act){let sum=0;const gs=GR[b].reduce((a,k)=>a+st[k],0);if(last){const from=shift(last,-6);Object.keys(D).forEach(d=>{if(d>=from&&d<=last&&d>S.baseDate){const u=U(D[d]);GR[b].forEach(k=>sum+=u[k])}})}
       r.gs=gs;r.thr=sum;r.avg=sum/7;r.left=r.avg?gs/r.avg:null;r.sug=Math.ceil(Math.max(0,sum-gs));
       r.s=st[b]<0?'neg':sum===0?'none':gs<sum?'low':'ok'}else r.s='off';
     o[b]=r});
   o.last=last;return o}
+const GL=b=>b[0]==='A'?'A1＋A2':'B1＋B2';
 function strip(){const c=calc();
   $('#strip').innerHTML=BR.map(b=>`<div class="sc ${c[b].s}"><span class="mut">${NM[b]}</span><br><b>${f1(c[b].stock)}</b> 包 <span class="mut ${c[b].s}">${ST[c[b].s]}</span></div>`).join('')}
 function tabs(){$('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="${tab===k?'on':''}" onclick="tab='${k}';arm=false;editI='';armI='';view()">${n}</button>`).join('')}
@@ -202,10 +203,10 @@ async function del(){if(busy)return;const b=$('#dl');if(!arm){arm=true;b.textCon
   busy=true;try{const before=derive();await rmDay(cur);const m3=await sync3d(before);arm=false;toast('已刪除'+m3);strip();view()}catch(e){toast('刪除未完成：'+e.message)}finally{busy=false}}
 function ovw(){const c=calc();
   const low=BR.filter(b=>c[b].s==='low'||c[b].s==='neg');
-  return (low.length?`<div class="card low"><b>🚨 ${low.map(b=>NM[b]).join('、')}${low.some(b=>c[b].grp)?'（不垂流 B1＋B2 合計）':''} 庫存告急，請盡快叫貨</b></div>`:'')+
+  return (low.length?`<div class="card low"><b>🚨 ${low.map(b=>NM[b]).join('、')}（${[...new Set(low.map(b=>(b[0]==='A'?'垂流 ':'不垂流 ')+GL(b)+' 合計'))].join('、')}） 庫存告急，請盡快叫貨</b></div>`:'')+
   `<div class="grid">${BR.map(b=>{const r=c[b];return `<div class="card ${r.s==='low'||r.s==='neg'?'low':''}"><div class="mut">${NM[b]}</div><div class="big ${r.s}">${f1(r.stock)} 包</div><div class="${r.s}">${ST[r.s]}</div>
-  ${r.act?`<div class="kv">${r.grp?`<span>B1＋B2 合計庫存</span><span>${f1(r.gs)} 包</span>`:''}<span>7天警戒門檻${r.grp?'（B1＋B2）':''}</span><span>${f1(r.thr)} 包</span><span>近7天日均</span><span>${f1(r.avg)} 包</span><span>剩餘可用天數</span><span>${r.left==null?'—':f1(r.left)+' 天'}</span><span>建議補貨</span><span>${r.sug?r.sug+' 包':'無需補貨'}</span></div>`:'<div class="mut" style="margin-top:8px">僅顯示庫存，不警戒</div>'}</div>`}).join('')}</div>
-  <p class="mut">庫存 = ${S.baseDate} 收工基準 + 之後進料 − 之後使用。A1 單獨警戒；B1、B2 都是不垂流，合併計算（1包B2＝1包B1）。以「最近有用量那天」往前7日（含當日）的總用量作警戒門檻；借出／歸還會直接加減庫存${c.last?`；目前最近用量日為 ${md(c.last)}`:''}。</p>`}
+  ${r.act?`<div class="kv">${r.grp?`<span>${GL(b)} 合計庫存</span><span>${f1(r.gs)} 包</span>`:''}<span>7天警戒門檻${r.grp?'（'+GL(b)+'）':''}</span><span>${f1(r.thr)} 包</span><span>近7天日均</span><span>${f1(r.avg)} 包</span><span>剩餘可用天數</span><span>${r.left==null?'—':f1(r.left)+' 天'}</span><span>建議補貨</span><span>${r.sug?r.sug+' 包':'無需補貨'}</span></div>`:'<div class="mut" style="margin-top:8px">僅顯示庫存，不警戒</div>'}</div>`}).join('')}</div>
+  <p class="mut">庫存 = ${S.baseDate} 收工基準 + 之後進料 − 之後使用。A1、A2 都是垂流，合併計算（1包A2＝1包A1）；B1、B2 都是不垂流，合併計算（1包B2＝1包B1）。以「最近有用量那天」往前7日（含當日）的總用量作警戒門檻；借出／歸還會直接加減庫存${c.last?`；目前最近用量日為 ${md(c.last)}`:''}。</p>`}
 const inR=d=>(!from||d>=from)&&(!to||d<=to);
 const pmOk=d=>pmf==='all'||(pmf==='none'?!D[d].pm:D[d].pm===pmf);
 const ipOk=d=>ipf==='all'||(ipf==='none'?!D[d].ipm:D[d].ipm===ipf);
@@ -240,7 +241,7 @@ function loanCard(){
   const person=w=>{w=String(w||'').trim();const p=w.split(/[-－]/);return p.length>1?p.slice(0,-1).join('-').trim():''};
   const who={},rs=[];Object.keys(D).sort().forEach(d=>(D[d].ln||[]).forEach(l=>{const u=unit(l.who);who[u]=who[u]||{o:0,B1:0,B2:0,A1:0,A2:0,ps:[]};if(l.k==='ret')who[u][l.b]+=num(l.n);else who[u].o+=num(l.n);const pn=person(l.who);if(pn&&!who[u].ps.includes(pn))who[u].ps.push(pn);rs.push([d,l])}));
   const ws=Object.keys(who);if(!ws.length)return `<div class="card"><h3 style="margin-top:0">借出／歸還</h3><div class="mut">目前沒有借還記錄。在「今日記錄」最下方可新增。</div></div>`;
-  return `<div class="card wrap"><h3 style="margin-top:0">借出／歸還帳（依單位合併；不算進料、不請款；1包B2＝1包B1）</h3><table><tr><th>單位</th><th>經手人</th><th>借出(包)</th><th>已還B1</th><th>已還B2</th><th>尚欠(包)</th></tr>${ws.map(w=>{const r=who[w],rt=r.A1+r.A2+r.B1+r.B2,ow=f1(r.o-rt);return `<tr><td>${esc(w)}</td><td style="text-align:left">${esc(r.ps.join('、'))}</td><td>${f1(r.o)}</td><td>${r.B1||''}</td><td>${r.B2||''}</td><td class="${ow>0?'low':'ok'}">${ow>0?ow:ow<0?'多還 '+(-ow):'已結清'}</td></tr>`}).join('')}</table>
+  return `<div class="card wrap"><h3 style="margin-top:0">借出／歸還帳（依單位合併；不算進料、不請款；1包B2＝1包B1、1包A2＝1包A1）</h3><table><tr><th>單位</th><th>經手人</th><th>借出(包)</th><th>已還B1</th><th>已還B2</th><th>尚欠(包)</th></tr>${ws.map(w=>{const r=who[w],rt=r.A1+r.A2+r.B1+r.B2,ow=f1(r.o-rt);return `<tr><td>${esc(w)}</td><td style="text-align:left">${esc(r.ps.join('、'))}</td><td>${f1(r.o)}</td><td>${r.B1||''}</td><td>${r.B2||''}</td><td class="${ow>0?'low':'ok'}">${ow>0?ow:ow<0?'多還 '+(-ow):'已結清'}</td></tr>`}).join('')}</table>
   <h3>借還明細（點一下可到當天修改）</h3><table><tr><th>日期</th><th>類型</th><th>品牌</th><th>包數</th><th>經手人-單位</th></tr>${rs.reverse().map(([d,l])=>`<tr class="cl" onclick="cur='${d}';tab='rec';view()"><td>${md(d)}</td><td>${l.k==='ret'?'歸還':'借出'}</td><td>${NM[l.b]||l.b}</td><td>${l.n}</td><td>${esc(l.who||'')}</td></tr>`).join('')}</table></div>`}
 async function rmDay(d){const o=D[d];if(!(await gpost({action:'day',date:d,doc:null})))throw new Error('cloud');const check=await pullCloud();if(!check||Object.prototype.hasOwnProperty.call(check.days,d)){throw new Error('雲端刪除驗證失敗，請勿重複操作');}delete D[d]}
 async function setIn(d,i){const x={...D[d],in:i},empty=Object.values(U(x)).every(n=>!n)&&K.every(k=>!num(i[k]))&&!x.note&&!(x.ln&&x.ln.length);if(empty)await rmDay(d);else await put(d,x)}

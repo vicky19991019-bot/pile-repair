@@ -98,7 +98,7 @@ html,body{height:100%;margin:0;background:linear-gradient(#e6ecf7,#f6f1ea);color
 <canvas id="c"></canvas>
 <div class="p" id="hd"><button id="toggleControls" type="button" aria-expanded="false">☰ 操作選單</button><h1>CDC 預壘樁 3D 施工進度</h1><div class="controlBody"><div style="margin-bottom:4px"><input id="q" placeholder="搜尋樁號(P125)或分區(A14)" style="width:230px;font-size:17px;padding:2px 8px;border:1px solid #d3dbea;border-radius:8px"><span class="b" id="qb">搜尋</span></div>
 <span class="b on" data-s="1">第一次開挖(現況)</span><span class="b" data-s="2">預覽 第二次</span><span class="b" data-s="3">預覽 第三次</span><span class="b" data-s="4">預覽 最終</span><br>
-<span class="b" id="dateOpen">📅 補樁日期查詢</span><span class="b on" id="mode">顯示：補樁狀態</span><span class="b" id="tr">透視土體</span><span class="b" id="cd">資訊卡</span><span class="b" id="cdcPhotoQuick">📷 施工照片</span><br><span class="b" id="un">↩ 復原</span><span class="b" id="re">↪ 重做</span><span class="b" id="hs">步驟紀錄</span><br><span class="b" id="excRestore">⬜ 未開挖（點選方格）</span><span class="b" id="excDone" style="display:none">✓ 完成開挖編輯</span><div style="margin-top:6px;font-size:12px"><a href="./" style="color:#7a87a3">首頁</a>　<a href="#" onclick="resetKey();return false" style="color:#7a87a3">重設通行碼</a></div><div class="hint" style="color:#7a87a3;margin-top:6px;font-size:13px">點選樁可標記補樁；移工自動跟進最新補樁進度，拖曳只會移動位置</div></div></div>
+<span class="b" id="dateOpen">📅 補樁日期查詢</span><span class="b on" id="mode">顯示：補樁狀態</span><span class="b" id="tr">透視土體</span><span class="b" id="cd">資訊卡</span><span class="b on" id="tpBtn">🧪 試驗管</span><span class="b" id="cdcPhotoQuick">📷 施工照片</span><br><span class="b" id="un">↩ 復原</span><span class="b" id="re">↪ 重做</span><span class="b" id="hs">步驟紀錄</span><br><span style="font-size:12px;color:#7a87a3;margin-right:2px">開挖範圍編輯：</span><span class="b" data-ep="w">⬜ 未開挖</span><span class="b" data-ep="o">🟧 進行中</span><span class="b" data-ep="g">🟩 已完成</span><span class="b" id="excDone" style="display:none">✓ 完成開挖編輯</span><div style="margin-top:6px;font-size:12px"><a href="./" style="color:#7a87a3">首頁</a>　<a href="#" onclick="resetKey();return false" style="color:#7a87a3">重設通行碼</a></div><div class="hint" style="color:#7a87a3;margin-top:6px;font-size:13px">點選樁可標記補樁；移工自動跟進最新補樁進度，拖曳只會移動位置</div></div></div>
 <section id="datePanel" aria-label="補樁日期查詢">
 <h3>📅 補樁日期查詢</h3>
 <label for="dateType">查詢方式</label><select id="dateType"><option value="day">單日</option><option value="range">日期區間</option></select>
@@ -151,8 +151,9 @@ const DEP={exp:[2.2,4.35,7.5,11.4],adm:[2.2,4.35,7.5,9.9],pl:[1.5,4.45,7.6,7.6],
 const TN={exp:'實驗棟',adm:'行政棟',pl:'左滯洪池',pr:'右滯洪池'};
 const SN={0:'未標記',1:'已修補完成',5:'已補兩次',7:'修補中'};
 const W=887.5,H=966.67,X0=-100,Y0=100;
-const G=new Set(['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','B1','B2','B3','B4','B5','B6','B′7','B′8','B′9','B′10','B′11','B′12','C1','C2','C3','D1','D2','D3','E1','E2','E3','滯BC1','滯BC2','滯BC3','滯BC4','滯BC5','滯BC6']);
-const O=new Set(['A14','B′13']);
+// 預設狀態：依 2026-11-23「CDC土方開挖本日回報」各區開挖階段狀態圖
+const G=new Set(['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','B1','B2','B3','B4','B5','B6','B′7','B′8','B′9','B′10','B′11','B′12','B′13','B′14','B′15','B′16','C1','C2','C3','D1','D2','D3','E1','E2','E3','滯BC1','滯BC2','滯BC3','滯BC4','滯BC5','滯BC6']);
+const O=new Set(['C′7','C′8','C′9','C′10','C′11','C′12','C′13','C′14','C′15','C′16']);
 const cells=[];
 function add(n,x1,x2,y1,y2,t){cells.push({n,t,s:G.has(n)?'g':O.has(n)?'o':'w',xa:x1/100,xb:x2/100,za:-y1/100,zb:-y2/100,d:0,ph:Math.random()*6})}
 'ABCDEF'.split('').forEach((r,ri)=>{for(let c=1;c<=16;c++){
@@ -165,7 +166,7 @@ add('滯BC2',-1815,-1100,-2900,-3590,'pl');add('滯BC6',-1100,-100,-2900,-3590,'
 [[-3510,-4240],[-4240,-4970],[-4970,-5700]].forEach((y,i)=>add('滯洪池A'+(i+1),14100,15265,y[0],y[1],'pr'));
 // 歷建旁保留地內縮：西緣、北緣各往建築物方向縮進，讓邊界上的樁頭露出來；相鄰分區同步加寬補滿。
 cells.forEach(c=>{if(Math.abs(c.xb-25.625)<.01&&c.za>=18.3&&c.zb<=44.6)c.xb=27.6;if(Math.abs(c.zb-18.3333)<.01&&c.xa>=25.6&&c.xb<=52.3)c.zb=19.9});
-const SK='cst2';let SV={};try{SV=JSON.parse(localStorage.getItem(SK))||{}}catch(e){}
+const SK='cst3';let SV={};try{SV=JSON.parse(localStorage.getItem(SK))||{}}catch(e){}
 if(SV.cs)cells.forEach(c=>{if(SV.cs[c.n])c.s=SV.cs[c.n]});
 const cv=document.getElementById('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
@@ -616,11 +617,37 @@ PILES.forEach((p,i)=>{const tp=p[3]/100,bt=p[4]/100,d=DEP[zt[i]],bd=[0,d[0],d[1]
  for(let j=0;j<NL;j++){const hi=Math.min(tp,-bd[j]),lo=Math.max(bt,j<4?-bd[j+1]:-1e3);
   if(hi-lo>.01){D.position.set(p[1],(hi+lo)/2,p[2]);D.scale.set(.4,hi-lo,.4)}else{D.position.set(p[1],0,p[2]);D.scale.set(0,0,0)}
   D.updateMatrix();segs[j].setMatrixAt(i,D.matrix)}});
+// ── 試驗管：樁頂凸出一根管子（黃黑警示膠帶＋紅色管蓋），旁邊標示樁號 ──
+// 要增減試驗管樁號，只要改下面這一行。
+const TEST_PIPES=[23,55,100,133,175,201,251,283,340,378,408,432,475];
+const tpGroup=new THREE.Group();tpGroup.name='CDC_試驗管';S.add(tpGroup);
+const tpObjs=[],tpSet=new Set(TEST_PIPES);let tpShow=true;
+(function(){
+ const cv=document.createElement('canvas');cv.width=32;cv.height=128;const x=cv.getContext('2d');
+ for(let i=0;i<8;i++){x.fillStyle=i%2?'#1d1d1d':'#ffd21f';x.fillRect(0,i*16,32,16)}
+ const tex=new THREE.CanvasTexture(cv);
+ const pipeMat=new THREE.MeshLambertMaterial({map:tex}),capMat=lam(0xe0262b);
+ const pipeGeo=new THREE.CylinderGeometry(.13,.13,1.6,12),capGeo=new THREE.CylinderGeometry(.2,.2,.32,12);
+ function tag(n){const c=document.createElement('canvas');c.width=256;c.height=96;const g=c.getContext('2d');
+  g.fillStyle='rgba(255,255,255,.95)';g.fillRect(0,0,256,96);g.strokeStyle='#e0262b';g.lineWidth=6;g.strokeRect(3,3,250,90);
+  g.fillStyle='#c41d22';g.textAlign='center';g.font='bold 40px sans-serif';g.fillText('P'+n,128,44);
+  g.fillStyle='#26354c';g.font='bold 30px sans-serif';g.fillText('試驗管',128,82);
+  const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true}));sp.scale.set(5.2,1.95,1);sp.renderOrder=20;return sp}
+ TEST_PIPES.forEach(n=>{const i=n-1,p=PILES[i];if(!p)return;const top=p[3]/100;
+  const pipe=new THREE.Mesh(pipeGeo,pipeMat);pipe.position.set(p[1],top+.8,p[2]);pipe.castShadow=true;
+  const cap=new THREE.Mesh(capGeo,capMat);cap.position.set(p[1],top+1.75,p[2]);cap.castShadow=true;
+  const lb=tag(n);lb.position.set(p[1],Math.max(top+1.9,0)+2.6,p[2]);
+  // 標籤和樁頂之間的細引線：樁頂還埋在土裡時也看得出是哪一支
+  const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(p[1],top+1.9,p[2]),new THREE.Vector3(p[1],lb.position.y-1,p[2])]),new THREE.LineBasicMaterial({color:0xe0262b,depthTest:false}));ln.renderOrder=19;
+  [pipe,cap].forEach(o=>{o.userData.tpi=i;tpObjs.push(o)});
+  tpGroup.add(pipe,cap,lb,ln)});
+})();
 let mode='repair';
 const counts=()=>{const c={0:0,1:0,5:0,7:0};LS[stage-1].forEach(s=>c[s]++);return c};
 function paint(){PILES.forEach((p,i)=>{for(let j=0;j<NL;j++)segs[j].setColorAt(i,new THREE.Color(mode=='repair'?(j<4?PC[LS[j][i]]:NEU):DC[p[4]]))});segs.forEach(m=>m.instanceColor.needsUpdate=true);legend();cards()}
 function legend(){const c=counts();document.getElementById('lg').innerHTML=mode=='repair'?
- '<b>第'+stage+'層補樁</b><i style="background:#45d17c"></i>已補完 '+c[1]+'<i style="background:#ff6b6b"></i>已補兩次 '+c[5]+(c[7]?'<i style="background:#ffc247"></i>修補中 '+c[7]:'')+'<i style="background:#c2cbdc"></i>未標記 '+c[0]+'<br><b>分區</b><i style="background:#8fdcab"></i>完成<i style="background:#ffb36b"></i>開挖中<i style="background:#f3f5f9;border:1px solid #ccd"></i>未開挖<i style="background:#9cc8ff"></i>預覽<br><small>移工會自動站在最新補樁位置；拖曳怪手到新格＝原格完成、新格開挖</small>':
+ '<b>第'+stage+'層補樁</b><i style="background:#45d17c"></i>已補完 '+c[1]+'<i style="background:#ff6b6b"></i>已補兩次 '+c[5]+(c[7]?'<i style="background:#ffc247"></i>修補中 '+c[7]:'')+'<i style="background:#c2cbdc"></i>未標記 '+c[0]+(tpShow?'<i style="background:#e0262b"></i>試驗管 '+TEST_PIPES.length+' 支':'')+'<br><b>分區</b><i style="background:#8fdcab"></i>完成<i style="background:#ffb36b"></i>進行中<i style="background:#f3f5f9;border:1px solid #ccd"></i>未開挖<i style="background:#9cc8ff"></i>預覽<br><small>移工會自動站在最新補樁位置；拖曳怪手到新格＝原格完成、新格開挖</small>':
  '<b>樁底高程</b>'+Object.keys(DC).sort((a,b)=>a-b).map(k=>'<i style="background:#'+DC[k].toString(16).padStart(6,'0')+'"></i>GL'+(k/100).toFixed(2)+'m('+dcnt[k]+'支)').join('')}
 // 怪手
 function mkExc(){const g=new THREE.Group(),sw=new THREE.Group();g.add(sw);
@@ -1009,7 +1036,7 @@ const ringM=new THREE.Mesh(new THREE.RingGeometry(11.4,12,64).rotateX(-Math.PI/2
 let stage=1,glass=false,showCards=false;
 const cardDef=[
  {c:'#45d17c',a:()=>new THREE.Vector3(18,16,-3),h:()=>{const c=counts();return['第'+stage+'層補樁',[['已完成','<b>'+c[1]+' / '+PILES.length+'</b>'],['已補兩次','<b>'+c[5]+'</b>'],['完成率','<b>'+Math.round(c[1]/PILES.length*100)+'%</b>']]]}},
- {c:'#ff8a3d',a:()=>{const o=ocen()||{x:69,z:28};return new THREE.Vector3(o.x,13,o.z)},h:()=>{const n={g:0,o:0,w:0},sn=new Set();cells.forEach(c=>{if(!sn.has(c.n)){sn.add(c.n);n[c.s]++}});return stage==1?['開挖進度',[['階段','<b>第一次 GL-2.2m</b>'],['完成','<b>'+n.g+' 區</b>'],['開挖中','<b>'+n.o+' 區</b>']]]:['開挖預覽',[['階段','<b>'+['','','第二次','第三次','最終'][stage]+'</b>'],['行政棟','<b>GL-'+DEP.adm[stage-1]+'m</b>'],['實驗棟','<b>GL-'+DEP.exp[stage-1]+'m</b>']]]}},
+ {c:'#ff8a3d',a:()=>{const o=ocen()||{x:69,z:28};return new THREE.Vector3(o.x,13,o.z)},h:()=>{const n={g:0,o:0,w:0},sn=new Set();cells.forEach(c=>{if(!sn.has(c.n)){sn.add(c.n);n[c.s]++}});return stage==1?['開挖進度',[['階段','<b>第一次 GL-2.2m</b>'],['完成','<b>'+n.g+' 區</b>'],['進行中','<b>'+n.o+' 區</b>']]]:['開挖預覽',[['階段','<b>'+['','','第二次','第三次','最終'][stage]+'</b>'],['行政棟','<b>GL-'+DEP.adm[stage-1]+'m</b>'],['實驗棟','<b>GL-'+DEP.exp[stage-1]+'m</b>']]]}},
  {c:'#ffc83d',a:()=>excs[0]?new THREE.Vector3(excs[0].c.cx,10,excs[0].c.cz):new THREE.Vector3(),h:()=>['怪手',[['數量','<b>'+excs.length+' 台</b>'],['狀態','<b>開挖中</b>']]]},
  {c:'#5b6cff',a:()=>workers[0]?new THREE.Vector3(workers[0].w.position.x,9,workers[0].w.position.z):new THREE.Vector3(),h:()=>['移工',[['人數','<b>'+workers.length+' 人</b>'],['作業','<b>樁頭補修</b>']]]},
  {c:'#c0805f',a:()=>new THREE.Vector3(38.5,12,36.5),h:()=>['歷史建築',[['位置','<b>基地中央</b>'],['模型','<b>示意</b>']]]}];
@@ -1088,24 +1115,27 @@ function dragEnd(){const d=drag,x=d.x;drag=null;let ch='';if(d.kind=='g'){x.held
  // 拖曳移工只改變站的位置，不再自動把樁標記為補完（要改狀態請點樁號後按按鈕）
  saveSt();cards();if(ch)pushH(ch)}
 function showPile(i){const p=PILES[i];inf.style.display='block';
- inf.innerHTML='<b>P'+p[0]+'</b>('+TN[zt[i]]+')<br>樁底 GL'+(p[4]/100).toFixed(2)+'m・樁頂 GL'+(p[3]/100).toFixed(2)+'m<br>樁身長 '+((p[3]-p[4])/100).toFixed(2)+'m<br>第'+stage+'層：<b>'+SN[LS[stage-1][i]]+'</b><br>'+[[0,'未標記'],[1,'已補完'],[5,'已補兩次']].map(b=>'<span class="b'+(LS[stage-1][i]==b[0]?' on':'')+'" data-k="'+b[0]+'">'+b[1]+'</span>').join('')+'<br>'+(()=>{if(LS[stage-1][i]==0)return'';if(p[0]<=83)return'<span style="color:#2b6b44">補樁日期：<b>2026-10-31</b></span><br>';const m=META[stage+'_'+p[0]];return m&&m[0]?'<span style="color:#2b6b44">補樁日期：<b>'+m[0]+'</b><br>施工組別：<b>'+(m[1]||'—')+'</b></span><br>':''})()+'<small>各層：'+LS.map(l=>SN2[l[i]]).join(' / ')+'</small>';
+ inf.innerHTML='<b>P'+p[0]+'</b>('+TN[zt[i]]+')<br>樁底 GL'+(p[4]/100).toFixed(2)+'m・樁頂 GL'+(p[3]/100).toFixed(2)+'m<br>樁身長 '+((p[3]-p[4])/100).toFixed(2)+'m'+(tpSet.has(p[0])?'<br><b style="color:#c41d22">🧪 有試驗管</b>':'')+'<br>第'+stage+'層：<b>'+SN[LS[stage-1][i]]+'</b><br>'+[[0,'未標記'],[1,'已補完'],[5,'已補兩次']].map(b=>'<span class="b'+(LS[stage-1][i]==b[0]?' on':'')+'" data-k="'+b[0]+'">'+b[1]+'</span>').join('')+'<br>'+(()=>{if(LS[stage-1][i]==0)return'';if(p[0]<=83)return'<span style="color:#2b6b44">補樁日期：<b>2026-10-31</b></span><br>';const m=META[stage+'_'+p[0]];return m&&m[0]?'<span style="color:#2b6b44">補樁日期：<b>'+m[0]+'</b><br>施工組別：<b>'+(m[1]||'—')+'</b></span><br>':''})()+'<small>各層：'+LS.map(l=>SN2[l[i]]).join(' / ')+'</small>';
  inf.insertAdjacentHTML('beforeend','<div style="margin-top:8px"><button id="cdcOpenPhotos" type="button" style="padding:7px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#edf3ff;color:#2c4266;cursor:pointer">📷 施工前／後照片</button></div>');
  inf.querySelector('#cdcOpenPhotos').onclick=()=>cdcOpenPilePhotos(p[0]);
  inf.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{LS[stage-1][i]=+b.dataset.k;try{localStorage.setItem(LK,JSON.stringify(LS))}catch(e){}postSt(stage,i,+b.dataset.k);paint();pushH('P'+PILES[i][0]+' 第'+stage+'層→'+SN[LS[stage-1][i]]);showPile(i)})}
 let excRestoreMode=false;
 function pickAt(e){rc.setFromCamera(new THREE.Vector2(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1),cam);
- const h=rc.intersectObjects(excRestoreMode?cells.map(c=>c.m):[...segs,...cells.map(c=>c.m)])[0];if(!h){inf.style.display='none';return}
- if(excRestoreMode){const c=h.object.userData.cell;if(!c)return;const before=c.s;setSt(c.n,'w');saveSt();recolor();cards();if(before!=='w')pushH('開挖範圍 '+c.n+' → 未開挖');inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b><br>已恢復為未開挖（白色）<br><small>繼續點選其他方格，或按「完成開挖編輯」。</small>';return}
+ const h=rc.intersectObjects(excRestoreMode?cells.map(c=>c.m):[...segs,...(tpShow?tpObjs:[]),...cells.map(c=>c.m)])[0];if(!h){inf.style.display='none';return}
+ if(excRestoreMode){const c=h.object.userData.cell;if(!c)return;const before=c.s;setSt(c.n,excPaint);saveSt();recolor();cards();if(before!==excPaint)pushH('開挖範圍 '+c.n+' → '+EPN[excPaint]);inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b><br>已改成'+EPN[excPaint]+'<br><small>繼續點選其他方格，或按「完成開挖編輯」。</small>';return}
+ if(h.object.userData.tpi!=null)return showPile(h.object.userData.tpi);
  if(segs.includes(h.object))return showPile(h.instanceId);
- const c=h.object.userData.cell;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'開挖中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
+ const c=h.object.userData.cell;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'進行中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
 document.querySelectorAll('.b[data-s]').forEach(b=>b.onclick=()=>{stage=+b.dataset.s;document.querySelectorAll('.b[data-s]').forEach(x=>x.classList.toggle('on',x==b));cells.forEach(c=>c.tp.color.setHex(stage==1?TOPC[c.s]:TOPC.p));inf.style.display='none';paint();followKey='';followLatest()});
 const $=id=>document.getElementById(id);
-function toggleExcRestore(on){excRestoreMode=on;$('excRestore').classList.toggle('on',on);$('excDone').style.display=on?'inline-block':'none';$('excRestore').textContent=on?'⬜ 未開挖：請點選綠色方格':'⬜ 未開挖（點選方格）';if(!on)inf.style.display='none'}
-$('excRestore').onclick=()=>{if(stage!==1){alert('請先切換至「第一次開挖(現況)」再編輯。');return}toggleExcRestore(!excRestoreMode)};
+let excPaint='w';const EPN={w:'未開挖',o:'進行中',g:'已完成'};
+function toggleExcRestore(on,k){excRestoreMode=on;if(k)excPaint=k;document.querySelectorAll('[data-ep]').forEach(b=>b.classList.toggle('on',on&&b.dataset.ep===excPaint));$('excDone').style.display=on?'inline-block':'none';if(!on){inf.style.display='none';return}inf.style.display='block';inf.innerHTML='開挖範圍編輯中<br>點選方格 → 改成<b>'+EPN[excPaint]+'</b><br><small>可連續點多格；按「完成開挖編輯」結束。</small>'}
+document.querySelectorAll('[data-ep]').forEach(b=>b.onclick=()=>{if(stage!==1){alert('請先切換至「第一次開挖(現況)」再編輯。');return}const k=b.dataset.ep;if(excRestoreMode&&excPaint===k)toggleExcRestore(false);else toggleExcRestore(true,k)});
 $('excDone').onclick=()=>toggleExcRestore(false);
 $('mode').onclick=e=>{mode=mode=='repair'?'depth':'repair';e.target.textContent=mode=='repair'?'顯示：補樁狀態':'顯示：樁底高程';paint()};
 $('tr').onclick=e=>{glass=!glass;e.target.classList.toggle('on',glass)};
 $('cd').onclick=e=>{showCards=!showCards;if(showCards)cardDef.forEach(d=>d.off=false);e.target.classList.toggle('on',showCards)};
+$('tpBtn').onclick=e=>{tpShow=!tpShow;tpGroup.visible=tpShow;e.target.classList.toggle('on',tpShow);legend()};
 paint();
 let HS=[],hx=0;
 const snapS=()=>JSON.stringify({cs:Object.fromEntries(cells.map(c=>[c.n,c.s])),ex:excs.map(x=>x.c.n),wk:workers.map(x=>x.pi),LS});
@@ -1192,7 +1222,7 @@ function doSearch(){const raw=$('q').value.trim(),q=raw.toUpperCase().replace(/[
  if(m){const n=+m[1];if(n<1||n>PILES.length){inf.style.display='block';inf.textContent='找不到樁號：'+raw;return}
   const p=PILES[n-1];v=new THREE.Vector3(p[1],-2,p[2]);zz=5.5;bea.position.set(p[1],0,p[2]);bea.visible=true;beaT=performance.now();showPile(n-1)}
  else{const c=cells.find(c=>c.n.toUpperCase()===q);if(!c){inf.style.display='block';inf.textContent='找不到：'+raw;return}
-  v=new THREE.Vector3(c.cx,-3,c.cz);zz=3.2;bea.visible=false;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'開挖中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
+  v=new THREE.Vector3(c.cx,-3,c.cz);zz=3.2;bea.visible=false;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'進行中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
  goal={v,z:zz};$('q').blur()}
 $('qb').onclick=doSearch;$('q').addEventListener('keydown',e=>{if(e.key=='Enter')doSearch()});
 const v3=new THREE.Vector3();let ttx=0;
