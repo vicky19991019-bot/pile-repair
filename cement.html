@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" translate="no"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>水泥進料施工記錄</title>
+<style>
+:root{--bg:#f5f4ef;--card:#fff;--tx:#1f2421;--mut:#6b726d;--bd:#dcdad2;--ac:#c2571a;--ok:#2e7d4f;--warn:#b7791f;--bad:#c0392b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171917;--card:#222522;--tx:#ecebe6;--mut:#9aa09b;--bd:#383c38;--ac:#e8854a;--ok:#5fbf86;--warn:#e3b04b;--bad:#ef7b6d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171917;--card:#222522;--tx:#ecebe6;--mut:#9aa09b;--bd:#383c38;--ac:#e8854a;--ok:#5fbf86;--warn:#e3b04b;--bad:#ef7b6d;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;max-width:900px;margin:0 auto;padding:12px}
+h1{font-size:18px;margin:4px 0 8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+h3{font-size:13px;color:var(--mut);margin:16px 0 6px;font-weight:600;letter-spacing:.04em}
+.mut{color:var(--mut);font-size:13px}.pill{font-size:11px;font-weight:400;padding:2px 8px;border-radius:99px;border:1px solid var(--bd);color:var(--mut)}
+.strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.sc{flex:1;min-width:140px;background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--ok);border-radius:8px;padding:6px 10px}
+.sc b{font-size:18px}.sc.low,.sc.neg,.card.low{background:#c0392b;border-color:#c0392b;color:#fff}.sc.low *,.sc.neg *,.card.low *{color:#fff!important}.sc.none{border-left-color:var(--warn)}.sc.off{border-left-color:var(--bd)}
+.tabs{display:flex;gap:4px;margin-bottom:8px;overflow-x:auto}
+.tabs button{flex:1;white-space:nowrap}
+button,input,select{font:inherit;color:var(--tx)}
+button{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;cursor:pointer}
+button.on,button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+button.ghost{color:var(--bad)}
+input,select{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;width:100%;min-width:0}
+input[type=checkbox]{width:auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row input[type=date]{width:auto;flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.grid label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mut)}
+[hidden]{display:none!important}.team{border:3px solid var(--tc);border-radius:14px;padding:12px;margin:16px 0;background:var(--card)}.th{background:var(--tc);color:#fff;margin:-12px -12px 12px;padding:8px 14px;border-radius:10px 10px 0 0;font-size:17px;font-weight:700}.sg{background:#fff7e0;border:1px dashed var(--warn);color:#7a5200;border-radius:8px;padding:6px 10px;margin-top:8px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sg button{padding:4px 10px}.vl{border-left:2px solid var(--mut)}.sb2{font-weight:600;font-size:13px;margin:14px 0 6px;padding-top:10px;border-top:1px dashed var(--bd)}.sb{font-size:13px;color:var(--mut);margin:10px 0 4px}
+.sub td{color:var(--mut);font-size:12px}.tot td{font-weight:700;border-top:2px solid var(--bd)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--bd);border-radius:99px;padding:5px 14px;display:flex;gap:6px;align-items:center;background:var(--bg)}
+.hint{margin-top:8px;font-size:13px;color:var(--mut);min-height:20px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}th{color:var(--mut);font-weight:600}tr.cl{cursor:pointer}tr.cl:hover{background:var(--bg)}
+.wrap{overflow-x:auto}.big{font-size:30px;font-weight:700;line-height:1.1}
+.ok{color:var(--ok)}.low,.neg{color:var(--bad)}.none{color:var(--warn)}.off{color:var(--mut)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:2px 12px;font-size:14px;margin-top:8px}.kv span:nth-child(even){text-align:right;font-weight:600}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 16px;border-radius:99px;opacity:0;transition:.2s;pointer-events:none}#toast.s{opacity:1}
+</style></head><body>
+  <a href="3d.html" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#1f6feb;color:#fff;text-decoration:none;padding:10px 16px;border-radius:24px;font-size:15px;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,.25);">🏗️ 前往 3D 施工進度</a>
+<h1>水泥進料施工記錄 <span class="pill" id="sync">載入中…</span></h1>
+<div style="text-align:right;margin:-6px 0 6px;font-size:12px"><a href="./" style="color:var(--mut)">首頁</a>　<a href="#" onclick="resetKey();return false" style="color:var(--mut)">重設通行碼</a></div>
+<div class="strip" id="strip"></div>
+<div class="tabs" id="tabs"></div>
+<div id="main"></div><div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// GitHub 版：透過 Apps Script API 存取雲端（需要通行碼）
+const API_URL="https://script.google.com/macros/s/AKfycbx5cAMgG2cXKMPVJzmnYvmyL26-gp99ky4xd-3Nwue9VUQqlzooBdE3eInM-9mk3R8WMw/exec";
+const KEY_LS="pile-api-key";
+function apiKey_(){let k="";try{k=localStorage.getItem(KEY_LS)||""}catch(e){}
+  if(!k){k=(prompt("請輸入通行碼（這台裝置第一次使用時需要）")||"").trim();if(k){try{localStorage.setItem(KEY_LS,k)}catch(e){}}}
+  return k}
+function resetKey(){try{localStorage.removeItem(KEY_LS)}catch(e){}location.reload()}
+async function apiCall(fn,...args){
+  const key=apiKey_();if(!key)throw new Error("未輸入通行碼");
+  let r;try{r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn,args,key})})}
+  catch(e){throw new Error("無法連到雲端，請檢查網路")}
+  let j;try{j=await r.json()}catch(e){throw new Error("雲端回應格式錯誤")}
+  if(!j.ok){if(/通行碼/.test(j.error||"")){try{localStorage.removeItem(KEY_LS)}catch(e){}}throw new Error(j.error||"雲端操作失敗")}
+  return j.data}
+function cloudFetch(url, options){
+  const isPost=options && String(options.method||'GET').toUpperCase()==='POST';
+  let p;
+  if(isPost){let payload;try{payload=JSON.parse(options.body)}catch(e){return Promise.reject(e)}p=apiCall('apiPost',payload)}
+  else p=apiCall('apiGet',String(url).includes('what=days')?'days':'state');
+  return p.then(data=>({ok:true,json:async()=>data}));
+}
+</script>
+<script>
+const $=s=>document.querySelector(s);
+const BR=['A1','A2','B1','B2'],NM={A1:'A1 藍款',A2:'A2 橘款',B1:'B1 優泥',B2:'B2 櫻王'};
+const VEN=[['wj','五金行'],['ps','專興'],['jc','建材行']],TEAMS=['49招','19文','38高'];
+const K=['wj_v','wj_n','ps_v','ps_n','jc_v','jc_n'];
+const ST={ok:'庫存安全',low:'⚠ 需叫貨・告急',neg:'庫存負數，請核對',none:'尚無近7天耗用',off:'停用｜不警戒'};
+const TABS=[['rec','今日記錄'],['ovw','庫存總覽'],['stat','進料統計'],['list','明細'],['set','設定']];
+let S={base:{A1:197,A2:14,B1:173,B2:0},baseDate:'2026-10-31',price:{wj:{v:320,n:320},ps:{v:239,n:246},jc:{v:400,n:400}},std:{v:4.5,n:1.5},wage:2700,stage:1,gas:'https://script.google.com/macros/s/AKfycbzE6lblnHTrYXdRrnlYcNJ7gYPXjTW9oaBusMCaqs5dBJy9ce70Z4NsWh11_F8SVZiN/exec'};
+let D={},db=null,tab='rec',cur=iso(new Date()),loaded=false,from='',to='',pmf='all',ipf='all',arm=false,editI='',armI='';let PD={};const TC={'49招':'#c2571a','19文':'#2563a8','38高':'#7a3fa0'};
+const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n},f1=n=>Math.round(n*10)/10;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function shift(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return iso(d)}
+const wd=s=>'日一二三四五六'[new Date(s+'T00:00:00').getDay()];
+const md=s=>+s.slice(5,7)+'/'+ +s.slice(8)+'（'+wd(s)+'）';
+function toast(m){const t=$('#toast');t.textContent=m;t.className='s';setTimeout(()=>t.className='',1800)}
+function bin(x){const i=x.in||{};return{A1:num(i.ps_v),A2:num(i.wj_v),B1:num(i.wj_n)+num(i.ps_n),B2:num(i.jc_n)}}
+function lnd(x){const r={A1:0,A2:0,B1:0,B2:0};(x.ln||[]).forEach(l=>{if(r[l.b]!=null)r[l.b]+=(l.k==='ret'?1:-1)*num(l.n)});return r}
+function calc(){
+  const st={};BR.forEach(b=>st[b]=num(S.base[b]));let last=null;
+  Object.keys(D).sort().forEach(d=>{if(d<=S.baseDate)return;const x=D[d],bi=bin(x),lo=lnd(x);
+    const u=U(x);BR.forEach(b=>st[b]+=bi[b]-u[b]+lo[b]);if(u.A1>0||u.B1>0||u.B2>0)last=d});
+  const o={},GR={A1:['A1'],B1:['B1','B2'],B2:['B1','B2']};
+  BR.forEach(b=>{const r={stock:st[b],act:!!GR[b],grp:GR[b]&&GR[b].length>1};
+    if(r.act){let sum=0;const gs=GR[b].reduce((a,k)=>a+st[k],0);if(last){const from=shift(last,-6);Object.keys(D).forEach(d=>{if(d>=from&&d<=last&&d>S.baseDate){const u=U(D[d]);GR[b].forEach(k=>sum+=u[k])}})}
+      r.gs=gs;r.thr=sum;r.avg=sum/7;r.left=r.avg?gs/r.avg:null;r.sug=Math.ceil(Math.max(0,sum-gs));
+      r.s=st[b]<0?'neg':sum===0?'none':gs<sum?'low':'ok'}else r.s='off';
+    o[b]=r});
+  o.last=last;return o}
+function strip(){const c=calc();
+  $('#strip').innerHTML=BR.map(b=>`<div class="sc ${c[b].s}"><span class="mut">${NM[b]}</span><br><b>${f1(c[b].stock)}</b> 包 <span class="mut ${c[b].s}">${ST[c[b].s]}</span></div>`).join('')}
+function tabs(){$('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="${tab===k?'on':''}" onclick="tab='${k}';arm=false;editI='';armI='';view()">${n}</button>`).join('')}
+function go(n){cur=shift(cur,n);arm=false;view()}
+function G(x){if(x.g)return x.g;const t=(x.t&&x.t[0])||TEAMS[0];return{[t]:{w:num(x.w),cv:num(x.cnt?.v),cn:num(x.cnt?.n),A1:num(x.use?.A1),A2:num(x.use?.A2),B1:num(x.use?.B1),B2:num(x.use?.B2)}}}
+function V(o){const z={m1:0,m2:0,nf:false};
+  if('c1' in o||'c2' in o)return{c1:num(o.c1),a11:num(o.a11),a21:num(o.a21),c2:num(o.c2),a12:num(o.a12),a22:num(o.a22),p1:num(o.p1),m1:num(o.m1),m2:num(o.m2),nf:'m1' in o};
+  if('rd' in o)return num(o.rd)===2?{...z,c1:0,a11:0,a21:0,c2:num(o.cv),a12:num(o.A1_2),a22:num(o.A2_2),p1:num(o.p1)}:{...z,c1:num(o.cv),a11:num(o.A1_1),a21:num(o.A2_1),c2:0,a12:0,a22:0,p1:0};
+  if('A1_1' in o||'A1_2' in o||'A2_1' in o||'A2_2' in o){const dn=num(o.A1_2)+num(o.A2_2)>0;return dn?{...z,c1:0,a11:num(o.A1_1),a21:num(o.A2_1),c2:num(o.cv),a12:num(o.A1_2),a22:num(o.A2_2),p1:num(o.A1_1)+num(o.A2_1)}:{...z,c1:num(o.cv),a11:num(o.A1_1),a21:num(o.A2_1),c2:0,a12:0,a22:0,p1:0}}
+  return{...z,c1:0,a11:0,a21:0,c2:num(o.cv),a12:num(o.A1),a22:num(o.A2),p1:0}}
+function N(o){const v=V(o),dn=v.c2>0||v.a12+v.a22>0;return{w:num(o.w),cv:v.c2,pc:v.c1,cn:num(o.cn)+(v.nf?v.c2:0),A1:v.a11+v.a12,A2:v.a21+v.a22,B1:num(o.B1)+v.m1,B2:num(o.B2)+v.m2,vu:dn?v.a12+v.a22+v.p1:0}}
+function U(x){const r={w:0,cv:0,pc:0,cn:0,A1:0,A2:0,B1:0,B2:0,vu:0};Object.values(G(x)).forEach(q=>{const n=N(q);for(const k in r)r[k]+=n[k]});return r}
+function pmList(c0){const z=new Set(['']),d=new Date();for(let k=-1;k<=8;k++)z.add(iso(new Date(d.getFullYear(),d.getMonth()+k,1)).slice(0,7));if(c0)z.add(c0);return[...z].sort()}
+const pmL=m=>m?m.replace('-','年')+'月':'未計價';
+function parseP(t){const r=new Set();String(t||'').split(/[.,，、;；\s]+/).forEach(x=>{x=x.replace(/^[Pp]/,'');let m=x.match(/^(\d+)[-~－～](\d+)$/);if(m){let a=+m[1],b=+m[2];if(a>b)[a,b]=[b,a];if(b-a<=300)for(let k=a;k<=b;k++)r.add(k)}else if(/^\d+$/.test(x))r.add(+x)});return[...r].sort((a,b)=>a-b)}
+const fmtP=a=>{const r=[];let i=0;while(i<a.length){let j=i;while(j+1<a.length&&a[j+1]===a[j]+1)j++;r.push(j>i?a[i]+'~'+a[j]:String(a[i]));i=j+1}return r.join('.')};
+function lastP(t,d){let m=0;Object.keys(D).filter(k=>k<d).forEach(k=>{const o=D[k].g?.[t];if(!o)return;[...parseP(o.gp),...parseP(o.q1)].forEach(x=>{if(x>m)m=x})});return m}
+function autoGP(k){const t=TEAMS[k],p='t'+k,g=$('#'+p+'gp'),n=Math.floor(num($('#'+p+'cn').value)),L=lastP(t,cur),sp=$('#'+p+'gpv');
+  if(g&&(g.dataset.auto==='1'||!g.value.trim())){
+    if(n>0&&n<=300&&L>0){const a=[];for(let i=1;i<=n;i++)a.push(L+i);g.value=fmtP(a);g.dataset.auto='1';if(sp)sp.textContent='自動帶入 共 '+n+' 支：'+fmtP(a)+'（可直接修改）'}
+    else{g.value='';g.dataset.auto='';if(sp)sp.textContent=''}}
+  hint()}
+function pf(id,cid){delete $('#'+id).dataset.auto;const a=parseP($('#'+id).value),c=$('#'+cid);if(a.length&&c)c.value=a.length;const v=$('#'+id+'v');if(v)v.textContent=a.length?'共 '+a.length+' 支：'+fmtP(a):'';hint()}
+function pend(t,d){let n=0,a=0,pl=[];Object.keys(D).filter(k=>k<d).sort().forEach(k=>{const o=D[k].g?.[t];if(!o)return;const v=V(o),d2=parseP(o.q2),d1=parseP(o.q1);n=Math.max(0,n-v.c2)+v.c1;a=Math.max(0,a-v.p1)+v.a11+v.a21;pl=pl.filter(x=>!d2.includes(x));d1.forEach(x=>{if(!pl.includes(x))pl.push(x)})});pl.sort((x,y)=>x-y);return{n:Math.max(n,pl.length),a:f1(a),pl:fmtP(pl)}}
+function sug(k){const e=$('#t'+k+'c2');if(e){e.value=PD[k]?.n||'';const q=$('#t'+k+'q2');if(q&&PD[k]?.pl){q.value=PD[k].pl;const v=$('#t'+k+'q2v');if(v)v.textContent='共 '+parseP(PD[k].pl).length+' 支：'+fmtP(parseP(PD[k].pl))}hint()}}
+function lnRow(l){l=l||{k:'out',b:'B1',n:'',who:''};const o=(v,t,c)=>`<option value="${v}" ${c===v?'selected':''}>${t}</option>`;
+  return `<div class="row lnr" style="margin-bottom:6px"><select class="lk" style="width:auto">${o('out','借出',l.k)}${o('ret','歸還',l.k)}</select><select class="lb" style="width:auto">${BR.map(b=>o(b,NM[b],l.b)).join('')}</select><input class="ln" type="number" inputmode="decimal" min="0" step="any" placeholder="包數" value="${num(l.n)||''}" style="width:90px;flex:0 0 90px"><input class="lw" placeholder="經手人-單位（例：高德-FDA）" value="${esc(l.who)}" style="flex:1;width:auto"><button type="button" class="ghost" onclick="this.parentNode.remove()">✕</button></div>`}
+function addLn(){$('#lnb').insertAdjacentHTML('beforeend',lnRow())}
+function rec(){const x=D[cur]||{},i=x.in||{},g=G(x),v=n=>n?n:'';
+  const inp=(id,val,ph)=>`<input id="${id}" type="number" inputmode="decimal" min="0" step="any" value="${v(val)}" ${ph?`placeholder="${ph}"`:''} oninput="hint()">`;
+  const pin=(id,val,cid)=>{const a=parseP(val);return `<label>樁號（例：10.12.13.15 或 10-13）<input id="${id}" type="text" inputmode="decimal" autocomplete="off" value="${esc(val||'')}" placeholder="10.12.13.15" oninput="pf('${id}','${cid}')"><span class="mut" id="${id}v">${a.length?'共 '+a.length+' 支：'+fmtP(a):''}</span></label>`};
+  const team=(t,k)=>{const o=g[t]||{},a=V(o),p='t'+k,pd=pend(t,cur);PD[k]=pd;
+    const p1=a.p1||'',sg=num(o.cn)>0||num(o.B1)+num(o.B2)>0,s1=a.c1>0||a.a11+a.a21>0,s2=a.c2>0||a.m1+a.m2>0;
+    return `<div class="team" style="--tc:${TC[t]}"><div class="th">${t}</div>
+    <div class="grid"><label>移工人數（工）${inp(p+'w',o.w)}</label></div>
+    <div class="sb2">一般組模・不垂流（直接補完，算支數）</div>
+    <div class="grid">${pin(p+'gp',o.gp,p+'cn')}<label>支數（輸入後自動帶入樁號）<input id="${p}cn" type="number" inputmode="numeric" min="0" step="1" value="${v(o.cn)}" oninput="autoGP(${k})"><span class="mut">${lastP(t,cur)?'上次做到 P'+lastP(t,cur)+'，下一支 P'+(lastP(t,cur)+1):'尚無先前樁號'}</span></label></div>
+    <div id="vg${k}" ${sg?'':'hidden'}><div class="grid" style="margin-top:8px"><label>B1優泥${inp(p+'B1',o.B1)}</label><label>B2櫻王${inp(p+'B2',o.B2)}</label></div></div>
+    <div class="sb2">組模1・垂流（第一次補，先不計支數）</div>
+    <div class="grid">${pin(p+'q1',o.q1,p+'c1')}<label>新補支數${inp(p+'c1',a.c1)}</label></div>
+    <div id="v1${k}" ${s1?'':'hidden'}><div class="grid" style="margin-top:8px"><label>A1藍款${inp(p+'x1',a.a11)}</label><label>A2橘款${inp(p+'y1',a.a21)}</label></div></div>
+    <div class="sb2">組模2・不垂流（第二次補，完成才計支數）</div>
+    ${pd.n>0?`<div class="sg">組模1尚有 <b>${pd.n}</b> 支待補第2次${pd.pl?'（樁號 <b>'+pd.pl+'</b>）':''}（垂流已用 ${pd.a} 包）<button type="button" onclick="sug(${k})">帶入${pd.pl?'樁號與':''} ${pd.n} 支</button></div>`:''}
+    <div class="grid" style="margin-top:8px">${pin(p+'q2',o.q2,p+'c2')}<label>完成支數${inp(p+'c2',a.c2,pd.n>0?'建議 '+pd.n:'')}</label></div>
+    <div id="v2${k}" ${s2?'':'hidden'}><div class="grid" style="margin-top:8px"><label>B1優泥${inp(p+'m1',a.m1)}</label><label>B2櫻王${inp(p+'m2',a.m2)}</label><input id="${p}p1" type="hidden" value="${v(p1)}" ${p1?'data-t="1"':''}></div></div>
+    <div class="hint" id="h${k}"></div></div>`};
+  return `<div class="card"><div class="row"><button onclick="go(-1)">‹</button><input type="date" id="dt" value="${cur}" onchange="cur=this.value;arm=false;view()"><button onclick="go(1)">›</button>
+  <span class="mut">星期${wd(cur)}${D[cur]?'・已有記錄':''}</span></div>
+  ${TEAMS.map(team).join('')}
+  <h3>全日合計（三組加總）</h3><div class="hint" id="ht"></div>
+  <h3>進料包數（各廠商叫貨）</h3><div class="grid">${VEN.map(([k,n])=>`<label>${n}・垂流${inp('i'+k+'_v',i[k+'_v'])}</label><label>${n}・不垂流${inp('i'+k+'_n',i[k+'_n'])}</label>`).join('')}</div>
+  <h3>借出／歸還（其他單位借用，不算進料、不算施工用量）</h3><div id="lnb">${(x.ln||[]).map(lnRow).join('')}</div><button type="button" onclick="addLn()">＋ 新增一筆借出／歸還</button>
+  <h3>備註</h3><input id="nt" value="${esc(x.note)}" placeholder="選填">
+  <div class="row" style="margin-top:14px"><button class="pri" onclick="save()">儲存這天</button>${D[cur]?`<button class="ghost" id="dl" onclick="del()">刪除這天</button>`:''}</div></div>`}
+function hint(){const q=id=>num($('#'+id)?.value),T={cv:0,pc:0,pb:0,cn:0,uv:0,un:0,w:0};
+  const d=(a,b)=>Math.abs(a-b)<1e-9?'吻合':(a>b?'超用 ':'少用 ')+f1(Math.abs(a-b))+' 包';
+  TEAMS.forEach((t,k)=>{const p='t'+k,cn=q(p+'cn'),gB=q(p+'B1')+q(p+'B2'),c1=q(p+'c1'),u1=q(p+'x1')+q(p+'y1'),c2=q(p+'c2'),m=q(p+'m1')+q(p+'m2'),on2=c2>0||m>0;
+    const pe=$('#'+p+'p1'),pd=PD[k]||{n:0,a:0};
+    if(pe&&!pe.dataset.t&&c2>0&&pd.n>0){pe.value=f1(pd.a*Math.min(c2,pd.n)/pd.n)}
+    const p1=on2?q(p+'p1'):0;
+    if(on2){T.cv+=c2;T.uv+=p1}T.pc+=c1;T.pb+=u1;T.cn+=cn+c2;T.un+=gB+m;T.w+=q(p+'w');
+    const a=$('#vg'+k),b=$('#v1'+k),c=$('#v2'+k);if(a)a.hidden=!(cn>0||gB>0);if(b)b.hidden=!(c1>0||u1>0);if(c)c.hidden=!on2;
+    const h=$('#h'+k);if(!h)return;
+    h.innerHTML=[(c1||u1)?`組模1：垂流 ${c1} 支，已用 ${f1(u1)} 包（先扣庫存，組模2完成才計支數）`:'',on2?`組模2 完成 ${c2} 支：垂流（組模1）已用 ${f1(p1)} 包・標準 ${f1(c2*S.std.v)}（${d(p1,c2*S.std.v)}）`:'',(cn+c2>0||gB+m>0)?`不垂流合計 ${cn+c2} 支（一般 ${cn}＋組模2 ${c2}）：實際 ${f1(gB+m)} 包・標準 ${f1((cn+c2)*S.std.n)}（${d(gB+m,(cn+c2)*S.std.n)}）`:''].filter(Boolean).join('<br>')});
+  const e=$('#ht');if(e)e.innerHTML=`移工 ${T.w} 工（$${(T.w*S.wage).toLocaleString()}）・垂流支 ${T.cv}（組模1垂流已用 ${f1(T.uv)} 包，標準 ${f1(T.cv*S.std.v)}，${d(T.uv,T.cv*S.std.v)}）${T.pc?`；新組模1 ${T.pc} 支（已先扣 ${f1(T.pb)} 包）`:''}<br>不垂流支 ${T.cn}，用 ${f1(T.un)} 包（標準 ${f1(T.cn*S.std.n)}，${d(T.un,T.cn*S.std.n)}）`}
+// 比對時不管欄位順序（Google 傳輸時會打亂 key 順序）
+const cj=v=>JSON.stringify(v,(k,o)=>o&&typeof o==='object'&&!Array.isArray(o)?Object.keys(o).sort().reduce((r,k2)=>(r[k2]=o[k2],r),{}):o);
+async function put(id,x){const j=await gpostR({action:'day',date:id,doc:x});if(!j)throw new Error('cloud');
+  let sv=null;if(typeof j.saved==='string'){try{sv=JSON.parse(j.saved)}catch(e){}}else{const c=await pullCloud();sv=c&&c.days[id]}  // 舊版後端沒有回傳 saved 時，退回讀整份
+  if(!sv||cj(sv)!==cj(x))throw new Error('雲端寫入驗證失敗');D[id]=x}
+async function gpostR(o){const ok=await gpost(o);return ok?lastJ:null}
+let cloudBad=0,busy=false,lastJ=null;
+async function gpost(o){if(!S.gas)return false;try{const r=await cloudFetch(S.gas,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)}),j=await r.json();if(!j.ok)throw 0;lastJ=j;cloudBad=0;$('#sync').textContent='雲端硬碟已同步';return true}catch(e){cloudBad++;$('#sync').textContent='⚠ 雲端未儲存（暫存本機）';toast('⚠ 雲端硬碟儲存失敗，已暫存在本機');return false}}
+async function pullCloud(first){try{const j=await(await cloudFetch(S.gas+'?what=days&_t='+Date.now()+'_'+Math.random(),{cache:'no-store'})).json();if(!j.ok||!j.days)throw 0;const dd={};Object.keys(j.days).forEach(k=>{let n=k;if(!/^\d{4}-\d\d-\d\d$/.test(k)){const t=new Date(k);if(isNaN(t))return;n=iso(t)}dd[n]=j.days[k]});j.days=dd;return j}catch(e){return null}}
+async function resync3d(){let bf={};
+  try{const j=await(await cloudFetch(S.gas)).json();Object.keys(j.data||{}).forEach(st=>Object.keys(j.data[st]).forEach(n=>{const k=st+'_'+n,mt=(j.meta||{})[k]||[];if(j.data[st][n]!==0&&mt[1]!=='3D')bf[k]=[j.data[st][n],'','']}))}catch(e){toast('讀取雲端失敗');return}
+  const m=await sync3d(bf,true);toast(m?'已重新同步全部樁號'+m:'已是最新，沒有需要同步的樁號')}
+async function restoreG(){if(!S.gas){toast('尚未設定網址');return}
+  try{const j=await(await cloudFetch(S.gas+'?what=days')).json();if(!j.ok)throw 0;const ks=Object.keys(j.days);
+    if(!ks.length){toast('雲端硬碟裡還沒有備份');return}
+    if(!confirm('將從雲端硬碟還原 '+ks.length+' 天資料，同日期會被覆蓋，確定嗎？'))return;
+    for(const d of ks)await put(d,j.days[d]);toast('已還原 '+ks.length+' 天');if(!db)strip();view()}catch(e){toast('還原失敗')}}
+function derive(){const m={};Object.keys(D).sort().forEach(d=>{const x=D[d],st=+x.stg||+S.stage||1;Object.entries(x.g||{}).forEach(([t,r])=>{const A=(a,v,l)=>parseP(a).forEach(n=>m[st+'_'+n]=[v,d,t+'・'+l]);A(r.gp,1,'一般組模');A(r.q1,7,'組模1(第一次)');A(r.q2,5,'組模2(已補兩次)')})});return m}
+async function sync3d(before,all){const u=S.gas;if(!u)return'';const a=derive(),b={},job={};
+  const add=(st,v,d,src,n)=>{const k=[st,v,d,src].join('|');(job[k]=job[k]||{stage:+st,status:v,date:d,source:src,piles:[]}).piles.push(+n)};
+  Object.keys(a).forEach(k=>{const o=before[k];if(all||!o||o[0]!==a[k][0]||o[1]!==a[k][1]||o[2]!==a[k][2]||a[k][1]===cur){const[st,n]=k.split('_');add(st,a[k][0],a[k][1],a[k][2],n)}});
+  Object.keys(before).forEach(k=>{if(!a[k]){const[st,n]=k.split('_');add(st,0,'','',n)}});
+  const L=Object.values(job);if(!L.length)return'';
+  try{const r=await cloudFetch(u,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'piles',jobs:L})}),jj=await r.json();
+    if(!jj.ok){if(jj.error!=='unknown')throw 0;for(const j of L){const r2=await cloudFetch(u,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(j)});if(!(await r2.json()).ok)throw 0}}  // 一次送出全部樁號
+    return'・3D已同步('+L.reduce((t,j)=>t+j.piles.length,0)+'支樁)'}catch(e){return'・3D同步失敗'}}
+async function save(){if(busy)return;busy=true;const before=derive(),q=id=>num($('#'+id).value),old=D[cur]?.g||{};
+  const x={g:{},in:{},note:$('#nt').value,pm:D[cur]?.pm||'',ipm:D[cur]?.ipm||'',stg:D[cur]?.stg||+S.stage||1};
+  TEAMS.forEach((t,k)=>{const p='t'+k,c2=q(p+'c2'),m=q(p+'m1')+q(p+'m2'),on2=c2>0||m>0,ov=old[t]?V(old[t]):null;
+    const pv=id=>fmtP(parseP($('#'+id)?.value));
+    const r={gp:pv(p+'gp'),q1:pv(p+'q1'),q2:pv(p+'q2'),w:q(p+'w'),cn:q(p+'cn'),B1:q(p+'B1'),B2:q(p+'B2'),c1:q(p+'c1'),a11:q(p+'x1'),a21:q(p+'y1'),c2,m1:q(p+'m1'),m2:q(p+'m2'),p1:on2?q(p+'p1'):0};
+    if(ov&&!ov.nf&&(ov.a12||ov.a22)){r.a12=ov.a12;r.a22=ov.a22}
+    if(Object.values(r).some(n=>n))x.g[t]=r});
+  K.forEach(k=>x.in[k]=q('i'+k));
+  const ln=[...document.querySelectorAll('#lnb .lnr')].map(r=>({k:r.querySelector('.lk').value,b:r.querySelector('.lb').value,n:num(r.querySelector('.ln').value),who:r.querySelector('.lw').value.trim()})).filter(l=>l.n>0);
+  if(ln.length)x.ln=ln;
+  try{await put(cur,x);const m=await sync3d(before);if(!cloudBad)toast('已儲存到雲端硬碟'+m);strip();view()}catch(e){toast('儲存失敗：'+e.message)}finally{busy=false}}
+async function del(){if(busy)return;const b=$('#dl');if(!arm){arm=true;b.textContent='再按一次確認刪除';return}
+  busy=true;try{const before=derive();await rmDay(cur);const m3=await sync3d(before);arm=false;toast('已刪除'+m3);strip();view()}catch(e){toast('刪除未完成：'+e.message)}finally{busy=false}}
+function ovw(){const c=calc();
+  const low=BR.filter(b=>c[b].s==='low'||c[b].s==='neg');
+  return (low.length?`<div class="card low"><b>🚨 ${low.map(b=>NM[b]).join('、')}${low.some(b=>c[b].grp)?'（不垂流 B1＋B2 合計）':''} 庫存告急，請盡快叫貨</b></div>`:'')+
+  `<div class="grid">${BR.map(b=>{const r=c[b];return `<div class="card ${r.s==='low'||r.s==='neg'?'low':''}"><div class="mut">${NM[b]}</div><div class="big ${r.s}">${f1(r.stock)} 包</div><div class="${r.s}">${ST[r.s]}</div>
+  ${r.act?`<div class="kv">${r.grp?`<span>B1＋B2 合計庫存</span><span>${f1(r.gs)} 包</span>`:''}<span>7天警戒門檻${r.grp?'（B1＋B2）':''}</span><span>${f1(r.thr)} 包</span><span>近7天日均</span><span>${f1(r.avg)} 包</span><span>剩餘可用天數</span><span>${r.left==null?'—':f1(r.left)+' 天'}</span><span>建議補貨</span><span>${r.sug?r.sug+' 包':'無需補貨'}</span></div>`:'<div class="mut" style="margin-top:8px">僅顯示庫存，不警戒</div>'}</div>`}).join('')}</div>
+  <p class="mut">庫存 = ${S.baseDate} 收工基準 + 之後進料 − 之後使用。A1 單獨警戒；B1、B2 都是不垂流，合併計算（1包B2＝1包B1）。以「最近有用量那天」往前7日（含當日）的總用量作警戒門檻；借出／歸還會直接加減庫存${c.last?`；目前最近用量日為 ${md(c.last)}`:''}。</p>`}
+const inR=d=>(!from||d>=from)&&(!to||d<=to);
+const pmOk=d=>pmf==='all'||(pmf==='none'?!D[d].pm:D[d].pm===pmf);
+const ipOk=d=>ipf==='all'||(ipf==='none'?!D[d].ipm:D[d].ipm===ipf);
+const sel=()=>Object.keys(D).filter(d=>inR(d)&&(tab==='list'?pmOk(d):tab==='stat'?ipOk(d):true));
+function rng(){return `<div class="row"><input type="date" value="${from}" onchange="from=this.value;view()"><span class="mut">～</span><input type="date" value="${to}" onchange="to=this.value;view()">
+  <button onclick="qr('all')">全部</button><button onclick="qr('m')">本月</button><button onclick="qr('p')">上月</button><button onclick="qr(7)">近7天</button><button onclick="qr(30)">近30天</button><button class="pri" onclick="exportX()">匯出 Excel</button></div>`}
+function qr(k){const t=iso(new Date());if(k==='all'){from=to=''}else if(k==='m'){from=t.slice(0,8)+'01';to=t}else if(k==='p'){const a=new Date();from=iso(new Date(a.getFullYear(),a.getMonth()-1,1));to=iso(new Date(a.getFullYear(),a.getMonth(),0))}else{from=shift(t,1-k);to=t}view()}
+const r2=n=>Math.round(n*100)/100;
+function vend(ds){const sum=k=>ds.reduce((a,d)=>a+num(D[d].in?.[k]),0);let tv=0,tn=0,ta=0;
+  const rows=VEN.map(([k,n])=>{const v=sum(k+'_v'),q=sum(k+'_n'),p=S.price[k],a=v*p.v+q*p.n;tv+=v;tn+=q;ta+=a;return[n,v,q,v+q,p.v,p.n,a]});
+  return{rows,tot:['總計',tv,tn,tv+tn,'','',ta]}}
+function pmSum(ds){const m={};ds.forEach(d=>{const k=D[d].pm||'';m[k]=m[k]||{d:0,w:0};m[k].d++;m[k].w+=U(D[d]).w});
+  return Object.keys(m).sort((a,b)=>(a||'~').localeCompare(b||'~')).map(k=>({k,...m[k]}))}
+const iq=x=>K.reduce((a,k)=>a+num(x.in?.[k]),0);
+const iamt=x=>VEN.reduce((a,[k])=>a+num(x.in?.[k+'_v'])*S.price[k].v+num(x.in?.[k+'_n'])*S.price[k].n,0);
+function stat(){const ds=sel(),V_=vend(ds),rows=ds.filter(d=>iq(D[d])>0).sort().reverse(),cm=iso(new Date()).slice(0,7);
+  const tr=r=>`<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]===''?'':r[4]+'／'+r[5]}</td><td>${r[6].toLocaleString()}</td>`;
+  const ims=[...new Set(Object.values(D).map(x=>x.ipm).filter(Boolean))].sort();
+  const mm={};rows.forEach(d=>{const k=D[d].ipm||'';mm[k]=mm[k]||{n:0,q:0,a:0};mm[k].n++;mm[k].q+=iq(D[d]);mm[k].a+=iamt(D[d])});
+  const head=`<div class="card">${rng()}<div class="row" style="margin-top:10px"><span class="mut">請款月份</span><select style="width:auto" onchange="ipf=this.value;view()"><option value="all">全部</option><option value="none" ${ipf==='none'?'selected':''}>未請款</option>${ims.map(m=>`<option value="${m}" ${ipf===m?'selected':''}>${pmL(m)}</option>`).join('')}</select>
+  <span style="flex:1"></span><span class="mut">將下表所有進料日期標記為</span><select id="im" style="width:auto">${pmList('').slice(1).map(m=>`<option value="${m}" ${m===cm?'selected':''}>${pmL(m)}計價完畢</option>`).join('')}<option value="">未計價（清除標記）</option></select><button onclick="bulkI()">套用</button></div></div>`;
+  const row=d=>{const x=D[d],ed=editI===d;
+    const cs=K.map(k=>ed?`<td><input id="ei_${k}" type="number" min="0" step="any" value="${num(x.in?.[k])||''}" style="width:72px"></td>`:`<td>${num(x.in?.[k])||''}</td>`).join('');
+    const act=ed?`<button class="pri" onclick="saveI('${d}')">儲存</button> <button onclick="editI='';view()">取消</button>`:`<button onclick="editI='${d}';armI='';view()">修改</button> <button class="ghost" onclick="delI('${d}')">${armI===d?'再按一次確認刪除':'刪除'}</button>`;
+    return `<tr><td>${md(d)}</td>${cs}<td>${iamt(x).toLocaleString()}</td><td><select style="width:auto" onchange="setI('${d}',this.value)">${pmList(x.ipm).map(m=>`<option value="${m}" ${m===(x.ipm||'')?'selected':''}>${pmL(m)}</option>`).join('')}</select></td><td>${act}</td></tr>`};
+  return head+`<div class="card"><h3 style="margin-top:0">廠商進料數量與金額（${from||'最早'} ～ ${to||'最新'}）</h3><div class="wrap"><table><tr><th>廠商</th><th>垂流(包)</th><th>不垂流(包)</th><th>合計</th><th>單價 垂／不垂</th><th>金額</th></tr>${V_.rows.map(r=>`<tr>${tr(r)}</tr>`).join('')}<tr class="tot">${tr(V_.tot)}</tr></table></div></div>
+  <div class="card wrap"><h3 style="margin-top:0">每日進料與計價月份（可修改、刪除）</h3>${rows.length?`<table><tr><th>日期</th>${VEN.map(([,n])=>`<th>${n}垂</th><th>${n}不垂</th>`).join('')}<th>金額</th><th>計價月</th><th></th></tr>${rows.map(row).join('')}</table>
+  <h3>依計價月份彙總（避免重複請款）</h3><table><tr><th>計價月份</th><th>日數</th><th>包數</th><th>金額</th></tr>${Object.keys(mm).sort((a,b)=>(a||'~').localeCompare(b||'~')).map(k=>`<tr><td>${pmL(k)}</td><td>${mm[k].n}</td><td>${mm[k].q}</td><td>${mm[k].a.toLocaleString()}</td></tr>`).join('')}</table>`:'<div class="mut">這個條件下沒有進料記錄。</div>'}</div>`+loanCard()}
+function loanCard(){
+  // 依「單位」合併借還帳：對象填「經手人-單位」（例：高德-FDA、阿康-FDA）時，以「-」後面的單位計算尚欠，經手人另外列出。
+  const unit=w=>{w=String(w||'').trim();if(!w)return'（未填對象）';const p=w.split(/[-－]/);return(p.length>1?p[p.length-1].trim():w)||w};
+  const person=w=>{w=String(w||'').trim();const p=w.split(/[-－]/);return p.length>1?p.slice(0,-1).join('-').trim():''};
+  const who={},rs=[];Object.keys(D).sort().forEach(d=>(D[d].ln||[]).forEach(l=>{const u=unit(l.who);who[u]=who[u]||{o:0,B1:0,B2:0,A1:0,A2:0,ps:[]};if(l.k==='ret')who[u][l.b]+=num(l.n);else who[u].o+=num(l.n);const pn=person(l.who);if(pn&&!who[u].ps.includes(pn))who[u].ps.push(pn);rs.push([d,l])}));
+  const ws=Object.keys(who);if(!ws.length)return `<div class="card"><h3 style="margin-top:0">借出／歸還</h3><div class="mut">目前沒有借還記錄。在「今日記錄」最下方可新增。</div></div>`;
+  return `<div class="card wrap"><h3 style="margin-top:0">借出／歸還帳（依單位合併；不算進料、不請款；1包B2＝1包B1）</h3><table><tr><th>單位</th><th>經手人</th><th>借出(包)</th><th>已還B1</th><th>已還B2</th><th>尚欠(包)</th></tr>${ws.map(w=>{const r=who[w],rt=r.A1+r.A2+r.B1+r.B2,ow=f1(r.o-rt);return `<tr><td>${esc(w)}</td><td style="text-align:left">${esc(r.ps.join('、'))}</td><td>${f1(r.o)}</td><td>${r.B1||''}</td><td>${r.B2||''}</td><td class="${ow>0?'low':'ok'}">${ow>0?ow:ow<0?'多還 '+(-ow):'已結清'}</td></tr>`}).join('')}</table>
+  <h3>借還明細（點一下可到當天修改）</h3><table><tr><th>日期</th><th>類型</th><th>品牌</th><th>包數</th><th>經手人-單位</th></tr>${rs.reverse().map(([d,l])=>`<tr class="cl" onclick="cur='${d}';tab='rec';view()"><td>${md(d)}</td><td>${l.k==='ret'?'歸還':'借出'}</td><td>${NM[l.b]||l.b}</td><td>${l.n}</td><td>${esc(l.who||'')}</td></tr>`).join('')}</table></div>`}
+async function rmDay(d){const o=D[d];if(!(await gpost({action:'day',date:d,doc:null})))throw new Error('cloud');const check=await pullCloud();if(!check||Object.prototype.hasOwnProperty.call(check.days,d)){throw new Error('雲端刪除驗證失敗，請勿重複操作');}delete D[d]}
+async function setIn(d,i){const x={...D[d],in:i},empty=Object.values(U(x)).every(n=>!n)&&K.every(k=>!num(i[k]))&&!x.note&&!(x.ln&&x.ln.length);if(empty)await rmDay(d);else await put(d,x)}
+async function saveI(d){const i={};K.forEach(k=>i[k]=num($('#ei_'+k).value));
+  try{await setIn(d,i);editI='';toast('已修改進料');if(!db)strip();view()}catch(e){toast('修改失敗，請再試一次')}}
+async function delI(d){if(busy)return;if(armI!==d){armI=d;view();return}
+  busy=true;try{await setIn(d,{});armI='';toast('已刪除該日進料');if(!db)strip();view()}catch(e){toast('刪除失敗：'+e.message)}finally{busy=false}}
+async function setI(d,m){try{await put(d,{...D[d],ipm:m});toast('已更新計價月份');if(!db)strip()}catch(e){toast('更新失敗，請再試一次')}}
+async function bulkI(){const m=$('#im').value,ds=sel().filter(d=>iq(D[d])>0);
+  if(!ds.length){toast('下表沒有進料日期');return}
+  try{for(const d of ds)await put(d,{...D[d],ipm:m});toast('已將 '+ds.length+' 天標記為'+(m?pmL(m)+'計價完畢':'未計價'));if(!db)strip();view()}catch(e){toast('標記失敗，請再試一次')}}
+function list(){const ds=sel().sort().reverse(),amt=w=>w?(num(w)*S.wage).toLocaleString():'',cm=iso(new Date()).slice(0,7);
+  const pms=[...new Set(Object.values(D).map(x=>x.pm).filter(Boolean))].sort();
+  const head=`<div class="card">${rng()}<div class="row" style="margin-top:10px"><span class="mut">計價月份</span><select style="width:auto" onchange="pmf=this.value;view()"><option value="all">全部</option><option value="none" ${pmf==='none'?'selected':''}>未計價</option>${pms.map(m=>`<option value="${m}" ${pmf===m?'selected':''}>${pmL(m)}</option>`).join('')}</select>
+  <span class="mut">1工＝$${S.wage.toLocaleString()}</span><span style="flex:1"></span><span class="mut">將下表所有日期標記為</span><select id="bm" style="width:auto">${pmList('').slice(1).map(m=>`<option value="${m}" ${m===cm?'selected':''}>${pmL(m)}計價完畢</option>`).join('')}<option value="">未計價（清除標記）</option></select><button onclick="bulk()">套用</button></div></div>`;
+  if(!ds.length)return head+'<div class="card mut">這個條件下沒有記錄。</div>';
+  const Z=()=>({w:0,cv:0,pc:0,cn:0,A1:0,A2:0,B1:0,B2:0,vu:0}),T=Z(),TT={};
+  const pileTxt=g=>Object.entries(g).map(([n,o])=>{const a=[];if(o.gp)a.push('一般 '+fmtP(parseP(o.gp)));if(o.q1)a.push('組模1 '+fmtP(parseP(o.q1)));if(o.q2)a.push('組模2 '+fmtP(parseP(o.q2)));return a.length?(Object.keys(g).length>1?n+'：':'')+a.join('｜'):''}).filter(Boolean).join('；');
+  const ptd=t=>`<td style="text-align:left;white-space:normal;min-width:150px">${esc(t)}</td>`;
+  const cells=o=>`<td>${o.w||''}</td><td>${amt(o.w)}</td><td class="vl">${o.cv||''}${o.pc?`<span class="mut">（待${o.pc}）</span>`:''}</td><td>${o.A1||''}</td><td>${o.A2||''}</td><td class="vl">${o.cn||''}</td><td>${o.B1||''}</td><td>${o.B2||''}</td>`;
+  const dif=o=>(o.cv||o.cn||o.vu||o.B1||o.B2)?`垂${f1(o.vu-o.cv*S.std.v)}／不${f1(o.B1+o.B2-o.cn*S.std.n)}`:'';
+  const rows=ds.map(d=>{const x=D[d],g=G(x),u=U(x),names=Object.keys(g),gn={},oc=`onclick="cur='${d}';tab='rec';view()"`;
+    names.forEach(n=>gn[n]=N(g[n]));for(const k in T)T[k]+=u[k];
+    names.forEach(n=>{TT[n]=TT[n]||Z();for(const k in TT[n])TT[n][k]+=gn[n][k]});
+    let h=`<tr class="cl" ${oc}><td>${md(d)}</td><td>${esc(names.join(' '))}</td>${cells(u)}<td class="vl">${dif(u)}</td>${ptd(pileTxt(g))}<td>${pmL(x.pm)}</td></tr>`;
+    if(names.length>1)h+=names.map(n=>`<tr class="sub cl" ${oc}><td></td><td>└ ${esc(n)}</td>${cells(gn[n])}<td class="vl">${dif(gn[n])}</td><td></td><td></td></tr>`).join('');
+    return h}).join('');
+  const tn=TEAMS.filter(n=>TT[n]),H='<th>工數</th><th>金額($)</th><th class="vl">垂流支</th><th>A1</th><th>A2</th><th class="vl">不垂流支</th><th>B1</th><th>B2</th><th class="vl">用量差異</th>';
+  return head+`<div class="card wrap"><table><tr><th>日期</th><th>組別</th>${H}<th>樁號</th><th>計價月</th></tr>${rows}
+  <tr class="tot"><td>區間合計</td><td></td>${cells(T)}<td class="vl">${dif(T)}</td><td></td><td></td></tr></table>
+  <h3>各組合計</h3><table><tr><th>組別</th>${H}</tr>${tn.map(n=>`<tr><td>${n}</td>${cells(TT[n])}<td class="vl">${dif(TT[n])}</td></tr>`).join('')}</table>
+  <h3>依計價月份彙總（月底扣廠商用）</h3><table><tr><th>計價月份</th><th>日數</th><th>工數</th><th>金額($)</th></tr>${pmSum(ds).map(r=>`<tr><td>${pmL(r.k)}</td><td>${r.d}</td><td>${r.w}</td><td>${(r.w*S.wage).toLocaleString()}</td></tr>`).join('')}</table></div>
+  <p class="mut">金額＝工數×${S.wage.toLocaleString()}。垂流第1次補的支數會標「（待N）」，填入第2次後才計入支數與用量差異；第1次用掉的包數照常扣庫存。點任一列可修改當天記錄。進料請看「進料統計」。</p>`}
+async function bulk(){const m=$('#bm').value,ds=sel();
+  if(!ds.length){toast('下表沒有日期');return}
+  try{for(const d of ds)await put(d,{...D[d],pm:m});toast('已將 '+ds.length+' 天標記為'+(m?pmL(m)+'計價完畢':'未計價'));if(!db)strip();view()}catch(e){toast('標記失敗，請再試一次')}}
+async function saveFile(fn,data){let dl=null;try{dl=await window.claude.use('downloads')}catch(e){}
+  if(dl){await dl.save({filename:fn,data});return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data]));a.download=fn;document.body.appendChild(a);a.click();a.remove()}
+async function exportX(){
+  const ds=sel().sort(),L=d=>d+'（'+wd(d)+'）',c=calc(),V=vend(ds),W=w=>num(w)*S.wage;
+  const sd=o=>[r2(o.cv*S.std.v),r2(o.cn*S.std.n),r2(o.vu-o.cv*S.std.v),r2(o.B1+o.B2-o.cn*S.std.n)];
+  const A=[['日期','工數','金額($)','垂流支數(已完成)','待第2次垂流支數','A1使用','A2使用','不垂流支數','B1使用','B2使用','垂流標準用量','不垂流標準用量','垂流差異','不垂流差異','計價月份','備註']];
+  const B=[['日期','組別','工數','金額($)','垂流支數(組模2完成)','組模1新補支數','A1(組模1)','A2(組模1)','組模2 B1','組模2 B2','組模1垂流已用合計','一般不垂流支數','一般 B1','一般 B2','不垂流支數合計','B1合計','B2合計','垂流標準用量','不垂流標準用量','垂流差異','不垂流差異','一般樁號','組模1樁號','組模2樁號']];
+  ds.forEach(d=>{const x=D[d],u=U(x);A.push([L(d),u.w,W(u.w),u.cv,u.pc,u.A1,u.A2,u.cn,u.B1,u.B2,...sd(u),D[d].pm||'未計價',x.note||'']);
+    Object.entries(G(x)).forEach(([n,o])=>{const a=V(o),m=N(o);B.push([L(d),n,m.w,W(m.w),m.cv,m.pc,m.A1,m.A2,a.m1,a.m2,a.p1,num(o.cn),num(o.B1),num(o.B2),m.cn,m.B1,m.B2,...sd(m),o.gp||'',o.q1||'',o.q2||''])})});
+  const C=[['廠商','垂流(包)','不垂流(包)','合計(包)','垂流單價','不垂流單價','金額'],...V.rows,V.tot];
+  const I=[['日期',...VEN.flatMap(([,n])=>[n+'垂流',n+'不垂流']),'金額($)','計價月份'],...ds.filter(d=>iq(D[d])>0).sort().map(d=>[L(d),...K.map(k=>num(D[d].in?.[k])),iamt(D[d]),D[d].ipm||'未計價'])];
+  const P=[['計價月份','日數','工數','金額($)'],...pmSum(ds).map(r=>[r.k||'未計價',r.d,r.w,r.w*S.wage])];
+  const E=[['品項','目前庫存(包)','7天警戒門檻','近7天日均','剩餘可用天數','建議補貨(包)','狀態'],...BR.map(b=>{const r=c[b];return[NM[b],r2(r.stock),r.act?r2(r.thr):'',r.act?r2(r.avg):'',r.left==null?'':r2(r.left),r.act?r.sug:'',ST[r.s]]})];
+  const name='水泥進料施工_'+iso(new Date()).replace(/-/g,'');
+  try{try{if(!window.XLSX)throw 0;const wb=XLSX.utils.book_new();
+      [['每日明細',A],['各組施工明細',B],['計價月份彙總',P],['進料統計',C],['進料明細',I],['目前庫存',E]].forEach(([n,a])=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),n));
+      await saveFile(name+'.xlsx',XLSX.write(wb,{type:'array',bookType:'xlsx'}));toast('已匯出 Excel');return}
+    catch(e){if(e&&e.code==='declined'){toast('已取消匯出');return}}
+    const csv='\ufeff'+B.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+    await saveFile(name+'_各組明細.csv',csv);toast('Excel 無法產生，已改匯出 CSV')}
+  catch(e){toast(e&&e.code==='declined'?'已取消匯出':'匯出失敗，請再試一次')}}
+function sett(){const inp=(id,v)=>`<input id="${id}" type="number" step="any" value="${v}">`;
+  return `<div class="card"><h3 style="margin-top:0">庫存基準</h3><label class="mut">基準日（收工後）<input id="bd" type="date" value="${S.baseDate}"></label>
+  <div class="grid" style="margin-top:8px">${BR.map(b=>`<label>${NM[b]}（包）${inp('b'+b,S.base[b])}</label>`).join('')}</div>
+  <h3>廠商單價（元／包）</h3><div class="grid">${VEN.map(([k,n])=>`<label>${n}・垂流${inp('p'+k+'v',S.price[k].v)}</label><label>${n}・不垂流${inp('p'+k+'n',S.price[k].n)}</label>`).join('')}</div>
+  <h3>標準用量（包／支）</h3><div class="grid"><label>垂流${inp('sv',S.std.v)}</label><label>不垂流${inp('sn',S.std.n)}</label></div>
+  <h3>3D 同步</h3><div class="grid"><label>補樁階段（第幾層）<select id="stg">${[1,2,3,4].map(i=>`<option value="${i}" ${(+S.stage||1)===i?'selected':''}>第${i}層</option>`).join('')}</select></label></div><input type="hidden" id="gas" value="${esc(S.gas||'')}"><div class="mut">雲端連線：使用登入帳號的安全內部連線</div>
+  <div class="row" style="margin-top:8px"><button onclick="restoreG()">從雲端硬碟還原資料</button><button onclick="resync3d()">重新同步全部樁號到 3D</button><span class="mut">每次儲存會自動備份到「樁頭修補」資料夾的試算表</span></div>
+  <h3>工資（元／工）</h3><div class="grid"><label>1工 ＝${inp('wg',S.wage)}</label></div>
+  <div class="row" style="margin-top:14px"><button class="pri" onclick="saveS()">儲存設定</button></div></div>`}
+async function saveS(){const g=id=>num($('#'+id).value);
+  const n={baseDate:$('#bd').value||S.baseDate,base:{},price:{},std:{v:g('sv'),n:g('sn')},wage:g('wg')||2700,stage:+$('#stg').value||1,gas:$('#gas').value.trim()};
+  BR.forEach(b=>n.base[b]=g('b'+b));VEN.forEach(([k])=>n.price[k]={v:g('p'+k+'v'),n:g('p'+k+'n')});
+  try{if(await gpost({action:'settings',doc:n})){S=n;toast('設定已儲存到雲端硬碟')}strip()}catch(e){toast('儲存失敗')}}
+function view(){tabs();let h;try{h={rec,ovw,stat,list,set:sett}[tab]()}catch(e){h=`<div class="card low"><b>畫面載入錯誤：${esc(e.message)}</b></div>`}$('#main').innerHTML=h;if(tab==='rec')try{hint()}catch(e){}strip()}
+function lsSave(){}
+function refresh(){strip();if(tab!=='rec')view()}
+async function init(){
+  view();$('#sync').textContent='連接雲端硬碟…';
+  const c=await pullCloud();
+  if(!c){$('#sync').textContent='⚠ 無法連線雲端硬碟';
+    $('#main').innerHTML='<div class="card low"><b>無法連線雲端硬碟（Apps Script）</b><div style="margin-top:6px">資料全部存放在雲端，連不上時為避免資料錯亂，暫不提供記錄。請確認網路及你是否已登入獲授權的 Google 帳號。</div><div class="row" style="margin-top:10px"><button onclick="location.reload()">重新連線</button></div></div>';return}
+  D=c.days||{};if(c.settings)S={...S,...c.settings};
+  $('#sync').textContent='雲端硬碟已同步';loaded=true;view();
+  setInterval(async()=>{if(tab==='rec'||cloudBad||busy)return;const c2=await pullCloud();if(busy)return;if(c2){D=c2.days;if(c2.settings)S={...S,...c2.settings};refresh()}},30000)}
+init();
+</script></body></html>

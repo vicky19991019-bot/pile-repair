@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" translate="no"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CDC 預壘樁 3D 施工進度</title>
+<style>
+:root{color-scheme:light;--ink:#1f2a44;--mut:#7a87a3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;background:linear-gradient(#e6ecf7,#f6f1ea);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC",sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
+.p{position:fixed;background:rgba(255,255,255,.94);border-radius:14px;padding:12px 15px;font-size:16px;box-shadow:0 6px 18px rgba(40,60,110,.16)}
+#hd{left:8px;top:calc(8px + env(safe-area-inset-top,0px));max-width:calc(100% - 16px)}
+#hd h1{font-size:19px;margin:0 0 6px}
+.b{display:inline-block;margin:4px 4px 0 0;padding:7px 14px;border-radius:18px;border:1px solid #d3dbea;background:#f3f6fc;color:#41507a;font-size:15px;cursor:pointer}
+.b.on{background:#5b6cff;border-color:#5b6cff;color:#fff}
+#lg{left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 16px);line-height:2;font-size:15px}
+#lg i{display:inline-block;width:13px;height:13px;border-radius:50%;margin:0 4px 0 9px;vertical-align:-1px}
+#in .b{margin-top:4px}#hp{right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:300px;max-height:45%;overflow:auto;display:none;line-height:1.5}.hr{padding:3px 6px;border-radius:6px;cursor:pointer}.hr:hover{background:#f0f3fa}.hr.cur{background:#e5ebff;font-weight:600}#in{right:8px;top:calc(8px + env(safe-area-inset-top,0px));min-width:190px;max-width:290px;display:none;line-height:1.7;font-size:16px}#in b{font-size:18px}#in small{font-size:13px}
+.card{position:fixed;left:0;top:0;background:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:15px;min-width:150px;box-shadow:0 8px 22px rgba(40,60,110,.2);pointer-events:none;white-space:nowrap}
+.card .x{position:absolute;right:6px;top:5px;width:24px;height:24px;line-height:22px;text-align:center;border-radius:12px;background:#eef1f8;color:#55618a;font-size:16px;cursor:pointer;pointer-events:auto}.card .x:hover{background:#ffd9d9;color:#c33}.card h4{margin:0 0 5px;font-size:16px;display:flex;align-items:center;gap:6px}
+.card h4 i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.card .r{display:flex;justify-content:space-between;gap:16px;color:var(--mut);line-height:1.6}
+.card .r b{color:var(--ink)}
+
+/* 2026-11: 精簡浮動工具列與手機版佈局 */
+.p{padding:9px 11px;border-radius:12px;font-size:13px;box-shadow:0 4px 12px rgba(40,60,110,.14)}
+#hd{max-width:min(600px,calc(100vw - 16px));box-sizing:border-box}
+#hd h1{font-size:17px;margin:0 0 5px}
+#hd .b{font-size:12px;padding:6px 9px;margin:3px 2px 0 0;border-radius:15px}
+#hd #q{box-sizing:border-box;width:min(205px,65vw)!important;font-size:14px!important;padding:5px 7px!important}
+#hd .hint{font-size:11px!important;margin-top:4px!important}
+#in{min-width:0;width:245px;max-width:calc(100vw - 20px);box-sizing:border-box;font-size:13px;line-height:1.5;max-height:45vh;overflow:auto}
+#in b{font-size:15px}#in small{font-size:11px}#in .b{font-size:12px;padding:5px 8px}
+#lg{max-width:min(560px,calc(100vw - 16px));box-sizing:border-box;line-height:1.55;font-size:12px}
+#lg small{font-size:10px}
+.card{font-size:12px;min-width:120px;padding:7px 26px 7px 9px;border-radius:9px}
+.card h4{font-size:13px}
+#toggleControls{display:inline-flex;align-items:center;justify-content:center;float:right;border:1px solid #d3dbea;background:#f3f6fc;color:#41507a;border-radius:9px;padding:5px 9px;font-size:12px;cursor:pointer;margin-left:10px}
+#hd .controlBody{display:none;padding-top:7px;max-height:70vh;overflow-y:auto}
+#hd.expanded .controlBody{display:block}
+@media(max-width:700px){
+ #hd{left:7px;right:7px;top:calc(7px + env(safe-area-inset-top,0px));max-width:none;width:auto;padding:8px 10px}
+ #hd h1{font-size:15px;margin:0}
+ #toggleControls{display:inline-flex;align-items:center;justify-content:center;float:right;border:1px solid #d3dbea;background:#f3f6fc;color:#41507a;border-radius:9px;padding:5px 9px;font-size:12px;cursor:pointer}
+ #hd .controlBody{display:none;padding-top:7px;max-height:32vh;overflow-y:auto}
+ #hd.expanded .controlBody{display:block}
+ #hd .b{font-size:12px;padding:6px 8px}
+ #hd #q{width:min(200px,60vw)!important}
+ #in{top:calc(54px + env(safe-area-inset-top,0px));right:7px;width:min(225px,63vw);max-height:36vh;padding:8px;font-size:12px;line-height:1.45}
+ #in b{font-size:14px}#in .b{font-size:11px;padding:5px 7px}
+ #lg{left:7px;right:7px;bottom:calc(7px + env(safe-area-inset-bottom,0px));max-width:none;padding:7px 9px;font-size:11px;line-height:1.45;max-height:15vh;overflow:auto}
+ #lg small{display:none}
+ .card{display:none!important}
+ #hp{right:7px;bottom:calc(90px + env(safe-area-inset-bottom,0px));width:min(280px,80vw)}
+}
+
+#scene-editor{position:fixed;right:10px;bottom:64px;z-index:30;max-width:min(320px,calc(100vw - 20px));font:13px sans-serif;color:#253451}#scene-editor button{cursor:pointer;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#263b60;padding:8px 10px;margin:3px;box-shadow:0 2px 7px #0002}#scene-editor button.active{background:#506bdf;color:white}#scene-actions{background:#fffffff0;padding:9px;border-radius:12px;box-shadow:0 5px 20px #0002}#scene-actions[hidden]{display:none}.scene-hint{font-size:12px;line-height:1.5;margin:4px 3px 7px}@media(max-width:600px){#scene-editor{right:6px;bottom:48px}#scene-editor button{padding:7px;font-size:12px}}
+
+/* 補樁日期查詢：獨立小面板，不改變樁位原有狀態顏色 */
+#datePanel{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top,0px));z-index:24;width:min(340px,calc(100vw - 16px));max-height:65vh;overflow:auto;box-sizing:border-box;background:#fffffff5;border-radius:12px;padding:12px;box-shadow:0 5px 20px #24344b30;font-size:13px;display:none}
+#datePanel.open{display:block}#datePanel h3{font-size:15px;margin:0 0 8px}#datePanel label{display:block;margin:5px 0 3px;color:#54627a}#datePanel input,#datePanel select{box-sizing:border-box;width:100%;padding:7px;border:1px solid #cbd5e1;border-radius:7px;background:white;color:#26344a}
+#datePanel .dateButtons{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}#datePanel button{border:1px solid #cbd5e1;background:#f4f7fc;border-radius:8px;padding:7px 10px;cursor:pointer;color:#25365b}#datePanel .datePrimary{background:#5265ed;color:#fff}#dateResults{max-height:190px;overflow:auto;margin-top:9px}#dateResults button{display:block;width:100%;text-align:left;margin:3px 0}#dateStatus{color:#64748b;margin-top:8px;font-size:12px}
+@media(max-width:700px){#datePanel{top:calc(54px + env(safe-area-inset-top,0px));max-height:56vh}}
+
+#cdcPhotoModal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:#101c31a8;padding:12px;box-sizing:border-box}
+#cdcPhotoModal.open{display:flex}
+#cdcPhotoBox{width:min(740px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:14px;padding:16px;box-sizing:border-box;color:#27364e;font:14px sans-serif}
+#cdcPhotoBox h3{margin:0 0 9px;font-size:18px}
+.cdcPhotoTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cdcPhotoGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.cdcPhotoGroup{border:1px solid #dbe2ee;border-radius:10px;padding:10px;min-width:0}
+.cdcPhotoGroup h4{margin:0 0 8px;font-size:14px}
+.cdcPhotoList{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;min-height:60px;margin-top:10px}
+.cdcPhotoItem{border:1px solid #e0e5ee;border-radius:8px;padding:5px;min-width:0}
+.cdcPhotoItem img{width:100%;height:100px;object-fit:cover;border-radius:5px;cursor:zoom-in;background:#eef2f7}
+.cdcPhotoItem small{display:block;overflow-wrap:anywhere;font-size:10px;color:#63728b}
+#cdcPhotoBox button,#cdcPhotoBox .cdcUploadLabel{display:inline-block;background:#edf3ff;border:1px solid #ccd7ed;color:#2c4266;border-radius:8px;padding:8px 10px;cursor:pointer;font-size:13px}
+#cdcPhotoStatus{margin-top:8px;font-size:12px;color:#536780}
+#cdcPhotoZoom{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;background:#000e;padding:20px}
+#cdcPhotoZoom.open{display:flex}
+#cdcPhotoZoom img{max-width:95vw;max-height:90vh;object-fit:contain}
+@media(max-width:560px){.cdcPhotoGrid{grid-template-columns:1fr}#cdcPhotoBox{max-height:86vh;padding:12px}}
+
+/* 樁位資訊卡避開右上角 ViewCube（桌機：移到方塊左側；手機：移到方塊下方） */
+#in{right:132px!important}
+#hd{max-width:min(600px,calc(100vw - 140px))!important}
+@media(max-width:700px){#hd{right:128px!important;left:7px!important;width:auto!important;max-width:none!important}}
+@media(max-width:700px){#in{right:7px!important;top:calc(176px + env(safe-area-inset-top,0px))!important;max-height:calc(100vh - 250px)!important}}
+</style></head><body>
+  <style>
+  .jump-btn{position:fixed;right:16px;bottom:16px;z-index:9999;background:#1f6feb;color:#fff;text-decoration:none;padding:10px 16px;border-radius:24px;font-size:15px;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,.25);}
+  .jump-btn .short{display:none;}
+  @media (max-width:768px){
+    .jump-btn{right:10px;bottom:auto;left:auto;top:200px;padding:6px 12px;font-size:13px;}
+    .jump-btn .full{display:none;}
+    .jump-btn .short{display:inline;}
+  }
+</style>
+<a class="jump-btn" href="cement.html"><span class="full">🧱 前往水泥進料記錄</span><span class="short">🧱 水泥記錄</span></a>
+<canvas id="c"></canvas>
+<div class="p" id="hd"><button id="toggleControls" type="button" aria-expanded="false">☰ 操作選單</button><h1>CDC 預壘樁 3D 施工進度</h1><div class="controlBody"><div style="margin-bottom:4px"><input id="q" placeholder="搜尋樁號(P125)或分區(A14)" style="width:230px;font-size:17px;padding:2px 8px;border:1px solid #d3dbea;border-radius:8px"><span class="b" id="qb">搜尋</span></div>
+<span class="b on" data-s="1">第一次開挖(現況)</span><span class="b" data-s="2">預覽 第二次</span><span class="b" data-s="3">預覽 第三次</span><span class="b" data-s="4">預覽 最終</span><br>
+<span class="b" id="dateOpen">📅 補樁日期查詢</span><span class="b on" id="mode">顯示：補樁狀態</span><span class="b" id="tr">透視土體</span><span class="b" id="cd">資訊卡</span><span class="b" id="cdcPhotoQuick">📷 施工照片</span><br><span class="b" id="un">↩ 復原</span><span class="b" id="re">↪ 重做</span><span class="b" id="hs">步驟紀錄</span><br><span class="b" id="excRestore">⬜ 未開挖（點選方格）</span><span class="b" id="excDone" style="display:none">✓ 完成開挖編輯</span><div style="margin-top:6px;font-size:12px"><a href="./" style="color:#7a87a3">首頁</a>　<a href="#" onclick="resetKey();return false" style="color:#7a87a3">重設通行碼</a></div><div class="hint" style="color:#7a87a3;margin-top:6px;font-size:13px">點選樁可標記補樁；移工自動跟進最新補樁進度，拖曳只會移動位置</div></div></div>
+<section id="datePanel" aria-label="補樁日期查詢">
+<h3>📅 補樁日期查詢</h3>
+<label for="dateType">查詢方式</label><select id="dateType"><option value="day">單日</option><option value="range">日期區間</option></select>
+<label for="dateFrom">日期／開始日期</label><input type="date" id="dateFrom" value="2026-11-04">
+<div id="dateToWrap" style="display:none"><label for="dateTo">結束日期</label><input type="date" id="dateTo" value="2026-11-05"></div>
+<div class="dateButtons"><button id="dateFind" class="datePrimary">查詢並標示</button><button id="dateClear">清除標示</button><button id="dateClose">關閉</button></div>
+<div id="dateStatus">查詢依據：現有補樁日期；樁體發光不影響原本顏色。</div><div id="dateResults"></div>
+</section>
+<div class="p" id="in"></div><div class="p" id="hp"></div><div class="p" id="lg"></div>
+<div id="cdcPhotoModal" role="dialog" aria-modal="true" aria-label="預壘樁施工照片">
+<div id="cdcPhotoBox">
+ <div class="cdcPhotoTop"><h3 id="cdcPhotoTitle">施工照片</h3><button type="button" id="cdcPhotoClose">關閉 ×</button></div>
+ <div style="font-size:12px;color:#66758b">照片儲存在 CDC 專用 Google Drive 資料夾；每支樁可上傳多張施工前後照片。</div>
+ <div class="cdcPhotoGrid">
+  <div class="cdcPhotoGroup"><h4>施工前</h4><label class="cdcUploadLabel">＋ 新增施工前照片<input type="file" id="cdcPhotoBefore" accept="image/jpeg,image/png,image/webp,image/*" style="display:none"></label><div class="cdcPhotoList" id="cdcPhotoBeforeList"></div></div>
+  <div class="cdcPhotoGroup"><h4>施工後</h4><label class="cdcUploadLabel">＋ 新增施工後照片<input type="file" id="cdcPhotoAfter" accept="image/jpeg,image/png,image/webp,image/*" style="display:none"></label><div class="cdcPhotoList" id="cdcPhotoAfterList"></div></div>
+ </div><div id="cdcPhotoStatus" aria-live="polite"></div>
+</div></div>
+<div id="cdcPhotoZoom" role="dialog" aria-label="照片放大預覽"><img alt="施工照片放大預覽"></div>
+<div id="walkDiagUI" style="display:none;position:fixed;right:12px;top:12px;z-index:30;background:#ffffffed;color:#25354b;padding:12px;border-radius:12px;box-shadow:0 2px 14px #0002;font:13px sans-serif;max-width:245px"><b>🚶 通行區域檢查（不改人物）</b><div style="margin:8px 0"><button id="walkDiagToggle" type="button">顯示通行檢查</button> <button id="walkDiagRefresh" type="button">重新檢查</button> <button id="walkRouteTest" type="button">顯示跨區路線</button></div><div id="walkDiagInfo">按「顯示通行檢查」查看判斷結果</div><div id="walkRouteInfo" style="margin-top:7px;color:#175a80">按「顯示跨區路線」檢查人物是否能跨越白色格子</div><div style="margin-top:7px;font-size:12px">🟦 可通行　🟥 不可通行（白格內）<br>🟨 已開挖／施工中（禁止）</div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// GitHub 版：透過 Apps Script API 存取雲端（需要通行碼）
+const API_URL="https://script.google.com/macros/s/AKfycbx5cAMgG2cXKMPVJzmnYvmyL26-gp99ky4xd-3Nwue9VUQqlzooBdE3eInM-9mk3R8WMw/exec";
+const KEY_LS="pile-api-key";
+function apiKey_(){let k="";try{k=localStorage.getItem(KEY_LS)||""}catch(e){}
+  if(!k){k=(prompt("請輸入通行碼（這台裝置第一次使用時需要）")||"").trim();if(k){try{localStorage.setItem(KEY_LS,k)}catch(e){}}}
+  return k}
+function resetKey(){try{localStorage.removeItem(KEY_LS)}catch(e){}location.reload()}
+async function apiCall(fn,...args){
+  const key=apiKey_();if(!key)throw new Error("未輸入通行碼");
+  let r;try{r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn,args,key})})}
+  catch(e){throw new Error("無法連到雲端，請檢查網路")}
+  let j;try{j=await r.json()}catch(e){throw new Error("雲端回應格式錯誤")}
+  if(!j.ok){if(/通行碼/.test(j.error||"")){try{localStorage.removeItem(KEY_LS)}catch(e){}}throw new Error(j.error||"雲端操作失敗")}
+  return j.data}
+function cloudFetch(url, options){
+  const isPost=options && String(options.method||'GET').toUpperCase()==='POST';
+  let p;
+  if(isPost){let payload;try{payload=JSON.parse(options.body)}catch(e){return Promise.reject(e)}p=apiCall('apiPost',payload)}
+  else p=apiCall('apiGet',String(url).includes('what=days')?'days':'state');
+  return p.then(data=>({ok:true,json:async()=>data}));
+}
+</script>
+<script>
+document.getElementById('toggleControls').addEventListener('click',function(){const hd=document.getElementById('hd');const open=hd.classList.toggle('expanded');this.textContent=open?'收合選單 ×':'☰ 操作選單';this.setAttribute('aria-expanded',String(open));});
+(function(){if(innerWidth>700){const hd=document.getElementById('hd'),b=document.getElementById('toggleControls');hd.classList.add('expanded');b.textContent='收合選單 ×';b.setAttribute('aria-expanded','true')}})();
+const PILES=[[1,-0.92,-1.25,-140,-1800],[2,-0.02,-1.05,-140,-1800],[3,0.88,-1.05,-140,-1800],[4,1.78,-1.05,-140,-1800],[5,2.68,-1.05,-140,-1800],[6,3.58,-1.05,-140,-1800],[7,4.48,-1.05,-140,-1800],[8,5.38,-1.05,-140,-1800],[9,6.28,-1.05,-140,-1800],[10,7.18,-1.05,-140,-1800],[11,8.08,-1.05,-140,-1800],[12,8.98,-1.05,-140,-1800],[13,9.88,-1.05,-140,-1800],[14,10.78,-1.05,-140,-1800],[15,11.68,-1.05,-140,-1800],[16,12.58,-1.05,-140,-1800],[17,13.48,-1.05,-140,-1800],[18,14.38,-1.05,-140,-1600],[19,15.28,-1.05,-140,-1600],[20,16.18,-1.05,-140,-1600],[21,17.08,-1.05,-140,-1600],[22,17.98,-1.05,-140,-1600],[23,18.88,-1.05,-140,-1600],[24,19.78,-1.05,-140,-1600],[25,20.68,-1.05,-140,-1600],[26,21.58,-1.05,-140,-1600],[27,22.48,-1.05,-140,-1600],[28,23.38,-1.05,-140,-1600],[29,24.28,-1.05,-140,-1600],[30,25.18,-1.05,-140,-1600],[31,26.08,-1.05,-140,-1600],[32,26.98,-1.05,-140,-1600],[33,27.88,-1.05,-140,-1600],[34,28.78,-1.05,-140,-1600],[35,29.68,-1.05,-140,-1600],[36,30.58,-1.05,-140,-1600],[37,31.48,-1.05,-140,-1600],[38,32.38,-1.05,-140,-1600],[39,33.28,-1.05,-140,-1600],[40,34.18,-1.05,-140,-1600],[41,35.08,-1.05,-140,-1600],[42,35.98,-1.05,-140,-1600],[43,36.88,-1.05,-140,-1600],[44,37.78,-1.05,-140,-1600],[45,38.68,-1.05,-140,-1600],[46,39.58,-1.05,-140,-1600],[47,40.48,-1.05,-140,-1600],[48,41.38,-1.05,-140,-1600],[49,42.28,-1.05,-140,-1600],[50,43.18,-1.05,-140,-1600],[51,44.08,-1.05,-140,-1600],[52,44.98,-1.05,-140,-1600],[53,45.88,-1.05,-140,-1600],[54,46.78,-1.05,-140,-1600],[55,47.68,-1.05,-140,-1600],[56,48.58,-1.05,-140,-1600],[57,49.48,-1.05,-140,-1600],[58,50.38,-1.05,-140,-1600],[59,51.28,-1.05,-140,-1600],[60,52.18,-1.05,-140,-1600],[61,53.08,-1.05,-140,-1600],[62,53.98,-1.05,-140,-1600],[63,54.88,-1.05,-140,-1600],[64,55.78,-1.05,-140,-1600],[65,56.68,-1.05,-140,-1600],[66,57.58,-1.05,-140,-1600],[67,58.48,-1.05,-140,-1600],[68,59.38,-1.05,-140,-1600],[69,60.28,-1.05,-140,-1600],[70,61.18,-1.05,-140,-1600],[71,62.08,-1.05,-140,-1600],[72,62.98,-1.05,-140,-1600],[73,63.88,-1.05,-140,-1600],[74,64.78,-1.05,-140,-1600],[75,65.68,-1.05,-140,-1600],[76,66.58,-1.05,-140,-1600],[77,67.48,-1.05,-140,-1600],[78,68.38,-1.05,-140,-1600],[79,69.28,-1.05,-140,-1600],[80,70.18,-1.05,-140,-1600],[81,71.08,-1.05,-140,-1600],[82,71.98,-1.05,-140,-1600],[83,72.88,-1.05,-140,-1600],[84,73.78,-1.05,-140,-1600],[85,74.68,-1.05,-140,-1600],[86,75.58,-1.05,-140,-1600],[87,76.48,-1.05,-140,-1600],[88,77.38,-1.05,-140,-1600],[89,78.28,-1.05,-140,-1600],[90,79.18,-1.05,-140,-1600],[91,80.08,-1.05,-140,-1600],[92,80.98,-1.05,-140,-1600],[93,81.88,-1.05,-140,-1600],[94,82.78,-1.05,-140,-1600],[95,83.68,-1.05,-140,-1600],[96,84.58,-1.05,-140,-1600],[97,85.48,-1.05,-140,-1600],[98,86.38,-1.05,-140,-1600],[99,87.28,-1.05,-140,-1600],[100,88.18,-1.05,-140,-1600],[101,89.08,-1.05,-140,-1600],[102,89.98,-1.05,-140,-1600],[103,90.88,-1.05,-140,-1800],[104,91.78,-1.05,-140,-1800],[105,92.68,-1.05,-140,-1800],[106,93.58,-1.05,-140,-1800],[107,94.48,-1.05,-140,-1800],[108,95.38,-1.05,-140,-1800],[109,96.28,-1.05,-140,-1800],[110,97.18,-1.05,-140,-1800],[111,98.08,-1.05,-140,-1800],[112,98.98,-1.05,-140,-1800],[113,99.88,-1.05,-140,-1800],[114,100.78,-1.05,-140,-1800],[115,101.68,-1.05,-140,-1800],[116,102.58,-1.05,-140,-1800],[117,103.48,-1.05,-140,-1800],[118,104.38,-1.05,-140,-1800],[119,105.28,-1.05,-140,-1800],[120,106.18,-1.05,-140,-1800],[121,107.08,-1.05,-140,-1800],[122,107.98,-1.05,-140,-1800],[123,108.88,-1.05,-140,-1800],[124,109.78,-1.05,-140,-1800],[125,110.68,-1.05,-140,-1800],[126,111.58,-1.05,-140,-1800],[127,112.48,-1.05,-140,-1800],[128,113.38,-1.05,-140,-1800],[129,114.28,-1.05,-140,-1800],[130,115.18,-1.05,-140,-1800],[131,116.08,-1.05,-140,-1800],[132,116.98,-1.05,-140,-1800],[133,117.88,-1.05,-140,-1800],[134,118.78,-1.05,-140,-2000],[135,119.68,-1.05,-140,-2000],[136,120.58,-1.05,-140,-2000],[137,121.48,-1.05,-140,-2000],[138,122.38,-1.05,-140,-2000],[139,123.28,-1.05,-140,-2000],[140,124.18,-1.05,-140,-2000],[141,125.08,-1.05,-140,-2000],[142,125.98,-1.05,-140,-2000],[143,126.88,-1.05,-140,-2000],[144,127.78,-1.05,-140,-2000],[145,128.68,-1.05,-140,-2000],[146,129.58,-1.05,-140,-2000],[147,130.48,-1.05,-140,-2000],[148,131.38,-1.05,-140,-2000],[149,132.28,-1.05,-140,-2000],[150,133.18,-1.05,-140,-2000],[151,134.08,-1.05,-140,-2000],[152,134.98,-1.05,-140,-2000],[153,135.88,-1.05,-140,-2000],[154,136.78,-1.05,-140,-2000],[155,137.68,-1.05,-140,-2000],[156,138.58,-1.05,-140,-2000],[157,139.48,-1.05,-140,-2000],[158,139.99,-0.3,-140,-2000],[159,140.46,0.47,-140,-2000],[160,140.93,1.24,-65,-2000],[161,140.85,2.13,-65,-2000],[162,140.85,3.03,-65,-2000],[163,140.85,3.93,-65,-2000],[164,140.85,4.83,-65,-2000],[165,140.85,5.73,-65,-2000],[166,140.85,6.63,-65,-2000],[167,140.85,7.53,-65,-2000],[168,140.85,8.43,-65,-2000],[169,140.85,9.33,-65,-2000],[170,140.85,10.23,-65,-2000],[171,140.85,11.13,-65,-2000],[172,140.85,12.03,-65,-2000],[173,140.85,12.93,-65,-2000],[174,140.85,13.83,-65,-2000],[175,140.85,14.73,-65,-1600],[176,140.85,15.63,-65,-1600],[177,140.85,16.53,-65,-1600],[178,140.85,17.43,-65,-1600],[179,140.85,18.33,-65,-1600],[180,140.85,19.23,-65,-1600],[181,140.85,20.13,-65,-1600],[182,140.85,21.03,-65,-1450],[183,140.85,21.93,-65,-1450],[184,140.85,22.83,-65,-1450],[185,140.85,23.73,-65,-1450],[186,140.85,24.63,-65,-1450],[187,140.85,25.53,-65,-1450],[188,140.85,26.43,-65,-1450],[189,140.85,27.33,-65,-1450],[190,140.85,28.23,-65,-1450],[191,140.85,29.13,-65,-1450],[192,140.85,30.03,-65,-1450],[193,140.85,30.93,-65,-1450],[194,140.85,31.83,-65,-1450],[195,140.85,32.73,-65,-1450],[196,140.85,33.63,-65,-1450],[197,140.85,34.53,-65,-1450],[198,140.85,35.43,-65,-1450],[199,140.85,36.33,-65,-1450],[200,140.85,37.23,-65,-1450],[201,140.85,38.13,-65,-1450],[202,140.85,39.03,-65,-1450],[203,140.85,39.93,-65,-1450],[204,140.85,40.83,-65,-1450],[205,140.85,41.73,-65,-1450],[206,140.85,42.63,-65,-1450],[207,140.85,43.53,-65,-1450],[208,140.85,44.43,-65,-1450],[209,140.85,45.33,-65,-1450],[210,140.85,46.23,-65,-1450],[211,140.85,47.13,-65,-1450],[212,140.85,48.03,-65,-1450],[213,140.85,48.93,-65,-1450],[214,140.85,49.83,-65,-1450],[215,140.85,50.73,-65,-1450],[216,140.85,51.63,-65,-1450],[217,140.85,52.53,-65,-1450],[218,140.85,53.43,-65,-1450],[219,140.85,54.33,-65,-1450],[220,140.85,55.23,-65,-1450],[221,140.85,56.13,-65,-1450],[222,140.16,56.7,-110,-1450],[223,139.26,56.7,-110,-1450],[224,138.36,56.7,-110,-1450],[225,137.46,56.7,-110,-1450],[226,136.56,56.7,-110,-1450],[227,135.66,56.7,-110,-1450],[228,134.76,56.7,-110,-1450],[229,133.86,56.7,-110,-1450],[230,132.96,56.7,-110,-1450],[231,132.06,56.7,-110,-1450],[232,131.16,56.7,-110,-1450],[233,130.26,56.7,-110,-1450],[234,129.36,56.7,-110,-1450],[235,128.46,56.7,-110,-1450],[236,127.56,56.7,-110,-1450],[237,126.66,56.7,-65,-1450],[238,125.76,56.7,-65,-1450],[239,124.86,56.7,-65,-1450],[240,123.96,56.7,-65,-1450],[241,123.06,56.7,-65,-1450],[242,122.16,56.7,-65,-1450],[243,121.26,56.7,-65,-1450],[244,120.36,56.7,-65,-1450],[245,119.46,56.7,-65,-1450],[246,118.56,56.7,-65,-1450],[247,117.66,56.7,-65,-1450],[248,116.76,56.7,-65,-1450],[249,115.86,56.7,-65,-1450],[250,114.96,56.7,-65,-1450],[251,114.06,56.7,-65,-1450],[252,113.16,56.7,-65,-1450],[253,112.26,56.7,-65,-1450],[254,111.36,56.7,-65,-1450],[255,110.46,56.7,-65,-1450],[256,109.56,56.7,-65,-1450],[257,108.66,56.7,-65,-1450],[258,107.76,56.7,-65,-1450],[259,106.86,56.7,-65,-1450],[260,105.96,56.7,-65,-1450],[261,105.06,56.7,-65,-1450],[262,104.16,56.7,-65,-1450],[263,103.26,56.7,-65,-1450],[264,102.36,56.7,-65,-1450],[265,101.46,56.7,-65,-1450],[266,100.56,56.7,-65,-1450],[267,99.66,56.7,-65,-1450],[268,98.76,56.7,-65,-1450],[269,97.86,56.7,-65,-1450],[270,96.96,56.7,-65,-1450],[271,96.06,56.7,-65,-1450],[272,95.16,56.7,-65,-1450],[273,94.26,56.7,-65,-1450],[274,93.36,56.7,-65,-1450],[275,92.46,56.7,-65,-1450],[276,91.56,56.7,-65,-1450],[277,90.66,56.7,-65,-1450],[278,89.76,56.7,-65,-1450],[279,88.86,56.7,-65,-1450],[280,87.96,56.7,-65,-1450],[281,87.06,56.7,-65,-1450],[282,86.16,56.7,-65,-1450],[283,85.26,56.7,-65,-1450],[284,84.36,56.7,-65,-1450],[285,83.46,56.7,-65,-1450],[286,82.56,56.7,-65,-1450],[287,81.66,56.7,-65,-1450],[288,80.76,56.7,-65,-1450],[289,79.86,56.7,-65,-1450],[290,78.96,56.7,-65,-1450],[291,78.06,56.7,-65,-1450],[292,77.16,56.7,-65,-1450],[293,76.26,56.7,-65,-1450],[294,75.36,56.7,-65,-1450],[295,74.46,56.7,-65,-1450],[296,73.56,56.7,-65,-1450],[297,72.66,56.7,-65,-1450],[298,71.76,56.7,-65,-1450],[299,70.86,56.7,-65,-1450],[300,69.96,56.7,-65,-1450],[301,69.06,56.7,-65,-1450],[302,68.16,56.7,-65,-1450],[303,67.26,56.7,-65,-1450],[304,66.36,56.7,-65,-1450],[305,65.46,56.7,-65,-1450],[306,64.56,56.7,-65,-1450],[307,63.66,56.7,-65,-1450],[308,62.76,56.7,-65,-1450],[309,61.86,56.7,-65,-1450],[310,60.96,56.7,-65,-1450],[311,60.06,56.7,-65,-1450],[312,59.16,56.7,-65,-1450],[313,58.26,56.7,-65,-1450],[314,57.36,56.7,-65,-1450],[315,56.46,56.7,-65,-1450],[316,55.56,56.7,-65,-1450],[317,54.66,56.7,-65,-1450],[318,53.76,56.7,-65,-1450],[319,52.86,56.85,-65,-1450],[320,52.7,55.95,-110,-1450],[321,52.7,55.05,-110,-1450],[322,52.7,54.15,-110,-1450],[323,52.7,53.25,-110,-1450],[324,52.7,52.35,-110,-1450],[325,52.7,51.45,-110,-1450],[326,52.7,50.55,-110,-1450],[327,52.7,49.65,-110,-1450],[328,52.7,48.75,-110,-1450],[329,52.7,47.85,-110,-1450],[330,52.7,46.95,-110,-1450],[331,52.7,46.05,-110,-1450],[332,52.7,45.15,-100,-1450],[333,52.7,44.25,-100,-1450],[334,52.7,43.35,-100,-1450],[335,52.7,42.45,-100,-1450],[336,52.7,41.55,-100,-1450],[337,52.7,40.65,-100,-1450],[338,52.7,39.75,-100,-1450],[339,52.7,38.85,-100,-1450],[340,52.7,37.95,-100,-1450],[341,52.7,37.05,-100,-1450],[342,52.7,36.15,-100,-1450],[343,52.7,35.25,-100,-1450],[344,52.7,34.35,-100,-1450],[345,52.7,33.45,-100,-1450],[346,52.7,32.55,-100,-1450],[347,52.7,31.65,-100,-1450],[348,52.7,30.75,-100,-1450],[349,52.7,29.85,-100,-1450],[350,52.7,28.95,-100,-1450],[351,52.7,28.05,-100,-1450],[352,52.7,27.15,-100,-1450],[353,52.7,26.25,-100,-1450],[354,52.7,25.35,-100,-1450],[355,52.7,24.45,-100,-1450],[356,52.7,23.55,-100,-1450],[357,52.7,22.65,-100,-1450],[358,52.7,21.75,-100,-1450],[359,52.7,20.85,-100,-1450],[360,52.7,19.95,-100,-1450],[361,52.7,19.05,-100,-1450],[362,51.8,19.05,-110,-1450],[363,50.9,19.05,-110,-1450],[364,50.0,19.05,-110,-1450],[365,49.1,19.05,-110,-1450],[366,48.2,19.05,-110,-1450],[367,47.3,19.05,-110,-1450],[368,46.4,19.05,-110,-1450],[369,45.5,19.05,-110,-1450],[370,44.6,19.05,-110,-1450],[371,43.7,19.05,-110,-1450],[372,42.8,19.05,-110,-1450],[373,41.9,19.05,-110,-1450],[374,41.0,19.05,-110,-1450],[375,40.1,19.05,-110,-1450],[376,39.2,19.05,-110,-1450],[377,38.3,19.05,-110,-1450],[378,37.4,19.05,-110,-1450],[379,36.5,19.05,-110,-1450],[380,35.6,19.05,-110,-1450],[381,34.7,19.05,-110,-1450],[382,33.8,19.05,-110,-1450],[383,32.9,19.05,-110,-1450],[384,32.0,19.05,-110,-1450],[385,31.1,19.05,-110,-1450],[386,30.2,19.05,-110,-1450],[387,29.3,19.05,-110,-1450],[388,28.4,19.05,-110,-1450],[389,27.5,19.05,-110,-1450],[390,26.65,19.05,-100,-1450],[391,26.65,19.95,-100,-1450],[392,26.65,20.85,-100,-1450],[393,26.65,21.75,-100,-1450],[394,26.65,22.65,-100,-1450],[395,26.65,23.55,-100,-1450],[396,26.65,24.45,-100,-1450],[397,26.65,25.35,-100,-1450],[398,26.65,26.25,-100,-1450],[399,26.65,27.15,-100,-1450],[400,26.65,28.05,-100,-1450],[401,26.65,28.95,-100,-1450],[402,26.65,29.85,-100,-1450],[403,26.65,30.75,-100,-1450],[404,26.65,31.65,-100,-1450],[405,26.65,32.55,-100,-1450],[406,26.65,33.45,-100,-1450],[407,26.65,34.35,-100,-1450],[408,26.65,35.25,-100,-1450],[409,26.65,36.15,-100,-1450],[410,26.65,37.05,-100,-1450],[411,26.65,37.95,-100,-1450],[412,26.65,38.85,-100,-1450],[413,26.65,39.75,-100,-1450],[414,26.65,40.65,-100,-1450],[415,26.65,41.55,-100,-1450],[416,26.65,42.45,-100,-1450],[417,26.65,43.35,-100,-1450],[418,26.65,44.25,-100,-1450],[419,25.75,44.7,-140,-1450],[420,24.85,44.7,-140,-1450],[421,23.95,44.7,-140,-1450],[422,23.05,44.7,-140,-1450],[423,22.15,44.7,-140,-1450],[424,21.25,44.7,-140,-1450],[425,20.35,44.7,-140,-1450],[426,19.45,44.7,-140,-1450],[427,18.55,44.7,-140,-1450],[428,17.65,44.7,-140,-1450],[429,16.75,44.7,-140,-1450],[430,15.85,44.7,-140,-1450],[431,14.95,44.7,-140,-1450],[432,14.05,44.7,-140,-1450],[433,13.15,44.7,-140,-1450],[434,12.25,44.7,-140,-1450],[435,11.35,44.7,-140,-1450],[436,10.45,44.7,-140,-1450],[437,9.55,44.7,-140,-1450],[438,8.65,44.7,-140,-1450],[439,7.75,44.7,-140,-1450],[440,6.85,44.7,-140,-1450],[441,5.95,44.7,-140,-1450],[442,5.05,44.7,-140,-1450],[443,4.15,44.7,-140,-1450],[444,3.25,44.7,-140,-1450],[445,2.35,44.7,-140,-1450],[446,1.45,44.7,-140,-1450],[447,0.55,44.7,-140,-1450],[448,-0.35,44.7,-140,-1450],[449,-1.25,44.7,-110,-1450],[450,-1.05,43.8,-110,-1450],[451,-1.05,42.9,-110,-1450],[452,-1.05,42.0,-110,-1450],[453,-1.05,41.1,-110,-1450],[454,-1.05,40.2,-110,-1450],[455,-1.05,39.3,-110,-1450],[456,-1.05,38.4,-110,-1450],[457,-1.05,37.5,-110,-1450],[458,-1.05,36.6,-110,-1450],[459,-1.05,35.7,-110,-1450],[460,-1.05,34.8,-110,-1450],[461,-1.05,33.9,-110,-1450],[462,-1.05,33.0,-110,-1450],[463,-1.05,32.1,-110,-1450],[464,-1.05,31.2,-110,-1450],[465,-1.05,30.3,-110,-1450],[466,-1.05,29.4,-110,-1450],[467,-1.05,28.5,-110,-1450],[468,-1.05,27.6,-110,-1450],[469,-1.05,26.7,-110,-1450],[470,-1.05,25.8,-110,-1500],[471,-1.05,24.9,-110,-1500],[472,-1.05,24.0,-110,-1500],[473,-1.05,23.1,-100,-1600],[474,-1.05,22.2,-100,-1600],[475,-1.05,21.3,-100,-1600],[476,-1.05,20.4,-100,-1600],[477,-1.05,19.5,-100,-1600],[478,-1.05,18.6,-100,-1800],[479,-1.05,17.7,-100,-1800],[480,-1.05,16.8,-100,-1800],[481,-1.05,15.9,-100,-1800],[482,-1.05,15.0,-100,-1800],[483,-1.05,14.1,-100,-1800],[484,-1.05,13.2,-100,-1800],[485,-1.05,12.3,-100,-1800],[486,-1.05,11.4,-100,-1800],[487,-1.05,10.5,-100,-1800],[488,-1.05,9.6,-100,-1800],[489,-1.05,8.7,-100,-1800],[490,-1.05,7.75,-100,-1800],[491,-1.05,6.85,-100,-1800],[492,-1.05,5.95,-100,-1800],[493,-1.05,5.05,-100,-1800],[494,-1.05,4.15,-100,-1800],[495,-1.05,3.25,-100,-1800],[496,-1.05,2.35,-100,-1800],[497,-1.05,1.45,-100,-1800],[498,-1.05,0.55,-100,-1800],[499,-1.05,-0.35,-100,-1800],[500,141.77,35.1,-65,-1350],[501,142.67,35.1,-65,-1350],[502,143.57,35.1,-65,-1350],[503,144.47,35.1,-65,-1350],[504,145.37,35.1,-65,-1350],[505,146.27,35.1,-65,-1350],[506,147.17,35.1,-65,-1350],[507,148.07,35.1,-65,-1350],[508,148.97,35.1,-65,-1350],[509,149.87,35.1,-65,-1350],[510,150.77,35.1,-65,-1350],[511,151.67,35.1,-65,-1350],[512,152.57,35.1,-65,-1350],[513,152.65,36.0,-65,-1350],[514,152.65,36.9,-65,-1350],[515,152.65,37.8,-65,-1350],[516,152.65,38.7,-65,-1350],[517,152.65,39.6,-65,-1350],[518,152.65,40.5,-65,-1350],[519,152.65,41.4,-65,-1350],[520,152.65,42.3,-65,-1350],[521,152.65,43.2,-65,-1350],[522,152.65,44.1,-65,-1350],[523,152.65,45.0,-65,-1350],[524,152.65,45.9,-65,-1350],[525,152.65,46.8,-65,-1350],[526,152.65,47.7,-65,-1350],[527,152.65,48.6,-65,-1350],[528,152.65,49.5,-65,-1350],[529,152.65,50.4,-65,-1350],[530,152.65,51.3,-65,-1350],[531,152.65,52.2,-65,-1350],[532,152.65,53.1,-65,-1350],[533,152.65,54.0,-65,-1350],[534,152.65,54.9,-65,-1350],[535,152.65,55.8,-65,-1350],[536,152.55,56.7,-65,-1350],[537,151.65,56.7,-65,-1350],[538,150.75,56.7,-65,-1350],[539,149.85,56.7,-65,-1350],[540,148.95,56.7,-65,-1350],[541,148.05,56.7,-65,-1350],[542,147.15,56.7,-65,-1350],[543,146.25,56.7,-65,-1350],[544,145.35,56.7,-65,-1350],[545,144.45,56.7,-65,-1350],[546,143.55,56.7,-65,-1350],[547,142.65,56.7,-65,-1350],[548,141.75,56.7,-65,-1350],[549,-1.95,35.9,-70,-1350],[550,-2.85,35.9,-70,-1350],[551,-3.75,35.9,-70,-1350],[552,-4.65,35.9,-70,-1350],[553,-5.55,35.9,-70,-1350],[554,-6.45,35.9,-70,-1350],[555,-7.35,35.9,-70,-1350],[556,-8.25,35.9,-70,-1350],[557,-9.15,35.9,-70,-1350],[558,-10.05,35.9,-70,-1350],[559,-10.95,35.9,-70,-1350],[560,-11.85,35.9,-70,-1350],[561,-12.75,35.9,-70,-1350],[562,-13.65,35.9,-70,-1350],[563,-14.55,35.9,-70,-1350],[564,-15.45,35.9,-70,-1350],[565,-16.35,35.9,-70,-1350],[566,-17.25,35.9,-70,-1350],[567,-18.15,35.9,-70,-1350],[568,-17.85,35.0,-110,-1350],[569,-17.85,34.1,-110,-1350],[570,-17.85,33.2,-110,-1350],[571,-17.85,32.3,-110,-1350],[572,-17.85,31.4,-110,-1350],[573,-17.85,30.5,-110,-1350],[574,-17.85,29.6,-110,-1350],[575,-17.85,28.7,-110,-1350],[576,-17.85,27.8,-110,-1350],[577,-17.85,26.9,-110,-1350],[578,-17.85,26.0,-110,-1350],[579,-17.85,25.1,-110,-1350],[580,-17.85,24.2,-110,-1350],[581,-17.85,23.3,-110,-1350],[582,-18.0,22.4,-110,-1350],[583,-17.1,22.0,-70,-1350],[584,-16.2,22.0,-70,-1350],[585,-15.3,22.0,-70,-1350],[586,-14.4,22.0,-70,-1350],[587,-13.5,22.0,-70,-1350],[588,-12.6,22.0,-70,-1350],[589,-11.7,22.0,-70,-1350],[590,-11.7,21.1,-70,-1350],[591,-11.7,20.2,-70,-1350],[592,-11.7,19.3,-70,-1350],[593,-11.7,18.4,-70,-1350],[594,-11.7,17.5,-70,-1350],[595,-11.7,16.6,-70,-1350],[596,-11.7,15.7,-70,-1350],[597,-11.7,14.8,-70,-1350],[598,-11.7,13.9,-70,-1350],[599,-11.7,12.99,-70,-1350],[600,-11.7,12.09,-70,-1350],[601,-11.7,11.19,-70,-1350],[602,-11.83,10.29,-70,-1350],[603,-10.97,10.0,-70,-1350],[604,-10.08,10.0,-70,-1350],[605,-9.18,10.0,-70,-1350],[606,-8.28,10.0,-70,-1350],[607,-7.38,10.0,-70,-1350],[608,-6.48,10.0,-70,-1350],[609,-5.58,10.0,-70,-1350],[610,-4.68,10.0,-70,-1350],[611,-3.78,10.0,-70,-1350],[612,-2.88,10.0,-70,-1350],[613,-1.98,10.0,-70,-1350]],ST=[5,5,1,1,1,5,5,5,1,1,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,5,5,1,1,5,5,5,1,1,1,5,5,1,1,1,1,5,1,5,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,1,1,5,1,5,5,1,1,5,1,1,1,5,1,1,1,1,1,5,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,1,1,5,1,1,1,1,1,1,1,1,1,1,5,1,1,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+const DC={'-2000':0xff7a8a,'-1800':0xffa94d,'-1600':0xffd866,'-1500':0xc9a0ff,'-1450':0x6ec6ff,'-1350':0x7ee0a6};
+const DEP={exp:[2.2,4.35,7.5,11.4],adm:[2.2,4.35,7.5,9.9],pl:[1.5,4.45,7.6,7.6],pr:[1.5,4,7.85,7.85]};
+const TN={exp:'實驗棟',adm:'行政棟',pl:'左滯洪池',pr:'右滯洪池'};
+const SN={0:'未標記',1:'已修補完成',5:'已補兩次',7:'修補中'};
+const W=887.5,H=966.67,X0=-100,Y0=100;
+const G=new Set(['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','B1','B2','B3','B4','B5','B6','B′7','B′8','B′9','B′10','B′11','B′12','C1','C2','C3','D1','D2','D3','E1','E2','E3','滯BC1','滯BC2','滯BC3','滯BC4','滯BC5','滯BC6']);
+const O=new Set(['A14','B′13']);
+const cells=[];
+function add(n,x1,x2,y1,y2,t){cells.push({n,t,s:G.has(n)?'g':O.has(n)?'o':'w',xa:x1/100,xb:x2/100,za:-y1/100,zb:-y2/100,d:0,ph:Math.random()*6})}
+'ABCDEF'.split('').forEach((r,ri)=>{for(let c=1;c<=16;c++){
+ if(c<=6&&(ri>4||(ri>1&&c>3)))continue;
+ const nm=r+(c>=7&&ri>0?'′':'')+c;let y2=Y0-(ri+1)*H;if(c<=3&&ri==4)y2=-4450;const xa=X0+(c-1)*W,xb=X0+c*W;
+ if(c==8){add(nm,xa,6650,Y0-ri*H,y2,'adm');add(nm,6650,xb,Y0-ri*H,y2,'exp')}else add(nm,xa,xb,Y0-ri*H,y2,c<8?'adm':'exp')}});
+add('滯BC3',-1100,-100,-1000,-1600,'pl');add('滯BC4',-1100,-100,-1600,-2200,'pl');
+add('滯BC1',-1815,-1100,-2200,-2900,'pl');add('滯BC5',-1100,-100,-2200,-2900,'pl');
+add('滯BC2',-1815,-1100,-2900,-3590,'pl');add('滯BC6',-1100,-100,-2900,-3590,'pl');
+[[-3510,-4240],[-4240,-4970],[-4970,-5700]].forEach((y,i)=>add('滯洪池A'+(i+1),14100,15265,y[0],y[1],'pr'));
+// 歷建旁保留地內縮：西緣、北緣各往建築物方向縮進，讓邊界上的樁頭露出來；相鄰分區同步加寬補滿。
+cells.forEach(c=>{if(Math.abs(c.xb-25.625)<.01&&c.za>=18.3&&c.zb<=44.6)c.xb=27.6;if(Math.abs(c.zb-18.3333)<.01&&c.xa>=25.6&&c.xb<=52.3)c.zb=19.9});
+const SK='cst2';let SV={};try{SV=JSON.parse(localStorage.getItem(SK))||{}}catch(e){}
+if(SV.cs)cells.forEach(c=>{if(SV.cs[c.n])c.s=SV.cs[c.n]});
+const cv=document.getElementById('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+const S=new THREE.Scene();
+S.add(new THREE.HemisphereLight(0xffffff,0xc8d2e6,.85));
+const dl=new THREE.DirectionalLight(0xfff4e0,.75);dl.position.set(-40,130,90);dl.target.position.set(69,0,28);S.add(dl,dl.target);
+dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);Object.assign(dl.shadow.camera,{left:-125,right:125,top:95,bottom:-95,near:10,far:420});dl.shadow.bias=-.0008;
+const lam=c=>new THREE.MeshLambertMaterial({color:c});
+function box(w,h,d,c){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),lam(c));m.castShadow=true;return m}
+function rr(x0,y0,x1,y1,r){const s=new THREE.Shape();s.moveTo(x0+r,y0);s.lineTo(x1-r,y0);s.quadraticCurveTo(x1,y0,x1,y0+r);s.lineTo(x1,y1-r);s.quadraticCurveTo(x1,y1,x1-r,y1);s.lineTo(x0+r,y1);s.quadraticCurveTo(x0,y1,x0,y1-r);s.lineTo(x0,y0+r);s.quadraticCurveTo(x0,y0,x0+r,y0);return s}
+const poly=[[-1,1],[141,1],[141,-35.1],[152.65,-35.1],[152.65,-57],[52.25,-57],[52.25,-19.9],[27.6,-19.9],[27.6,-44.5],[-1,-44.5],[-1,-35.9],[-18.15,-35.9],[-18.15,-22],[-12.5,-22],[-12.5,-10],[-1,-10]];
+const sh=rr(-66,-92,184,30,8),hp=new THREE.Path();poly.forEach((p,i)=>i?hp.lineTo(p[0],p[1]):hp.moveTo(p[0],p[1]));hp.closePath();sh.holes.push(hp);
+const slab=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:22,bevelEnabled:false,curveSegments:8}),[lam(0xeef2f7),lam(0xd9b891)]);
+slab.rotation.x=-Math.PI/2;slab.position.y=-22;slab.receiveShadow=true;S.add(slab);
+const plinth=new THREE.Mesh(new THREE.ExtrudeGeometry(rr(-69,-95,187,33,10),{depth:4,bevelEnabled:false,curveSegments:8}),lam(0xffffff));
+plinth.rotation.x=-Math.PI/2;plinth.position.y=-26;plinth.receiveShadow=true;S.add(plinth);
+
+// ── 圍籬、大門、工務所：依 CAD(DXF)與「新建階段圍籬配置平面圖」PDF 的實際位置 ──
+// 對位方式：DXF 內 613 個樁號與「全專案樁位進度.xlsx」座標一一對應（誤差約 2 cm），
+// 圍籬/大門/工務所再用同一組座標換算。換算規則：3D 的 x = 樁位 X(公尺)，3D 的 z = -Y(公尺)。
+// 下面的點位直接寫成 [X, Y]（Y 朝北、與 CAD 相同），由 cdcXY() 轉成 3D，之後要微調可直接改數字。
+//[[walkgeom-begin]]
+const cdcXY=p=>[p[0],-p[1]];
+// 順時針：左側斜邊 → 北側 → 東側斜邊 → 南側 → 左下斜邊；在 4號、3號、2號、1號大門處斷開。
+const cdcFenceRunsXY=[
+ [[-27.2,-28.55],[-16.1,0.8],[-13.7,-0.8],[-7.2,-4.4],[-3.5,2.5],[27.5,2.75],[57.9,3.0],[57.9,1.8],[116.4,1.8],[124.2,8.7],[128.2,10.4]],
+ [[134.0,13.1],[166.9,-49.9],[164.2,-59.4],[155.4,-60.2],[156.5,-64.4],[152.0,-64.2],[112.8,-64.0],[75.9,-63.9],[48.4,-63.9],[48.4,-65.0],[42.4,-65.0]],
+ [[36.4,-65.0],[19.9,-65.0],[19.9,-62.8],[-4.7,-52.1]],
+ [[-10.2,-49.7],[-29.4,-41.1],[-31.7,-38.55]]
+];
+// 通行區域幾何：圍籬內側、開挖邊界外側的地面（人員可在此行走、車輛可由大門進出）
+const cdcFencePoly=cdcFenceRunsXY.flat().map(cdcXY);          // 大門缺口以直線相連，構成封閉圍籬多邊形
+const cdcHolePoly=poly.map(p=>[p[0],-p[1]]);                   // 開挖範圍外框(3D x,z)
+function cdcPip(px,pz,P){let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if((a[1]>pz)!==(b[1]>pz)&&px<(b[0]-a[0])*(pz-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
+function cdcEdgeDist(px,pz,P){let m=1e9;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[j],b=P[i],dx=b[0]-a[0],dz=b[1]-a[1],L2=dx*dx+dz*dz;let t=L2?((px-a[0])*dx+(pz-a[1])*dz)/L2:0;t=Math.max(0,Math.min(1,t));const d=Math.hypot(px-a[0]-t*dx,pz-a[1]-t*dz);if(d<m)m=d}return m}
+function cdcYardOK(x,z,mFence,mHole){return cdcPip(x,z,cdcFencePoly)&&!cdcPip(x,z,cdcHolePoly)&&cdcEdgeDist(x,z,cdcFencePoly)>=mFence&&cdcEdgeDist(x,z,cdcHolePoly)>=mHole}
+//[[walkgeom-end]]
+const cdcFence=new THREE.Group();cdcFence.name='CDC_新建階段圍籬';S.add(cdcFence);
+const cdcFenceHeight=3.1;
+const cdcFencePanelMat=new THREE.MeshLambertMaterial({color:0x86a9bb,side:THREE.DoubleSide});   // 槽型鐵板：實心不透明
+function cdcSiteBeam(parent,w,h,d,color,x,y,z){const m=box(w,h,d,color);m.position.set(x,y,z);parent.add(m);return m;}
+// ── 安全走廊：依「圍籬剖面圖」兩種樣式 ──
+// A 型（利用舊有圍牆：防溢座 110 + 版片 240，外挑 150 頂棚，無立柱）
+// B~E 型（防溢座 60 + 版片 240，外側 C 型鋼立柱 @240 撐起 220 寬頂棚，立柱頂有警示燈）
+const cdcCorrSegs=[];
+function cdcCorrType(a,b){const X=(a[0]+b[0])/2,Y=-(a[1]+b[1])/2;
+ if((X<-3&&Y<-40)||(X>-5&&X<20&&Y<-52&&Y>-63)||(Y<=-63.8&&Y>=-65.1&&X>19&&X<77))return 'B';
+ return null}
+function cdcCorridorSegment(a,b,type){
+ const dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;
+ let nx=-dz/len,nz=dx/len;if(!cdcPip(mx+nx*3,mz+nz*3,cdcFencePoly)){nx=-nx;nz=-nz}          // (nx,nz)=朝基地內側：頂棚與立柱都在圍牆的基地側
+ const g=new THREE.Group();g.position.set(mx,0,mz);g.rotation.y=-Math.atan2(dz,dx);cdcFence.add(g);
+ const sg=((-dz/len)*nx+(dx/len)*nz)>0?1:-1;                                                  // 局部 z 軸的「外側」正負
+ const yel=0x7a1f27,yel2=0xb7bdc4,steel=0x959ca4,grey=0xb9bcc0;   // steel＝頂棚灰；yel＝立柱(暗紅)   // yel＝立柱(暗紅)，其餘鐵皮灰白
+ const C=type==='C',A=type==='A',base=A?1.1:.6,top=A?3.5:C?2.4:3.0,cw=C?0:A?1.5:2.2;
+ cdcSiteBeam(g,len,base,.25,grey,0,base/2,0);                                                 // 防溢座／既有圍牆
+ const wall=new THREE.Mesh(new THREE.PlaneGeometry(len,top-base),new THREE.MeshLambertMaterial({color:0xe3e7ea,side:THREE.DoubleSide}));wall.position.y=(top+base)/2;g.add(wall);
+ for(let x=-len/2+.6;x<len/2;x+=1.2)cdcSiteBeam(g,.05,top-base-.05,.05,yel2,x,(top+base)/2,.02*sg);   // 槽型鐵板波浪
+ cdcSiteBeam(g,len,.14,.18,yel2,0,top,0);
+ if(C){const nC=Math.max(2,Math.round(len/2.4));for(let i=0;i<=nC;i++)cdcSiteBeam(g,.16,top+.1,.16,yel,-len/2+len*i/nC,(top+.1)/2,-sg*.16);return}   // C：只有牆面＋暗紅立柱，無頂棚
+ // 頂棚（外側略低，利於排水）
+ const roof=cdcSiteBeam(g,len,.08,cw,steel,0,top+.02,sg*cw/2);roof.rotation.x=sg*.07;
+ cdcSiteBeam(g,len,.14,.06,0x6f767d,0,top-.06,sg*cw);                                              // 滴水邊
+ const n=Math.max(2,Math.round(len/2.4));
+ for(let i=0;i<=n;i++){const x=-len/2+len*i/n;
+  if(A){                                                                                       // A 型：牆面斜撐托住外挑頂棚
+   const br=cdcSiteBeam(g,.07,1.3,.07,steel,x,top-.55,sg*.55);br.rotation.x=sg*.9}
+  else{cdcSiteBeam(g,.16,top,.16,yel,x,top/2,sg*(cw-.1))}                                       // B~E：外側立柱
+  if(i%1===0){const l=new THREE.Mesh(new THREE.SphereGeometry(.1,10,8),new THREE.MeshBasicMaterial({color:0xd8322a}));l.position.set(x,top+.2,sg*(A?.1:cw-.1));g.add(l)}}
+ if(!A)cdcSiteBeam(g,len,.12,.14,0xaeb4bb,0,top-.05,sg*(cw-.1));                                   // 外緣橫梁
+ const fl=cdcSiteBeam(g,len,.04,cw,0x7f868d,0,.02,sg*cw/2);fl.castShadow=false;                // 通道地坪
+ cdcCorrSegs.push([a[0],a[1],b[0],b[1],cw,nx,nz]);
+}
+function cdcGuardRail(a,b){
+ // 東南段：只保留通道地坪，外側加暗紅色欄杆
+ const dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;
+ let nx=-dz/len,nz=dx/len;if(cdcPip(mx+nx*3,mz+nz*3,cdcFencePoly)){nx=-nx;nz=-nz}   // 朝基地外側
+ const g=new THREE.Group();g.position.set(mx,0,mz);g.rotation.y=-Math.atan2(dz,dx);cdcFence.add(g);
+ const sg=((-dz/len)*nx+(dx/len)*nz)>0?1:-1,zz=sg*1.45,red=0x7a1f27;
+ cdcSiteBeam(g,len,.04,1.8,0x7f868d,0,.02,sg*.95).castShadow=false;                          // 地坪
+ cdcSiteBeam(g,len,.06,.07,red,0,1.08,zz);cdcSiteBeam(g,len,.05,.05,red,0,.55,zz);cdcSiteBeam(g,len,.05,.05,red,0,.12,zz);
+ for(let x=-len/2;x<=len/2+.01;x+=2.4)cdcSiteBeam(g,.09,1.12,.09,red,x,.56,zz);
+ const nb=Math.floor(len/.25),im=new THREE.InstancedMesh(new THREE.BoxGeometry(.025,.95,.025),lam(red),nb),O=new THREE.Object3D();
+ for(let i=0;i<nb;i++){O.position.set(-len/2+(i+.5)*len/nb,.58,zz);O.updateMatrix();im.setMatrixAt(i,O.matrix)}
+ g.add(im);
+}
+function cdcFenceRail(a,b,mode,off){
+ // mode 'light'：馬路側／北側 — 淺灰直桿欄杆＋灰色底座；mode 'red'：暗紅欄杆（行人側）
+ const dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;
+ const g=new THREE.Group();g.position.set(mx,0,mz);g.rotation.y=-Math.atan2(dz,dx);cdcFence.add(g);
+ let oz=0;
+ if(off){let nx=-dz/len,nz=dx/len;if(!cdcPip(mx+nx*3,mz+nz*3,cdcFencePoly)){nx=-nx;nz=-nz}          // 朝基地內側
+  const sg=((-dz/len)*nx+(dx/len)*nz)>0?1:-1;oz=sg*off;
+  cdcSiteBeam(g,len,.04,off+.2,0x7f868d,0,.02,oz/2).castShadow=false}                                // 欄杆與圍籬線之間的鋪面
+ const G=new THREE.Group();G.position.z=oz;g.add(G);
+ const red=mode==='red',H=red?1.1:1.8,col=red?0x7a1f27:0xdde3ea,base=red?0x7a1f27:0xc6ccd2,sp=red?.25:.2;
+ if(!red)cdcSiteBeam(G,len,.35,.2,base,0,.175,0);
+ cdcSiteBeam(G,len,.07,.09,col,0,H,0);
+ if(red){cdcSiteBeam(G,len,.05,.05,col,0,H*.5,0);cdcSiteBeam(G,len,.05,.05,col,0,.12,0)}
+ else cdcSiteBeam(G,len,.05,.07,col,0,.95,0);
+ for(let x=-len/2;x<=len/2+.01;x+=(red?2.4:3.0))cdcSiteBeam(G,.1,H,.1,col,x,H/2,0);
+ const y0=red?.12:.35,nb=Math.max(1,Math.floor(len/sp)),im=new THREE.InstancedMesh(new THREE.BoxGeometry(.025,H-y0,.025),lam(col),nb),O=new THREE.Object3D();
+ for(let i=0;i<nb;i++){O.position.set(-len/2+(i+.5)*len/nb,y0+(H-y0)/2,0);O.updateMatrix();im.setMatrixAt(i,O.matrix)}
+ G.add(im);
+}
+function cdcFenceSegment(a,b){
+ {const mn=Math.min(a[0],b[0]),mxx=Math.max(a[0],b[0]),Ym=-(a[1]+b[1])/2,Xm=(a[0]+b[0])/2;
+  if(mn>=112.7&&mxx<=152.5&&Ym<-63.8&&Ym>-64.5){cdcFenceRail(a,b,'red',1.8);return}               // 工務所東端往東 38.5m：欄杆內移 1.8m＋鋪面：只留暗紅欄杆
+  if(mn>=112.7&&mxx<=165&&Ym<-59&&Ym>-65)return;                                           // 東南轉角兩小段：刪除（使用者圈選範圍）
+  if(mn>=75&&mxx<=113&&Ym<-63.5&&Ym>-64.6){cdcFenceRail(a,b,'red',1.8);return}                  // 工務所前：欄杆內移 1.8m＋鋪面
+  if((Ym>-29.5&&Xm<130)||(Xm>140&&Ym>-61.5)){cdcCorridorSegment(a,b,'C');return}}                                    // 馬路側、北側：直桿欄杆
+ {const ty=cdcCorrType(a,b);if(ty&&Math.hypot(b[0]-a[0],b[1]-a[1])>3){cdcCorridorSegment(a,b,ty);return}}
+ if(a[0]>112.7&&b[0]>112.7&&a[1]>63.8&&a[1]<64.4&&b[1]>63.8&&b[1]<64.4)cdcGuardRail(a,b);
+ const dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),n=Math.max(1,Math.ceil(len/4.8));
+ for(let i=0;i<n;i++){
+  const t=(i+.5)/n,x=a[0]+dx*t,z=a[1]+dz*t,w=len/n;
+  const panel=new THREE.Mesh(new THREE.PlaneGeometry(w-.05,cdcFenceHeight-.72),cdcFencePanelMat);
+  panel.position.set(x,.62+(cdcFenceHeight-.72)/2,z);panel.rotation.y=-Math.atan2(dz,dx);cdcFence.add(panel);
+  const bs=cdcSiteBeam(cdcFence,w,.6,.22,0xb4b9be,x,.3,z);bs.rotation.y=-Math.atan2(dz,dx);   // 防溢座 60cm
+  const cap=cdcSiteBeam(cdcFence,w,.09,.12,0xd8e7ed,x,cdcFenceHeight+.04,z);cap.rotation.y=-Math.atan2(dz,dx);
+ }
+ for(let i=0;i<=n;i++){
+  const t=i/n,x=a[0]+dx*t,z=a[1]+dz*t;
+  cdcSiteBeam(cdcFence,.17,cdcFenceHeight+.15,.17,0x536e80,x,cdcFenceHeight/2,z);
+ }
+}
+// 休息區頂棚（CAD 紅框範圍：沿西側圍籬、1號大門北側；BIM 平屋頂）
+(function(){
+ const P=[[-27.17,-28.51],[-19.9,-30.41],[-19.9,-24.6],[-19.9,-19.8],[-13.7,-19.8],[-13.7,-9.7],[-19.06,-8.23]],H=3.3;   // 避開開挖範圍(邊界 X=-18.15 / Y=-22 / X=-12.5)
+ const g=new THREE.Group();g.name='CDC_休息區頂棚';S.add(g);
+ const sh=new THREE.Shape(P.map(q=>new THREE.Vector2(q[0],q[1])));
+ const roof=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.22,bevelEnabled:false}),new THREE.MeshLambertMaterial({color:0xaeb4ba,side:THREE.DoubleSide}));
+ roof.rotation.x=-Math.PI/2;roof.position.y=H;roof.castShadow=true;roof.receiveShadow=true;g.add(roof);
+ const cx=P.reduce((t,q)=>t+q[0],0)/P.length,cy=P.reduce((t,q)=>t+q[1],0)/P.length;
+ const post=(x,y)=>{const d=Math.hypot(cx-x,cy-y)||1,px=x+(cx-x)/d*.4,py=y+(cy-y)/d*.4;cdcSiteBeam(g,.2,H,.2,0x7d848b,px,H/2,-py)};
+ for(let i=0;i<P.length;i++){const q=P[i],r=P[(i+1)%P.length];post(q[0],q[1]);const L=Math.hypot(r[0]-q[0],r[1]-q[1]),k=Math.floor(L/5);for(let j=1;j<=k;j++)post(q[0]+(r[0]-q[0])*j/(k+1),q[1]+(r[1]-q[1])*j/(k+1))}
+})();
+cdcFenceRunsXY.forEach(run=>{const r=run.map(cdcXY);for(let i=0;i<r.length-1;i++)cdcFenceSegment(r[i],r[i+1]);});
+// 大門（兩個端點 [X,Y]）：1號 10m（洗車台旁）、2號/3號/4號 6m。門片向基地內側打開。
+function cdcGateBuild(name,pa,pb){
+ const a=cdcXY(pa),b=cdcXY(pb),g=new THREE.Group();g.name=name;S.add(g);
+ const dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),ang=-Math.atan2(dz,dx),mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;
+ const big=/1號/.test(name),PH=big?4.5:3.3;
+ [a,b].forEach(p=>cdcSiteBeam(g,.5,PH,.5,0x425563,p[0],PH/2,p[1]));
+ if(big){cdcSiteBeam(g,len,.4,.4,0x425563,mx,4.45,mz).rotation.y=ang;
+ cdcSiteBeam(g,Math.max(.5,len-.6),.15,.25,0xf2d66d,mx,4.76,mz).rotation.y=ang;}
+ if(!/1號/.test(name)){                                                  // 1號大門（車輛進出）只留框架；其餘大門關閉：下半實心鐵皮、上半直桿
+  [[a,b],[b,a]].forEach(([h,o])=>{
+   const L=len/2-.08,cx=h[0]+(o[0]-h[0])*.25,cz=h[1]+(o[1]-h[1])*.25;
+   const lg=new THREE.Group();lg.position.set(cx,0,cz);lg.rotation.y=ang;g.add(lg);
+   const fr=0x425563,pn=0x6c8998,rb=0x587482;
+   cdcSiteBeam(lg,L,1.95,.1,pn,0,1.2,0);                                                        // 下半實心鐵皮
+   for(let x=-L/2+.2;x<L/2;x+=.32)cdcSiteBeam(lg,.04,1.85,.13,rb,x,1.2,0);                        // 鐵皮凸肋
+   cdcSiteBeam(lg,L,.14,.16,fr,0,.2,0);cdcSiteBeam(lg,L,.12,.16,fr,0,2.2,0);cdcSiteBeam(lg,L,.12,.16,fr,0,3.05,0);   // 底、中、頂橫桿
+   for(let x=-L/2+.15;x<L/2;x+=.24)cdcSiteBeam(lg,.04,.8,.05,fr,x,2.62,0);                        // 上半直桿
+   [-1,1].forEach(sd=>cdcSiteBeam(lg,.1,3.1,.16,fr,sd*L/2,1.55,0));                               // 門扇邊框
+  });
+ }
+ return g;
+}
+const cdcGates=[
+ cdcGateBuild('CDC_1號大門10m(洗車台旁)',[-31.7,-38.55],[-27.2,-28.55]),
+ cdcGateBuild('CDC_2號大門6m',[-10.2,-49.7],[-4.7,-52.1]),
+ cdcGateBuild('CDC_3號大門6m',[36.4,-65.0],[42.4,-65.0]),
+ cdcGateBuild('CDC_4號大門6m',[128.2,10.4],[134.0,13.1])
+];
+
+// ── 連外道路：沿西側圍籬外側（距圍籬 13m）南北向通過 1號大門前，兩端延伸到基地邊緣 ──
+(function(){
+ const F0=[-27.2,-28.55],dd=[0.3537,0.9353],nn=[-0.9353,0.3537],OFF=13,W=9,S0=-62,S1=45;
+ const pt=s=>[F0[0]+nn[0]*OFF+dd[0]*s,F0[1]+nn[1]*OFF+dd[1]*s];      // [X,Y]
+ const grp=new THREE.Group();grp.name='CDC_連外道路';S.add(grp);
+ const flat=(cx,cy,len,wid,dir,y,color,h)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(len,h||.06,wid),lam(color));m.castShadow=false;m.receiveShadow=true;m.position.set(cx,y,-cy);m.rotation.y=-Math.atan2(-dir[1],dir[0]);grp.add(m);return m};
+ const mid=pt((S0+S1)/2),L=S1-S0;
+ flat(mid[0],mid[1],L,W,dd,.05,0x4b5058);                                   // 柏油路面
+ // 邊線與路緣人行帶：靠基地側在 1號大門引道處斷開，讓引道與道路完整銜接
+ const sgGate=((-29.45-F0[0])*dd[0]+(-33.55-F0[1])*dd[1]);
+ const strip=(s0,s1,off,wid,y,color,h)=>{if(s1-s0<.5)return;const c=pt((s0+s1)/2);flat(c[0]+nn[0]*off,c[1]+nn[1]*off,s1-s0,wid,dd,y,color,h)};
+ for(const sd of [-1,1]){
+  const spans=sd===-1?[[S0,sgGate-6],[sgGate+6,S1]]:[[S0,S1]];
+  spans.forEach(([a0,a1])=>{strip(a0,a1,sd*(W/2-.25),.18,.09,0xf4f4f0,.04);strip(a0,a1,sd*(W/2+.6),1.2,.08,0xb9bec6,.07)})}
+ for(let s=S0+3;s<S1-3;s+=7){const q=pt(s+1.5);flat(q[0],q[1],3,.2,dd,.09,0xf2c94c,.04)}                                // 中心虛線
+ // 1號大門前引道：與道路同高、直接蓋過道路邊緣
+ const g=[-29.45,-33.55],P=pt(sgGate);
+ const ax=(g[0]+P[0])/2,ay=(g[1]+P[1])/2,adir=[g[0]-P[0],g[1]-P[1]],al=Math.hypot(adir[0],adir[1]);
+ flat(ax,ay,al+.6,10,[adir[0]/al,adir[1]/al],.055,0x4b5058,.06);
+})();
+// 工務所：CAD「工務所示意位置」斜線區，L 型平面、三層樓，位於基地南側圍籬外。
+// 主棟 X 77.3~93.6、Y -71.7~-64.4；東側棟 X 93.6~112.9、Y -69.9~-64.4（轉成 3D：z = 64.4~71.7 / 64.4~69.9）。
+const cdcOffice=new THREE.Group();cdcOffice.name='CDC_CAD_L型三層工務所';S.add(cdcOffice);
+const officeWall=0xe5e9eb,officeFrame=0x566a78,officeGlass=0x83b9d1,officeRoof=0x647b89;
+const FH=3.0;   // 層高 3.0m（立面圖 300cm）
+function cdcOfficeBlock(x0,x1,y0,y1){
+ const z0=-y1,z1=-y0,w=x1-x0,d=z1-z0,cx=(x0+x1)/2,cz=(z0+z1)/2;
+ cdcSiteBeam(cdcOffice,w,.32,d,0xb5bbc1,cx,.16,cz);
+ for(let f=0;f<3;f++){
+  const y=f*FH;
+  cdcSiteBeam(cdcOffice,w-.4,FH-.35,d-.4,officeWall,cx,y+(FH-.35)/2+.1,cz);
+  cdcSiteBeam(cdcOffice,w-.1,.18,d-.1,0x9aa2a9,cx,y+FH-.06,cz);
+  for(let x=x0+2.2;x<=x1-2.2;x+=4){                                    // 南側(背面)一般窗；北側(外廊面)依立面圖另做
+   cdcSiteBeam(cdcOffice,2.3,1.35,.12,officeFrame,x,y+1.85,cz+(d/2-.14));
+   cdcSiteBeam(cdcOffice,2.1,1.15,.14,officeGlass,x,y+1.85,cz+(d/2-.05));
+  }
+ }
+ cdcGableRoof(cdcOffice,cx,cz,w,d,3*FH+.08,Math.max(1.4,d*.27));
+}
+function cdcGableRoof(parent,cx,cz,w,d,y0,rise){
+ const ox=.45,oz=.7,hx=w/2+ox,hz=d/2+oz,ye=y0-hz*0+.0,yr=y0+rise;   // 屋簷外挑
+ const A=[-hx,y0,-hz],B=[hx,y0,-hz],C=[hx,y0,hz],D=[-hx,y0,hz],R1=[-hx,yr,0],R2=[hx,yr,0];
+ const tri=[];const q=(a,b,c,e)=>{tri.push(...a,...b,...c,...a,...c,...e)};
+ q(A,B,R2,R1);                 // 北坡
+ q(D,R1,R2,C);                 // 南坡
+ tri.push(...A,...R1,...D, ...B,...C,...R2);   // 兩側山牆三角
+ q(A,D,C,B);                   // 底面
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(tri,3));g.computeVertexNormals();
+ const m=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:0x8e959c,side:THREE.DoubleSide}));
+ m.position.set(cx,0,cz);m.castShadow=true;parent.add(m);
+ // 屋脊
+ cdcSiteBeam(parent,w+ox*2,.16,.28,0x6c747b,cx,yr+.04,cz);
+ // 山牆面補牆色三角（讓屋頂下緣到簷口之間不透空）
+}
+// 圍籬與工務所之間留 1.8m 通道（CAD 標示 176cm），工務所整體往南移 1.3m。
+// 北側(面向圍籬)為外廊面：外廊 1.5m + 欄杆；圍籬到外廊欄杆之間留約 1.4m 通道，故工務所比 CAD 位置共往南移 2.5m。
+// C向立面圖：左棟 1630、右棟 1620、中間樓梯間約 354；外廊(欄杆)只在 2F/3F 中段。立面由北側(圍籬側)看，故左右對調。
+const OFX0=77.3,OFXE=113.34,zN=66.9,EL=px=>OFXE-(px-110)/28.22,ELW=(a,b)=>(b-a)/28.22;
+cdcOfficeBlock(77.3,93.5,-74.2,-66.9);
+cdcOfficeBlock(97.04,113.34,-72.4,-66.9);
+{const w=cdcSiteBeam(cdcOffice,OFXE-OFX0,.04,2.9,0x7f868d,(OFX0+OFXE)/2,.02,65.45);w.castShadow=false}   // 圍籬與工務所間的行人通道地坪
+cdcSiteBeam(cdcOffice,3.6,.2,6.2,0x9aa2a9,95.27,3*FH+.0,70.0).castShadow=false;                           // 樓梯間頂板
+(function(){
+ const g=cdcOffice,DK=0x2a2f35,O=new THREE.Object3D(),GW=1.5,CAN=2.3;
+ const bars=(arr,w,h,d,color)=>{if(!arr.length)return;const im=new THREE.InstancedMesh(new THREE.BoxGeometry(w,h,d),lam(color),arr.length);arr.forEach((q,i)=>{O.position.set(q[0],q[1],q[2]);O.rotation.set(0,0,0);O.updateMatrix();im.setMatrixAt(i,O.matrix)});g.add(im)};
+ const flatRail=(x0,x1,y,z,h)=>{
+  const L=x1-x0,mx=(x0+x1)/2;
+  cdcSiteBeam(g,L,.05,.06,DK,mx,y+h,z);cdcSiteBeam(g,L,.04,.05,DK,mx,y+h*.5,z);cdcSiteBeam(g,L,.04,.05,DK,mx,y+.1,z);
+  const posts=[],bs=[];for(let x=x0;x<=x1+.01;x+=Math.max(1.2,L/Math.round(L/1.8)))posts.push([x,y+h/2,z]);
+  const nb=Math.max(1,Math.floor(L/.12));for(let i=0;i<nb;i++)bs.push([x0+(i+.5)*L/nb,y+h/2,z]);
+  bars(posts,.07,h,.07,DK);bars(bs,.022,h-.1,.022,DK)};
+ // ── 北立面門窗（px 取自立面圖）──
+ const win=(f,p0,p1)=>{const x=(EL(p0)+EL(p1))/2,w=ELW(p0,p1),y=f*FH+1.0+.7;
+  cdcSiteBeam(g,w,1.4,.12,officeFrame,x,y,zN+.14);cdcSiteBeam(g,w-.16,1.24,.14,officeGlass,x,y,zN+.05);cdcSiteBeam(g,.05,1.24,.16,officeFrame,x,y,zN+.04)};
+ const door=(f,p0,p1)=>{const x=(EL(p0)+EL(p1))/2,w=ELW(p0,p1),y=f*FH+1.05+.1;
+  cdcSiteBeam(g,w,2.1,.12,officeFrame,x,y,zN+.14);cdcSiteBeam(g,w-.14,1.96,.14,0xa9cfe0,x,y,zN+.05);if(w>1.1)cdcSiteBeam(g,.06,2.0,.16,officeFrame,x,y,zN+.04)};
+ [[168,215],[318,368],[720,770],[1025,1070]].forEach(q=>win(0,...q));
+ [[118,158],[370,408],[675,715],[1078,1118]].forEach(q=>door(0,...q));[[422,442],[541,560]].forEach(q=>door(0,...q));
+ [[168,215],[268,316],[370,418],[722,770],[822,872],[922,972],[1025,1073]].forEach(q=>win(1,...q));
+ [[523,565],[675,717]].forEach(q=>door(1,...q));
+ [[168,215],[318,368],[470,520],[722,770],[822,872],[922,972],[1025,1073]].forEach(q=>win(2,...q));
+ [[370,412],[675,717]].forEach(q=>door(2,...q));[[541,560]].forEach(q=>door(2,...q));
+ // ── 外廊：只在 px 365~870（X 86.4~104.3），2F/3F ──
+ const ga=EL(870),gb=EL(365),gl=gb-ga,gcx=(ga+gb)/2;
+ for(let f=1;f<=2;f++){
+  const y=f*FH;
+  cdcSiteBeam(g,gl,.16,GW,0xa9b0b7,gcx,y-.09,zN-GW/2).castShadow=false;
+  cdcSiteBeam(g,3.54,.16,.6,0xa9b0b7,95.27,y-.09,zN+.3).castShadow=false;                   // 樓梯間前緣樓板
+  flatRail(ga,gb,y,zN-GW+.04,1.05);
+  flatRail(ga,ga+.001,y,zN-GW+.04,1.05);
+  const can=cdcSiteBeam(g,gl,.1,CAN,0xa3aab1,gcx,y+FH-.4,zN-CAN/2);can.rotation.x=-.07;      // 雨遮
+  cdcSiteBeam(g,gl,.2,.07,0x6f767d,gcx,y+FH-.46,zN-CAN);
+ }
+ // 外廊兩端與樓梯間側的欄杆（梯間側：樓梯口留開）
+ for(let f=1;f<=2;f++){const y=f*FH;[ga,gb].forEach(x=>{const im=cdcSiteBeam(g,.06,1.05,GW,DK,x,y+.55,zN-GW/2)})}
+ // ── 樓梯：樓梯間 X 93.5~97.04，U 型雙跑，梯跑沿進深方向；下跑在西半、回跑在東半 ──
+ const SW=1.4,FW=95.27-.22-SW/2,FE=95.27+.22+SW/2,Z0=67.3,Z1=69.9,ZL=71.2,n=9;
+ const flight=(xc,ya,yb,za,zb)=>{
+  const dz=(zb-za)/n,dy=(yb-ya)/n,tr=[];
+  for(let k=0;k<n;k++)tr.push([xc,ya+(k+1)*dy-.03,za+(k+.5)*dz]);
+  bars(tr,SW,.05,Math.abs(dz)*.96,0x8f969d);
+  const L=Math.hypot(zb-za,yb-ya),th=-Math.atan2(yb-ya,zb-za);
+  for(const sd of [-1,1]){const xx=xc+sd*SW/2;
+   cdcSiteBeam(g,.06,.3,L,0x4a5058,xx,(ya+yb)/2-.15,(za+zb)/2).rotation.x=th;
+   cdcSiteBeam(g,.05,.06,L,DK,xx,(ya+yb)/2+.95,(za+zb)/2).rotation.x=th;
+   cdcSiteBeam(g,.04,.05,L,DK,xx,(ya+yb)/2+.5,(za+zb)/2).rotation.x=th}
+ };
+ for(let f=0;f<2;f++){const y0=f*FH;
+  flight(FW,y0,y0+FH/2,Z0,Z1);                                  // 下跑（西半）：由前方往後爬升
+  cdcSiteBeam(g,3.6,.14,ZL-Z1+.1,0x9aa2a9,95.27,y0+FH/2-.07,(Z1+ZL+.1)/2);   // 平台
+  flight(FE,y0+FH/2,y0+FH,Z1,Z0);                               // 回跑（東半）：由後方返回外廊
+ }
+})();
+
+cdcOffice.position.z=-1.9;   // 工務所整體往基地內側(北)靠 1.9m（依使用者紅線）
+// 車輛改走基地畫面最下緣、咖啡色外牆內側原本樹木排列的位置。
+// 以世界座標 Z=62 為中心，並限制 X=66~145，避開歷史建築。
+const truckRoadZ=62;
+const truckRoadStartX=66;
+const truckRoadEndX=145;
+const TOPC={g:0x8fdcab,o:0xffb36b,w:0xf3f5f9,p:0x9cc8ff},BX=new THREE.BoxGeometry(1,1,1);
+cells.forEach(c=>{const sd=new THREE.MeshLambertMaterial({color:0xd9b891,transparent:true}),tp=new THREE.MeshLambertMaterial({color:TOPC[c.s],transparent:true});
+ const m=new THREE.Mesh(BX,[sd,sd,tp,sd,sd,sd]);m.scale.x=c.xb-c.xa-.04;m.scale.z=c.zb-c.za-.04;m.position.x=(c.xa+c.xb)/2;m.position.z=(c.za+c.zb)/2;
+ m.receiveShadow=true;m.userData.cell=c;Object.assign(c,{m,sd,tp,cx:m.position.x,cz:m.position.z});S.add(m)});
+// 水泥區：置於基地中間上方；顏色與剩餘包數同步水泥管理網站的 days/settings。
+const cementDisplays=[];
+const cementSites=[
+ {zone:'A1',x:64,z:-8,color:0x3178df},
+ {zone:'A2',x:77,z:-8,color:0xf29935},
+ {zone:'B1',x:90,z:-8,color:0x35a967},
+ {zone:'B2',x:103,z:-8,color:0xd94f86}
+];
+function makeCementLabel(site,count){
+ const cn=document.createElement('canvas');cn.width=512;cn.height=176;
+ const ctx=cn.getContext('2d');
+ ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(0,0,512,176);
+ ctx.strokeStyle='#c9d5e7';ctx.lineWidth=7;ctx.strokeRect(4,4,504,168);
+ const color='#'+site.color.toString(16).padStart(6,'0');
+ ctx.fillStyle=color;ctx.textAlign='center';ctx.font='bold 56px sans-serif';
+ ctx.fillText(site.zone+' 水泥',256,74);
+ ctx.fillStyle='#26354c';ctx.font='bold 53px sans-serif';
+ ctx.fillText(typeof count==='number' && Number.isFinite(count)?count+' 包':(count==='error'?'同步失敗':'讀取中'),256,140);
+ const tex=new THREE.CanvasTexture(cn);tex.minFilter=THREE.LinearFilter;
+ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+ sp.scale.set(10.5,3.6,1);sp.position.y=8.5;return sp;
+}
+function setCementStack(site,count){
+ const valid=typeof count==='number' && Number.isFinite(count);
+ const rawCount=count;
+ count=valid?Math.max(0,Math.round(count)):0;
+ if(site.group){
+   S.remove(site.group);
+   site.group.traverse(o=>{
+     if(o.geometry)o.geometry.dispose();
+     if(o.material){
+       (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+         if(m.map)m.map.dispose();
+         m.dispose();
+       });
+     }
+   });
+ }
+ const group=new THREE.Group();
+ group.position.set(site.x,0,site.z);
+ const cols=6,rows=5,perLayer=cols*rows;
+ const shown=Math.min(count,6000);
+ const levels=Math.ceil(shown/perLayer);
+ const bagGeo=new THREE.BoxGeometry(.82,.32,.86);
+ const bagMat=new THREE.MeshLambertMaterial({color:site.color});
+ if(shown){
+   const bags=new THREE.InstancedMesh(bagGeo,bagMat,shown);
+   const dummy=new THREE.Object3D();
+   for(let i=0;i<shown;i++){
+     const layer=Math.floor(i/perLayer),n=i%perLayer;
+     dummy.position.set((n%cols-(cols-1)/2)*.91,.28+layer*.34,
+       (Math.floor(n/cols)-(rows-1)/2)*.94);
+     dummy.updateMatrix();bags.setMatrixAt(i,dummy.matrix);
+   }
+   bags.instanceMatrix.needsUpdate=true;bags.castShadow=true;group.add(bags);
+ }
+ const pallet=new THREE.Mesh(new THREE.BoxGeometry(5.8,.18,4.9),
+   new THREE.MeshLambertMaterial({color:0xb69a7b}));
+ pallet.position.y=.04;group.add(pallet);
+ const label=makeCementLabel(site,valid?count:rawCount);
+ label.position.y=Math.max(6.3,levels*.34+2.2);
+ group.add(label);S.add(group);
+ site.group=group;site.count=valid?count:null;
+}
+cementSites.forEach(site=>setCementStack(site,'loading'));
+function cementNumber(v){const n=parseFloat(v);return Number.isFinite(n)?n:0}
+function cementLegacyGroup(x){
+ if(x.g)return x.g;
+ const t=(x.t&&x.t[0])||'legacy';
+ return {[t]:{w:cementNumber(x.w),cv:cementNumber(x.cnt?.v),
+  cn:cementNumber(x.cnt?.n),A1:cementNumber(x.use?.A1),
+  A2:cementNumber(x.use?.A2),B1:cementNumber(x.use?.B1),
+  B2:cementNumber(x.use?.B2)}};
+}
+function cementV(o){
+ const n=cementNumber,z={m1:0,m2:0,nf:false};
+ if('c1' in o||'c2' in o)return {c1:n(o.c1),a11:n(o.a11),a21:n(o.a21),
+  c2:n(o.c2),a12:n(o.a12),a22:n(o.a22),p1:n(o.p1),
+  m1:n(o.m1),m2:n(o.m2),nf:'m1' in o};
+ if('rd' in o)return n(o.rd)===2?
+  {...z,c1:0,a11:0,a21:0,c2:n(o.cv),a12:n(o.A1_2),a22:n(o.A2_2),p1:n(o.p1)}:
+  {...z,c1:n(o.cv),a11:n(o.A1_1),a21:n(o.A2_1),c2:0,a12:0,a22:0,p1:0};
+ if('A1_1' in o||'A1_2' in o||'A2_1' in o||'A2_2' in o){
+  const dn=n(o.A1_2)+n(o.A2_2)>0;
+  return dn?{...z,c1:0,a11:n(o.A1_1),a21:n(o.A2_1),c2:n(o.cv),
+    a12:n(o.A1_2),a22:n(o.A2_2),p1:n(o.A1_1)+n(o.A2_1)}:
+    {...z,c1:n(o.cv),a11:n(o.A1_1),a21:n(o.A2_1),c2:0,a12:0,a22:0,p1:0};
+ }
+ return {...z,c1:0,a11:0,a21:0,c2:n(o.cv),a12:n(o.A1),a22:n(o.A2),p1:0};
+}
+function cementUsed(x){
+ const n=cementNumber,u={A1:0,A2:0,B1:0,B2:0};
+ Object.values(cementLegacyGroup(x)).forEach(o=>{
+  const v=cementV(o);
+  u.A1+=v.a11+v.a12;
+  u.A2+=v.a21+v.a22;
+  u.B1+=n(o.B1)+v.m1;
+  u.B2+=n(o.B2)+v.m2;
+ });
+ return u;
+}
+function cementIncoming(x){
+ const i=x.in||{},n=cementNumber;
+ return {A1:n(i.ps_v),A2:n(i.wj_v),B1:n(i.wj_n)+n(i.ps_n),B2:n(i.jc_n)};
+}
+function cementStockFromCloud(data){
+ if(!data||!data.ok||!data.days||typeof data.days!=='object')throw new Error('水泥雲端資料讀取失敗');
+ const settings=data.settings||{};
+ const base=settings.base||{A1:197,A2:14,B1:173,B2:0};
+ const baseDate=settings.baseDate||'2026-10-31';
+ const st={A1:cementNumber(base.A1),A2:cementNumber(base.A2),B1:cementNumber(base.B1),B2:cementNumber(base.B2)};
+ const days=data.days;
+ Object.keys(days).sort().forEach(d=>{
+  if(d<=baseDate)return;
+  const doc=days[d]||{},inQty=cementIncoming(doc),used=cementUsed(doc);
+  ['A1','A2','B1','B2'].forEach(k=>st[k]+=inQty[k]-used[k]);
+  (doc.ln||[]).forEach(l=>{if(st[l.b]!=null)st[l.b]+=(l.k==='ret'?1:-1)*cementNumber(l.n)});   // 借出／歸還
+ });
+ return st;
+}
+let cementSyncBusy=false;
+async function syncCementStacks(){
+ if(cementSyncBusy)return;
+ cementSyncBusy=true;
+ try{
+  // 直接使用同一個 Apps Script 專案的 apiGet('days')，不走舊公開網址。
+  const response=await cloudFetch('local?what=days',{cache:'no-store'});
+  const stock=cementStockFromCloud(await response.json());
+  const warning=document.getElementById('cementSyncWarning');if(warning)warning.remove();
+  cementSites.forEach(site=>{
+   const count=stock[site.zone];
+   if(!Number.isFinite(count))throw new Error(site.zone+' 庫存數值無效');
+   if(site.count!==Math.max(0,Math.round(count)))setCementStack(site,count);
+  });
+ }catch(err){
+  console.warn('水泥庫存同步失敗，保留前次畫面：',err);
+  cementSites.forEach(site=>{if(site.count===null)setCementStack(site,'error')});
+  let warning=document.getElementById('cementSyncWarning');
+  if(!warning){warning=document.createElement('div');warning.id='cementSyncWarning';warning.style.cssText='position:fixed;bottom:62px;left:10px;z-index:1000;background:#fff4e8;color:#a04a10;border:1px solid #edb88a;padding:7px 10px;border-radius:8px;font:12px sans-serif;max-width:280px';document.body.appendChild(warning)}
+  warning.textContent='水泥庫存同步失敗：'+(err?.message||String(err));
+ }finally{cementSyncBusy=false}
+}
+syncCementStacks();
+setInterval(syncCementStacks,30000);
+document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden)syncCementStacks();
+});
+const geo=new THREE.CylinderGeometry(1,1,1,12),D=new THREE.Object3D(),NL=5;
+const PC={1:0x45d17c,5:0xff6b6b,0:0xc2cbdc,7:0xffc247},NEU=0xaab6cc,dcnt={};
+PILES.forEach(p=>dcnt[p[4]]=(dcnt[p[4]]||0)+1);
+function near0(p,c,m){return p[1]>c.xa-m&&p[1]<c.xb+m&&p[2]>c.za-m&&p[2]<c.zb+m}
+const zt=PILES.map(p=>{const c=cells.find(c=>near0(p,c,1.3));return c?c.t:'exp'});
+const LK='pls2_'+ST.reduce((a,b)=>a+b,0);let LS=[ST.slice(),PILES.map(()=>0),PILES.map(()=>0),PILES.map(()=>0)];
+try{const l=JSON.parse(localStorage.getItem(LK));if(l&&l.length==4&&l[0].length==PILES.length)LS=l}catch(e){}
+const segs=[];for(let j=0;j<NL;j++){const m=new THREE.InstancedMesh(geo,lam(0xffffff),PILES.length);m.castShadow=true;S.add(m);segs.push(m);for(let i=0;i<PILES.length;i++)m.setColorAt(i,new THREE.Color())}
+PILES.forEach((p,i)=>{const tp=p[3]/100,bt=p[4]/100,d=DEP[zt[i]],bd=[0,d[0],d[1],d[2],d[3]];
+ for(let j=0;j<NL;j++){const hi=Math.min(tp,-bd[j]),lo=Math.max(bt,j<4?-bd[j+1]:-1e3);
+  if(hi-lo>.01){D.position.set(p[1],(hi+lo)/2,p[2]);D.scale.set(.4,hi-lo,.4)}else{D.position.set(p[1],0,p[2]);D.scale.set(0,0,0)}
+  D.updateMatrix();segs[j].setMatrixAt(i,D.matrix)}});
+let mode='repair';
+const counts=()=>{const c={0:0,1:0,5:0,7:0};LS[stage-1].forEach(s=>c[s]++);return c};
+function paint(){PILES.forEach((p,i)=>{for(let j=0;j<NL;j++)segs[j].setColorAt(i,new THREE.Color(mode=='repair'?(j<4?PC[LS[j][i]]:NEU):DC[p[4]]))});segs.forEach(m=>m.instanceColor.needsUpdate=true);legend();cards()}
+function legend(){const c=counts();document.getElementById('lg').innerHTML=mode=='repair'?
+ '<b>第'+stage+'層補樁</b><i style="background:#45d17c"></i>已補完 '+c[1]+'<i style="background:#ff6b6b"></i>已補兩次 '+c[5]+(c[7]?'<i style="background:#ffc247"></i>修補中 '+c[7]:'')+'<i style="background:#c2cbdc"></i>未標記 '+c[0]+'<br><b>分區</b><i style="background:#8fdcab"></i>完成<i style="background:#ffb36b"></i>開挖中<i style="background:#f3f5f9;border:1px solid #ccd"></i>未開挖<i style="background:#9cc8ff"></i>預覽<br><small>移工會自動站在最新補樁位置；拖曳怪手到新格＝原格完成、新格開挖</small>':
+ '<b>樁底高程</b>'+Object.keys(DC).sort((a,b)=>a-b).map(k=>'<i style="background:#'+DC[k].toString(16).padStart(6,'0')+'"></i>GL'+(k/100).toFixed(2)+'m('+dcnt[k]+'支)').join('')}
+// 怪手
+function mkExc(){const g=new THREE.Group(),sw=new THREE.Group();g.add(sw);
+ [-1,1].forEach(s=>{const t=box(.9,.55,3.4,0x4a5568);t.position.set(s,.3,0);g.add(t)});
+ const b=box(2.4,.8,2.6,0xffc83d);b.position.y=1;sw.add(b);
+ const cab=box(1.2,1.2,1.3,0x9fd6ff);cab.position.set(-.5,1.9,-.3);sw.add(cab);
+ const rf=box(1.4,.15,1.5,0xffc83d);rf.position.set(-.5,2.55,-.3);sw.add(rf);
+ const cw=box(2.2,.9,.9,0x6b7280);cw.position.set(0,1.1,-1.5);sw.add(cw);
+ const bp=new THREE.Group();bp.position.set(.5,1.2,1.2);sw.add(bp);
+ const boom=box(.5,.5,3.4,0xffc83d);boom.position.z=1.7;bp.add(boom);
+ const sp=new THREE.Group();sp.position.z=3.4;bp.add(sp);
+ const st=box(.4,.4,2.6,0xffb020);st.position.z=1.3;sp.add(st);
+ const kp=new THREE.Group();kp.position.z=2.6;sp.add(kp);
+ const bk=box(.9,.8,.9,0x6b7280);bk.position.set(0,-.2,.3);kp.add(bk);
+ g.userData={sw,bp,sp,kp};g.scale.setScalar(2.2);return g}
+const exn=SV.ex&&SV.ex.length>=1?[SV.ex[0]]:cells.filter(c=>c.s=='o').slice(0,1).map(c=>c.n);   // 只留一台怪手
+const excs=exn.map((n,i)=>{const c=cells.find(c=>c.n===n)||cells[0],e=mkExc();e.position.set(c.cx,0,c.cz);S.add(e);return{e,c,base:i?1.2:-.6}});
+// 移工
+function mkWorker(){const g=new THREE.Group();
+ const l=box(.7,.9,.45,0x3b5b92);l.position.y=.45;g.add(l);
+ const b=box(.8,.9,.5,0xff8d3a);b.position.y=1.35;g.add(b);
+ const h=new THREE.Mesh(new THREE.SphereGeometry(.34,10,8),lam(0xf2c7a0));h.position.y=2.1;h.castShadow=true;g.add(h);
+ const hat=new THREE.Mesh(new THREE.SphereGeometry(.38,10,6,0,Math.PI*2,0,Math.PI/2),lam(0xffe14d));hat.position.y=2.15;g.add(hat);
+ const arm=new THREE.Group();arm.position.set(.5,1.7,0);const a=box(.22,.8,.22,0xff8d3a);a.position.y=-.35;arm.add(a);
+ const tl=box(.2,.2,.8,0x8a94a6);tl.position.set(0,-.8,.35);arm.add(tl);g.add(arm);g.userData.arm=arm;g.userData.body=b;return g}
+const near=(p,c,m)=>p[1]>c.xa-m&&p[1]<c.xb+m&&p[2]>c.za-m&&p[2]<c.zb+m,gc=cells.filter(c=>c.s=='g'),cand=[];
+PILES.forEach(p=>{const s=ST[p[0]-1];if(!s)return;const c=gc.find(c=>near(p,c,1.6));if(c)cand.push({p,c,s})});
+function spread(a,n){const r=[],st=Math.max(1,Math.floor(a.length/n));for(let i=0;i<a.length&&r.length<n;i+=st)r.push(a[i]);return r}
+function placeWorker(x,pi){const p=PILES[pi];let c=cells.find(c=>c.s!='w'&&near(p,c,1.6))||cells.find(c=>near(p,c,1.6));
+ const dx=(c?c.cx:69)-p[1],dz=(c?c.cz:28)-p[2],L=Math.hypot(dx,dz)||1;
+ x.w.position.set(p[1]+dx/L*3.4,0,p[2]+dz/L*3.4);x.w.rotation.y=Math.atan2(-dx,-dz);x.c=c;x.pi=pi}
+const workers=spread(cand.filter(x=>x.s==5),1).map((s,i)=>{
+ const w=mkWorker();w.scale.setScalar(2.4);S.add(w);const x={w,c:null,ph:Math.random()*6,pi:0};
+ placeWorker(x,SV.wk&&SV.wk.length>i&&SV.wk[i]>=0?SV.wk[i]:s.p[0]-1);return x});
+
+// 工程師：藍背心、白安全帽，自動走動，可拖曳
+function mkEng(){const g=new THREE.Group();
+ const l=box(.7,.9,.45,0x2e3a4d);l.position.y=.45;g.add(l);
+ const b=box(.82,.95,.52,0x2f6fe0);b.position.y=1.35;g.add(b);
+ const st=box(.84,.12,.54,0xdfe8ff);st.position.y=1.3;g.add(st);
+ const h=new THREE.Mesh(new THREE.SphereGeometry(.34,10,8),lam(0xf2c7a0));h.position.y=2.1;h.castShadow=true;g.add(h);
+ const hat=new THREE.Mesh(new THREE.SphereGeometry(.4,10,6,0,Math.PI*2,0,Math.PI/2),lam(0xffffff));hat.position.y=2.15;hat.castShadow=true;g.add(hat);
+ const br=box(.9,.06,.3,0xffffff);br.position.set(0,2.17,.28);g.add(br);
+ g.userData.body=b;return g}
+const engs=[];
+function pilePt(pi){const p=PILES[pi],c=cells.find(c=>near(p,c,1.6)),dx=(c?c.cx:69)-p[1],dz=(c?c.cz:28)-p[2],L=Math.hypot(dx,dz)||1;return{x:p[1]+dx/L*5,z:p[2]+dz/L*5}}
+for(let i=0;i<4;i++){const w=mkEng();w.scale.setScalar(2.4);S.add(w);const q=pilePt(Math.floor(Math.random()*PILES.length));w.position.set(q.x,0,q.z);engs.push({w,t:null,ph:Math.random()*6,wait:0,held:false})}
+function stepEngs(dt,k){engs.forEach(e=>{
+ const w=e.w;
+ if(!e.held){
+  if(!sceneWalkAllowed(w.position.x,w.position.z,e)){
+   const safe=sceneNearestSafe(w.position.x,w.position.z,e);
+   if(safe){w.position.x=safe.x;w.position.z=safe.z;e.t=null;e.roamGoal=null;e.walkTarget=null}
+  }
+  const next=sceneAdvance(w.position.x,w.position.z,e,dt,2.5);
+  if(next){w.position.x=next.x;w.position.z=next.z;w.rotation.y=Math.atan2(next.dx,next.dz)}
+  e.t=next?{x:next.x,z:next.z}:null;
+  e.wait=next?0:.3;
+ }
+ w.position.y=0;const mv=!e.held&&e.wait<=0&&!!e.t;
+ w.userData.body.position.y=1.35+(mv?Math.abs(Math.sin(k*9+e.ph))*.12:0);
+ w.rotation.z=mv?Math.sin(k*9+e.ph)*.05:0;
+})}
+function ocen(){const o=cells.filter(c=>c.s=='o');return o.length?{x:o.reduce((a,c)=>a+c.cx,0)/o.length,z:o.reduce((a,c)=>a+c.cz,0)/o.length}:null}
+function setSt(n,s){cells.forEach(c=>{if(c.n===n)c.s=s})}
+function recolor(){cells.forEach(c=>c.tp.color.setHex(stage==1?TOPC[c.s]:TOPC.p))}
+function saveSt(){try{localStorage.setItem(SK,JSON.stringify({cs:Object.fromEntries(cells.map(c=>[c.n,c.s])),ex:excs.map(x=>x.c.n),wk:workers.map(x=>x.pi)}))}catch(e){}}
+// 卡車
+function mkTruck(){const g=new THREE.Group();
+ // 砂石車：綠色駕駛室、橘褐色傾卸車斗、三軸（前一後二）
+ const G=0x4aa84a,OR=0xc9791f,OR2=0xa4601a,DK=0x3a3f47;
+ const fr=box(7.2,.35,1.5,DK);fr.position.set(-.1,.95,0);g.add(fr);
+ const cab=box(1.9,1.8,2.4,G);cab.position.set(2.7,2.1,0);g.add(cab);
+ const roof=box(2.0,.12,2.5,0x3d8f3d);roof.position.set(2.7,3.05,0);g.add(roof);
+ const st=box(1.92,.22,2.42,0xf5a623);st.position.set(2.7,1.6,0);g.add(st);
+ const wn=box(.08,.95,2.1,0xa9d8ee);wn.position.set(3.67,2.5,0);g.add(wn);
+ [-1,1].forEach(sd=>{const sw=box(1.1,.8,.06,0xa9d8ee);sw.position.set(2.65,2.5,sd*1.21);g.add(sw);
+  const lt=box(.06,.22,.4,0xfff3b0);lt.position.set(3.7,1.25,sd*.85);g.add(lt);
+  const mr=box(.12,.5,.1,0x2a2d33);mr.position.set(3.2,2.55,sd*1.38);g.add(mr)});
+ const gr=box(.1,.7,1.7,0x2e3238);gr.position.set(3.68,1.6,0);g.add(gr);
+ const bp=box(.35,.3,2.45,0x30343a);bp.position.set(3.75,1.0,0);g.add(bp);
+ const ex=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,2.2,8),lam(0x8a9097));ex.position.set(1.6,2.7,1.28);g.add(ex);
+ const bed=new THREE.Group();bed.position.set(-1.3,0,0);bed.rotation.z=.035;g.add(bed);
+ const bd=box(4.4,1.5,2.5,OR);bd.position.set(0,2.2,0);bed.add(bd);
+ const hb=box(.3,2.0,2.5,OR);hb.position.set(2.25,2.45,0);bed.add(hb);
+ const tg=box(.12,1.5,2.5,OR2);tg.position.set(-2.25,2.2,0);bed.add(tg);
+ const top=box(4.5,.1,2.6,OR2);top.position.set(0,2.98,0);bed.add(top);
+ for(let x=-1.8;x<=1.81;x+=.9)[-1,1].forEach(sd=>{const rb=box(.1,1.5,.08,OR2);rb.position.set(x,2.2,sd*1.28);bed.add(rb)});
+ const sk=box(4.6,.3,1.7,DK);sk.position.set(0,1.28,0);bed.add(sk);
+ [[2.5,1.25,0],[-.9,1.25,.5],[-.9,-1.25,-.5],[-2.3,1.25,.5],[-2.3,-1.25,-.5],[2.5,-1.25,0]].forEach(q=>{
+  [0,1].forEach(k=>{if(q[0]===2.5&&k)return;const zz=q[1]>0?(q[1]+(k?-.55:0)):(q[1]+(k?.55:0));
+   const w=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,.46,14).rotateX(Math.PI/2),lam(0x23262d));w.position.set(q[0],.62,zz);w.castShadow=true;g.add(w);
+   const hub=new THREE.Mesh(new THREE.CylinderGeometry(.25,.25,.48,10).rotateX(Math.PI/2),lam(0x9aa0a8));hub.position.set(q[0],.62,zz);g.add(hub)})});
+ g.scale.setScalar(1.2);return g}
+const truck=mkTruck();truck.visible=false;S.add(truck);const cdcTrucks=[truck];
+// ── 施工車輛：由 1 號大門(洗車台旁)進場，沿便道開到東南側空地迴轉卸料，再原路由大門離場 ──
+// 路線點為 3D [x,z]，已檢查與圍籬、開挖邊界、歷史建築保持約 1.8m 以上的間距。
+const cdcTruckRoute=(()=>{
+ let P=[[-59.9,78.2],[-53.5,61.4],[-48.6,48.3],[-44.3,37.0],[-38.2,30.3],[-34.0,31.3],[-29.45,33.55],[-25.4,38.2],[-13,41.8],[-6,47.5],[3,49.9],[12,53.8],[20,57.4],[30,59.0],[45,59.4],[60,59.4],[80,59.4],[100,59.4],[120,59.4],[140,59.4],[148,59.4],[152.4,59.4],[156.4,56.8],[159.6,53.0],[160.2,50.5]];
+ for(let it=0;it<2;it++){const Q=[P[0]];for(let i=0;i<P.length-1;i++){const a=P[i],b=P[i+1];Q.push([.75*a[0]+.25*b[0],.75*a[1]+.25*b[1]],[.25*a[0]+.75*b[0],.25*a[1]+.75*b[1]])}Q.push(P[P.length-1]);P=Q}
+ const L=[0];for(let i=1;i<P.length;i++)L.push(L[i-1]+Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]));
+ return{P,L,total:L[L.length-1]};
+})();
+function cdcRouteAt(s){const R=cdcTruckRoute;s=Math.max(0,Math.min(R.total,s));let i=1;while(i<R.L.length-1&&R.L[i]<s)i++;
+ const t=(s-R.L[i-1])/((R.L[i]-R.L[i-1])||1),a=R.P[i-1],b=R.P[i];return{x:a[0]+(b[0]-a[0])*t,z:a[1]+(b[1]-a[1])*t,dx:b[0]-a[0],dz:b[1]-a[1]}}
+function cdcNearRoute(x,z,r){const P=cdcTruckRoute.P;for(let i=1;i<P.length;i++){const a=P[i-1],b=P[i],dx=b[0]-a[0],dz=b[1]-a[1],L2=dx*dx+dz*dz;let t=L2?((x-a[0])*dx+(z-a[1])*dz)/L2:0;t=Math.max(0,Math.min(1,t));if(Math.hypot(x-a[0]-t*dx,z-a[1]-t*dz)<r)return true}return false}
+const cdcTruckState={mode:'wait',s:0,t:0,head:0,h0:0};
+function cdcTruckStep(dt){
+ const st=cdcTruckState,R=cdcTruckRoute,sp=7;dt=Math.min(dt,.1);st.t+=dt;
+ if(st.mode==='wait'){truck.visible=false;
+  if(st.t>4){const p=cdcRouteAt(0);st.mode='in';st.s=0;st.t=0;st.head=-Math.atan2(p.dz,p.dx);truck.visible=true;truck.position.set(p.x,.12,p.z);truck.rotation.y=st.head}}
+ else if(st.mode==='in'||st.mode==='out'){
+  const dir=st.mode==='in'?1:-1;st.s+=dir*sp*dt;
+  if(st.mode==='in'&&st.s>=R.total){st.s=R.total;st.mode='turn';st.t=0;st.h0=st.head;return}
+  if(st.mode==='out'&&st.s<=0){st.mode='wait';st.t=0;truck.visible=false;return}
+  const p=cdcRouteAt(st.s),th=-Math.atan2(p.dz*dir,p.dx*dir);let d=th-st.head;d=Math.atan2(Math.sin(d),Math.cos(d));st.head+=d*Math.min(1,dt*5);
+  truck.position.set(p.x,.12,p.z);truck.rotation.y=st.head}
+ else if(st.mode==='turn'){const k=Math.min(1,st.t/3);st.head=st.h0+Math.PI*k*k*(3-2*k);truck.rotation.y=st.head;if(k>=1){st.mode='unload';st.t=0}}
+ else if(st.mode==='unload'){if(st.t>3){st.mode='out';st.t=0}}
+}
+// 歷史建築(示意)：2層平屋頂、花格立面、入口雨庇
+const hist=new THREE.Group();
+(function(){const cvs=document.createElement('canvas');cvs.width=cvs.height=128;const x=cvs.getContext('2d');x.fillStyle='#4a5160';x.fillRect(0,0,128,128);x.strokeStyle='#aeb7c6';x.lineWidth=5;
+ for(let i=0;i<2;i++)for(let j=0;j<2;j++){x.save();x.translate(32+i*64,32+j*64);x.rotate(Math.PI/4);x.strokeRect(-17,-17,34,34);x.restore()}
+ const tx=new THREE.CanvasTexture(cvs);tx.wrapS=tx.wrapT=THREE.RepeatWrapping;tx.repeat.set(12,1.6);
+ const add=(m,x,y,z)=>{m.position.set(x,y,z);hist.add(m);return m},CW=0xb89f88,WH=0xf3ece1,GL=0x7fa2c8;
+ add(box(9.6,7.2,25.6,CW),0,3.6,0);add(box(9.4,.05,25.4,0x76829a),0,7.58,0);
+ add(box(10.4,.5,26.4,WH),0,3.7,0);add(box(10.4,.5,26.4,WH),0,7.3,0);
+ [[10.4,.3,.8,0,-13.1],[10.4,.3,.8,0,13.1]].forEach(q=>add(box(q[0],q[2],q[1],WH),q[3],7.75,q[4]));
+ [-5.05,5.05].forEach(sx=>add(box(.3,.8,26.4,WH),sx,7.75,0));
+ const lat=new THREE.Mesh(new THREE.PlaneGeometry(24.6,3.1),new THREE.MeshLambertMaterial({map:tx}));lat.rotation.y=-Math.PI/2;add(lat,-4.85,5.5,0);
+ add(box(.2,2.6,24.6,GL),-4.85,1.9,0);add(box(.2,2.6,24.6,GL),4.85,1.9,0);
+ const ev=new THREE.Mesh(new THREE.PlaneGeometry(24.6,3.1),new THREE.MeshLambertMaterial({map:tx}));ev.rotation.y=Math.PI/2;add(ev,4.85,5.5,0);
+ [-1,1].forEach(s=>[0,1].forEach(r=>[-2.4,2.4].forEach(c=>add(box(1.8,1.9,.15,GL),c,1.9+r*3.6,s*12.85))));
+ 
+ add(box(6,.35,4.6,WH),-8,3.5,0);[[-10.7,-2],[-10.7,2],[-5.3,-2],[-5.3,2]].forEach(q=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,3.5,8),lam(WH));c.position.set(q[0],1.75,q[1]);c.castShadow=true;hist.add(c)});
+ add(box(15,.3,30,0xc3c9d6),0,.15,0).castShadow=false})();
+hist.position.set(38.5,0,36.5);S.add(hist);
+// 樹與工務所
+let sd=7;const rnd=()=>(sd=(sd*16807)%2147483647)/2147483647,tr=[];
+for(let i=0;i<500&&tr.length<55;i++){const x=-30+rnd()*198,z=-12+rnd()*81;
+ if(cells.some(c=>x>c.xa-7&&x<c.xb+7&&z>c.za-7&&z<c.zb+7)||Math.abs(z+8)<3.5||(x<-6&&z<8&&z>-2)||(x>22&&x<56&&z>14&&z<62)||(x>-10&&x<18&&z>39&&z<57)||(x>72&&x<118&&z>60)|| (x>truckRoadStartX-8&&x<truckRoadEndX+8&&Math.abs(z-truckRoadZ)<6))continue;tr.push([x,z,.8+rnd()*.6])}
+for(let i=tr.length-1;i>=0;i--)if(cdcNearRoute(tr[i][0],tr[i][1],5))tr.splice(i,1);
+ for(let i=tr.length-1;i>=0;i--){const t=tr[i];if(cdcCorrSegs.some(q=>{const dx=q[2]-q[0],dz=q[3]-q[1],L2=dx*dx+dz*dz;let u=L2?((t[0]-q[0])*dx+(t[1]-q[1])*dz)/L2:0;u=Math.max(0,Math.min(1,u));return Math.hypot(t[0]-q[0]-u*dx,t[1]-q[1]-u*dz)<q[4]+3.5}))tr.splice(i,1)}   // 車輛路線上不放樹
+// 可編輯的樹木與人物（僅場景佈置，不改施工狀態）
+const SCENE_EDIT_KEY='cdc3d_scene_objects_v1';
+let sceneObjects=[];
+function sceneDefault(){return tr.map(t=>({kind:'tree',x:t[0],z:t[1],scale:t[2]}));}
+function sceneRead(){try{const a=JSON.parse(localStorage.getItem(SCENE_EDIT_KEY));if(Array.isArray(a))return a.filter(v=>['tree','engineer','worker','person'].includes(v.kind)&&Number.isFinite(v.x)&&Number.isFinite(v.z)).slice(0,400).map(v=>({...v,kind:v.kind==='person'?'engineer':v.kind}))}catch(e){}return sceneDefault()}
+function sceneSave(){try{localStorage.setItem(SCENE_EDIT_KEY,JSON.stringify(sceneObjects.map(v=>({kind:v.kind,x:v.x,z:v.z,scale:v.scale}))))}catch(e){console.warn('場景配置儲存失敗',e)}}
+function sceneMake(item){
+ const g=item.kind==='tree'?new THREE.Group():(item.kind==='engineer'?mkEng():mkWorker());
+ g.userData.sceneItem=item;
+ if(item.kind==='tree'){
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.38,.48,2,7),lam(0x9a7b5a));trunk.position.y=1;g.add(trunk);
+  const crown=new THREE.Mesh(new THREE.ConeGeometry(2.2,6,7),lam(0x75cf98));crown.position.y=4.5;g.add(crown);
+ }
+ // 直接使用原有工程師/移工的模型及相同縮放比例，避免新增人物大小不一。
+ const scale=item.kind==='tree'?(item.scale||1):2.4;
+ g.position.set(item.x,0,item.z);g.scale.setScalar(scale);
+ if(item.kind!=='tree'){
+  item.walkTime=0;item.walkTarget=null;item.walkSeed=Math.random()*10;
+  item.walkOrigin={x:item.x,z:item.z};
+ }
+ g.traverse(o=>{if(o.isMesh)o.castShadow=true});S.add(g);item.mesh=g;
+}
+function sceneRender(){sceneObjects.forEach(item=>{if(item.mesh){S.remove(item.mesh);item.mesh.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose()})}});sceneObjects.forEach(sceneMake)}
+sceneObjects=sceneRead();sceneRender();
+let sceneMode='view';
+const sceneUI=document.createElement('div');sceneUI.id='scene-editor';
+sceneUI.innerHTML='<button type="button" id="scene-toggle">🌳 樹木／人員管理</button><div id="scene-actions" hidden><div class="scene-hint">選擇工具後點選地面；刪除時點選物件。工程師與移工新增後會自動走動；「完成」只結束編輯，不會停止動畫。配置僅儲存於目前瀏覽器。</div><button data-scene="tree">＋ 樹木</button><button data-scene="engineer">＋ 工程師</button><button data-scene="worker">＋ 移工</button><button data-scene="delete">－ 刪除</button><button data-scene="view">完成</button><button data-scene="reset">恢復預設樹木</button></div>';
+document.body.appendChild(sceneUI);
+const sceneActions=sceneUI.querySelector('#scene-actions');
+sceneUI.querySelector('#scene-toggle').onclick=()=>{sceneActions.hidden=!sceneActions.hidden;sceneMode='view';sceneButtons()};
+function sceneButtons(){sceneUI.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b.dataset.scene===sceneMode))}
+sceneUI.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{
+ const k=b.dataset.scene;
+ if(k==='reset'){if(confirm('確定恢復原本的樹木配置？自行新增的人物與樹木將被清除。')){sceneObjects=sceneDefault();sceneRender();sceneSave()}sceneMode='view'}
+ else{sceneMode=k;if(k==='view')sceneActions.hidden=true}sceneButtons();
+});
+function sceneEditClick(e){if(excRestoreMode)return false;if(sceneMode==='view')return false;
+ rc.setFromCamera(ndc(e),cam);
+ if(sceneMode==='delete'){
+  // 僅刪除使用者可編輯的樹木／人物，不會刪除樁位或建築。
+  // 使用 Raycaster 命中模型，若人物正在走動則仍能正確命中其最新位置。
+  S.updateMatrixWorld(true);
+  const editable=sceneObjects.filter(v=>v.mesh).map(v=>v.mesh);
+  const hits=rc.intersectObjects(editable,true);
+  let target=null;
+  for(const hit of hits){
+   let o=hit.object;
+   while(o&&!o.userData.sceneItem)o=o.parent;
+   if(o&&o.userData.sceneItem){target=o.userData.sceneItem;break}
+  }
+  if(target){
+   sceneObjects=sceneObjects.filter(v=>v!==target);
+   sceneRender();sceneSave();
+  }else{
+   // 在手機上小人物較難點到：允許點擊人物腳邊地面附近刪除。
+   if(rc.ray.intersectPlane(gpl,gp)){
+    let best=null,dist=Infinity;
+    sceneObjects.forEach(v=>{
+     if(!v.mesh)return;
+     const d=Math.hypot(v.mesh.position.x-gp.x,v.mesh.position.z-gp.z);
+     if(d<dist){best=v;dist=d}
+    });
+    if(best&&dist<2.5){sceneObjects=sceneObjects.filter(v=>v!==best);sceneRender();sceneSave()}
+   }
+  }
+  return true;
+ }
+ if(!rc.ray.intersectPlane(gpl,gp))return true;
+ // 限制在基地地面範圍，避免放到外側灰色背景。
+ if(gp.x< -28||gp.x>166||gp.z< -10||gp.z>68)return true;
+ if(sceneMode!=='tree'&&!sceneWalkAllowed(gp.x,gp.z,null)){alert('此處不是可通行的白色區域，或距離建築／怪手太近，請選擇其他位置。');return true}
+ const item={kind:sceneMode,x:Math.round(gp.x*10)/10,z:Math.round(gp.z*10)/10,scale:sceneMode==='tree'?1:2.4};
+ sceneObjects.push(item);sceneMake(item);sceneSave();return true;
+}
+// 人員路徑避障：禁止進入已開挖格、歷建、樹木、水泥堆、怪手及車輛的安全緩衝區。
+// 動態位置每幀重新檢查，移動路段以小步取樣，避免穿越障礙物。
+// 人員通行區以「白色未開挖格」為唯一依據，並使用實際模型位置計算障礙。
+function sceneWalkAllowed(x,z,self,st){   // st=true：只檢查靜態障礙（規劃路線用），不含移動中的人與車
+ // 只能在白色格子內，且腳邊預留 0.8m 安全間距；禁止走進綠色與橘色格。
+ const safeCell=cdcWhiteAt(x,z);
+ if(!safeCell&&!cdcYardOK(x,z,1.0,.8))return false;   // 白色未開挖格，或圍籬內的地面（含大門、洗車台、南側便道）
+ // 建物實際本體：hist 中心 (38.5,36.5)，本體寬約 10.4、長約 30，雨庇向西伸出。
+ if(x>26.5&&x<45&&z>20&&z<53)return false;
+ for(const site of cementSites){if(Math.abs(x-site.x)<8&&Math.abs(z-site.z)<8)return false}
+ // 怪手迴轉半徑，按模型實際世界座標即時判斷。
+ for(const e of excs){if(e.e&&Math.hypot(x-e.e.position.x,z-e.e.position.z)<12)return false}
+ for(const v of sceneObjects){if(v.kind==='tree'&&Math.hypot(x-v.x,z-v.z)<2.2*(v.scale||1)+1)return false}
+ if(st)return true;
+ for(const tk of cdcTrucks){if(tk.visible&&Math.hypot(x-tk.position.x,z-tk.position.z)<7)return false}   // 卡車行進時人員避讓
+ // 工程師與可編輯人物之間保持間距。
+ for(const v of sceneObjects){if(v===self||v.kind==='tree'||!v.mesh)continue;
+  if(Math.hypot(x-v.mesh.position.x,z-v.mesh.position.z)<1.4)return false}
+ for(const e of engs){if(e===self)continue;if(Math.hypot(x-e.w.position.x,z-e.w.position.z)<1.4)return false}
+ return true;
+}
+function sceneWalkPathAllowed(x1,z1,x2,z2,self){
+ const n=Math.max(1,Math.ceil(Math.hypot(x2-x1,z2-z1)/.35));
+ for(let j=1;j<=n;j++){const t=j/n;if(!sceneWalkAllowed(x1+(x2-x1)*t,z1+(z2-z1)*t,self))return false}
+ return true;
+}
+function sceneNearestSafe(x,z,self){
+ // 由近到遠一圈圈找最近的可行走點（含白色格與圍籬內地面）。
+ for(let r=1.5;r<=60;r+=1.5){const n=Math.max(8,Math.round(r*2));
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2,xx=x+Math.cos(a)*r,zz=z+Math.sin(a)*r;if(sceneWalkAllowed(xx,zz,self))return{x:xx,z:zz}}}
+ return null;
+}
+// 廣域漫遊：遠方目的地 + 輕量局部繞障，不在每一幀執行全圖路徑搜尋。
+function sceneRandomTarget(x,z,self){
+ // 目的地一部分取自白色未開挖格，其餘取自圍籬內的地面（便道、洗車台、大門內側、東西側空地）。
+ const free=cells.filter(c=>c.s==='w');
+ for(let i=0;i<150;i++){
+  let xx,zz;
+  const onlyWhite=!!(self&&(self.w||self.kind==='engineer'));
+  if((onlyWhite||Math.random()<.3)&&free.length){const c=free[Math.floor(Math.random()*free.length)];
+   xx=c.xa+1.2+Math.random()*Math.max(.1,c.xb-c.xa-2.4);zz=Math.min(c.za,c.zb)+1.2+Math.random()*Math.max(.1,Math.abs(c.za-c.zb)-2.4)}
+  else if(!onlyWhite){xx=-30+Math.random()*196;zz=-5+Math.random()*72}else continue;
+  if(Math.hypot(xx-x,zz-z)>14&&sceneWalkAllowed(xx,zz,self)&&cdcInMain(xx,zz,onlyWhite))return{x:xx,z:zz};
+ }
+ return null;
+}
+// 只在人物需要轉向時挑選局部步點；方向會延續，不會在原地反覆抖動。
+function sceneNextWaypoint(x,z,goal,self){
+ if(!goal)return null;
+ const angle=Math.atan2(goal.z-z,goal.x-x);
+ const offsets=[0,.4,-.4,.8,-.8,1.25,-1.25,1.7,-1.7,2.2,-2.2,Math.PI];
+ const len=3.2;
+ let best=null,bestScore=-Infinity;
+ for(const off of offsets){
+  const a=angle+off,xx=x+Math.cos(a)*len,zz=z+Math.sin(a)*len;
+  if(!sceneWalkAllowed(xx,zz,self)||!sceneWalkPathAllowed(x,z,xx,zz,self))continue;
+  const score=-Math.hypot(goal.x-xx,goal.z-zz)-Math.abs(off)*.55+Math.random()*.65;
+  if(score>bestScore){bestScore=score;best={x:xx,z:zz}}
+ }
+ return best;
+}
+// ── 路線規劃：在 1.5m 網格上做 A* 找路，再拉直成少數轉折點；移動中的人與車在行走時即時避讓 ──
+const CDC_G={x0:-36,z0:-16,s:1.5,nx:139,nz:62};
+let cdcGrid=null,cdcGridAt=0;
+function cdcGridBuild(){
+ const G=CDC_G,a=new Uint8Array(G.nx*G.nz),wh=new Uint8Array(G.nx*G.nz);
+ for(let j=0;j<G.nz;j++)for(let i=0;i<G.nx;i++){const k=j*G.nx+i,px=G.x0+i*G.s,pz=G.z0+j*G.s;a[k]=sceneWalkAllowed(px,pz,null,true)?1:0;if(a[k])wh[k]=cdcWhiteAt(px,pz)?1:0}
+ cdcWhite=wh;
+ // 標記最大連通區（人員只在這一塊活動，避免被困在封閉小區塊）
+ const lab=new Int32Array(a.length),sz=[0];let nl=0;
+ for(let k=0;k<a.length;k++){if(!a[k]||lab[k])continue;nl++;let c=0;const st=[k];lab[k]=nl;
+  while(st.length){const q=st.pop();c++;const qi=q%G.nx,qj=(q/G.nx)|0;
+   for(const[di,dj]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=qi+di,j=qj+dj;if(i<0||j<0||i>=G.nx||j>=G.nz)continue;const n=j*G.nx+i;if(a[n]&&!lab[n]){lab[n]=nl;st.push(n)}}}
+  sz.push(c)}
+ let best=1;for(let i=1;i<=nl;i++)if(sz[i]>sz[best])best=i;
+ const wc=new Int32Array(nl+1);for(let k=0;k<a.length;k++)if(lab[k]&&wh[k])wc[lab[k]]++;
+ let bw=best;for(let i=1;i<=nl;i++)if(wc[i]>wc[bw])bw=i;      // 白色(未開挖)格最多的連通區＝工程師活動區
+ cdcMain=new Uint8Array(a.length);cdcMainW=new Uint8Array(a.length);
+ for(let k=0;k<a.length;k++){cdcMain[k]=lab[k]===best?1:0;cdcMainW[k]=lab[k]===bw?1:0}
+ cdcGrid=a;cdcGridAt=performance.now();
+}
+let cdcMain=null,cdcMainW=null,cdcWhite=null;
+// 未開挖(白色)格連成一整片可走區；只在靠近「已完成/開挖中」格子的邊緣保留 0.8m 安全距離。
+function cdcWhiteAt(x,z){let inW=false;
+ for(let i=0;i<cells.length;i++){const c=cells[i],x0=Math.min(c.xa,c.xb),x1=Math.max(c.xa,c.xb),z0=Math.min(c.za,c.zb),z1=Math.max(c.za,c.zb);
+  if(c.s==='w'){if(x>=x0&&x<=x1&&z>=z0&&z<=z1)inW=true}
+  else{const dx=Math.max(x0-x,0,x-x1),dz=Math.max(z0-z,0,z-z1);if(dx*dx+dz*dz<.64)return false}}
+ return inW}
+function cdcInMain(x,z,wh){if(!cdcGrid||performance.now()-cdcGridAt>4000)cdcGridBuild();const M=wh?cdcMainW:cdcMain,G=CDC_G,i=Math.round((x-G.x0)/G.s),j=Math.round((z-G.z0)/G.s);return i>=0&&j>=0&&i<G.nx&&j<G.nz&&M[j*G.nx+i]===1}
+function cdcMainNearest(x,z,wh){cdcInMain(x,z);const M=wh?cdcMainW:cdcMain,G=CDC_G;let best=null,bd=1e9;for(let k=0;k<M.length;k++)if(M[k]){const px=G.x0+(k%G.nx)*G.s,pz=G.z0+((k/G.nx)|0)*G.s,d=(px-x)**2+(pz-z)**2;if(d<bd){bd=d;best={x:px,z:pz}}}return best}
+function cdcLos(x1,z1,x2,z2,needWhite){const n=Math.max(1,Math.ceil(Math.hypot(x2-x1,z2-z1)/.5));for(let k=1;k<=n;k++){const t=k/n,px=x1+(x2-x1)*t,pz=z1+(z2-z1)*t;if(!sceneWalkAllowed(px,pz,null,true))return false;if(needWhite&&!cdcWhiteAt(px,pz))return false}return true}
+function cdcPlan(sx,sz,gx,gz){
+ if(!cdcGrid||performance.now()-cdcGridAt>4000)cdcGridBuild();
+ const G=CDC_G,W=cdcGrid,N=G.nx*G.nz;
+ const nearest=(x,z)=>{const ci=Math.round((x-G.x0)/G.s),cj=Math.round((z-G.z0)/G.s);let best=-1,bd=1e9;
+  for(let r=0;r<=8&&best<0;r++)for(let dj=-r;dj<=r;dj++)for(let di=-r;di<=r;di++){const i=ci+di,j=cj+dj;if(i<0||j<0||i>=G.nx||j>=G.nz||!W[j*G.nx+i])continue;const d=di*di+dj*dj;if(d<bd){bd=d;best=j*G.nx+i}}
+  return best};
+ const s0=nearest(sx,sz),g0=nearest(gx,gz);if(s0<0||g0<0)return null;
+ const gi=g0%G.nx,gj=(g0/G.nx)|0,gs=new Float32Array(N).fill(1e9),from=new Int32Array(N).fill(-1),done=new Uint8Array(N),heap=[];
+ const hf=k=>{const i=k%G.nx,j=(k/G.nx)|0;return Math.hypot(i-gi,j-gj)};   // 空地(非白色格)成本 6 倍：盡量走未開挖區
+ const push=(k,f)=>{heap.push([f,k]);let c=heap.length-1;while(c>0){const p=(c-1)>>1;if(heap[p][0]<=heap[c][0])break;[heap[p],heap[c]]=[heap[c],heap[p]];c=p}};
+ const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let c=0;for(;;){let l=c*2+1,r=l+1,m=c;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===c)break;[heap[m],heap[c]]=[heap[c],heap[m]];c=m}}return top};
+ gs[s0]=0;push(s0,hf(s0));let found=false;
+ while(heap.length){const [,k]=pop();if(done[k])continue;done[k]=1;if(k===g0){found=true;break}
+  const ki=k%G.nx,kj=(k/G.nx)|0;
+  for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){if(!di&&!dj)continue;const i=ki+di,j=kj+dj;if(i<0||j<0||i>=G.nx||j>=G.nz)continue;const n=j*G.nx+i;if(!W[n]||done[n])continue;
+   if(di&&dj&&(!W[kj*G.nx+i]||!W[j*G.nx+ki]))continue;
+   const ng=gs[k]+(di&&dj?1.414:1)*(cdcWhite[n]?1:6);if(ng<gs[n]){gs[n]=ng;from[n]=k;push(n,ng+hf(n))}}}
+ if(!found)return null;
+ const nodes=[];for(let k=g0;k>=0;k=from[k])nodes.push([G.x0+(k%G.nx)*G.s,G.z0+((k/G.nx)|0)*G.s]);nodes.reverse();
+ // 拉直：能直線通過就略過中間點
+ const out=[];let cur=[sx,sz],i=0;
+ const nw=nodes.map(n=>cdcWhiteAt(n[0],n[1]));
+ while(i<nodes.length){let far=i;for(let j=nodes.length-1;j>i;j--){let allW=true;for(let q=i;q<=j;q++)if(!nw[q]){allW=false;break}
+   if(cdcLos(cur[0],cur[1],nodes[j][0],nodes[j][1],allW)){far=j;break}}
+  out.push(nodes[far]);cur=nodes[far];i=far+1}
+ return out;
+}
+function cdcWhiteNearest(x,z){cdcInMain(x,z);const G=CDC_G;let best=null,bd=1e9;for(let k=0;k<cdcWhite.length;k++)if(cdcWhite[k]&&cdcMainW[k]){const px=G.x0+(k%G.nx)*G.s,pz=G.z0+((k/G.nx)|0)*G.s,d=(px-x)**2+(pz-z)**2;if(d<bd){bd=d;best=[px,pz]}}return best}
+function sceneAdvance(x,z,self,dt,speed){
+ if(self.w&&!self.placed){self.placed=1;if(!cdcWhiteAt(x,z)){const q=cdcWhiteNearest(x,z);if(q){self.w.position.x=q[0];self.w.position.z=q[1];x=q[0];z=q[1]}}}
+ if(!self.plan||!self.roamGoal||self.roamAge>120){
+  if(self.pause>0){self.pause-=dt;return null}
+  self.plan=null;self.roamGoal=null;
+  const g=sceneRandomTarget(x,z,self);if(!g)return null;
+  const p=cdcPlan(x,z,g.x,g.z);
+  const isE=!!(self.w||self.kind==='engineer');
+  if(!p||!p.length||!cdcInMain(x,z,isE)){self.failN=(self.failN||0)+1;if(self.failN>=2){self.failN=0;const m=cdcMainNearest(x,z,isE);if(m){{const mm=self.w||self.mesh;mm.position.x=m.x;mm.position.z=m.z}self.x=m.x;self.z=m.z}}return null}
+  self.failN=0;
+  self.roamGoal=g;self.plan=p;self.planI=0;self.roamAge=0;self.blockT=0;
+ }
+ self.roamAge+=dt;
+ let wp=self.plan[self.planI];
+ while(wp&&Math.hypot(wp[0]-x,wp[1]-z)<.35){self.planI++;wp=self.plan[self.planI]}
+ if(!wp){self.plan=null;self.roamGoal=null;self.pause=1+Math.random()*3;return null}
+ const dx=wp[0]-x,dz=wp[1]-z,dist=Math.hypot(dx,dz),step=Math.min(speed*dt,dist),nx=x+dx/dist*step,nz=z+dz/dist*step;
+ if(!sceneWalkAllowed(nx,nz,self)){
+  self.blockT=(self.blockT||0)+dt;
+  if(self.blockT>1.2){self.blockT=0;self.plan=null;self.roamGoal=null;self.stuckN=(self.stuckN||0)+1;if(!self.sp)self.sp={x,z};
+   if(self.stuckN>=3){self.stuckN=0;self.sp=null;const m=cdcMainNearest(x+(Math.random()-.5)*30,z+(Math.random()-.5)*30,!!(self.w||self.kind==='engineer'));if(m){const mm=self.w||self.mesh;mm.position.x=m.x;mm.position.z=m.z;self.x=m.x;self.z=m.z}}}
+  return null}
+ if(self.sp&&Math.hypot(x-self.sp.x,z-self.sp.z)>4){self.stuckN=0;self.sp=null}
+ self.blockT=0;self.walkTarget=wp;
+ return{x:nx,z:nz,dx,dz};
+}
+function sceneWalk(dt){
+ sceneObjects.forEach(v=>{
+  if(v.kind==='tree'||!v.mesh)return;
+  let sx=v.mesh.position.x,sz=v.mesh.position.z;
+  if(!sceneWalkAllowed(sx,sz,v)){
+   const safe=sceneNearestSafe(sx,sz,v);
+   if(!safe)return;
+   v.mesh.position.set(safe.x,0,safe.z);v.x=safe.x;v.z=safe.z;
+   v.walkTarget=null;v.roamGoal=null;sx=safe.x;sz=safe.z;
+  }
+  const next=sceneAdvance(sx,sz,v,dt,v.kind==='engineer'?2.3:1.8);
+  if(!next)return;
+  v.mesh.position.x=next.x;v.mesh.position.z=next.z;
+  v.mesh.rotation.y=Math.atan2(next.dx,next.dz);
+  v.mesh.position.y=.035*Math.sin(performance.now()/180+v.walkSeed);
+  if(v.mesh.userData.arm)v.mesh.userData.arm.rotation.x=-.6+.35*Math.sin(performance.now()/230+v.walkSeed);
+ });
+}
+// 已移除彩色貨櫃模型。
+const orr=cells.filter(c=>c.s=='o'),ox=orr.reduce((a,c)=>a+c.cx,0)/orr.length,oz=orr.reduce((a,c)=>a+c.cz,0)/orr.length;
+const ringM=new THREE.Mesh(new THREE.RingGeometry(11.4,12,64).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xff8a3d,transparent:true,opacity:.9}));ringM.position.set(ox,.4,oz);S.add(ringM);
+// 資訊卡
+let stage=1,glass=false,showCards=false;
+const cardDef=[
+ {c:'#45d17c',a:()=>new THREE.Vector3(18,16,-3),h:()=>{const c=counts();return['第'+stage+'層補樁',[['已完成','<b>'+c[1]+' / '+PILES.length+'</b>'],['已補兩次','<b>'+c[5]+'</b>'],['完成率','<b>'+Math.round(c[1]/PILES.length*100)+'%</b>']]]}},
+ {c:'#ff8a3d',a:()=>{const o=ocen()||{x:69,z:28};return new THREE.Vector3(o.x,13,o.z)},h:()=>{const n={g:0,o:0,w:0},sn=new Set();cells.forEach(c=>{if(!sn.has(c.n)){sn.add(c.n);n[c.s]++}});return stage==1?['開挖進度',[['階段','<b>第一次 GL-2.2m</b>'],['完成','<b>'+n.g+' 區</b>'],['開挖中','<b>'+n.o+' 區</b>']]]:['開挖預覽',[['階段','<b>'+['','','第二次','第三次','最終'][stage]+'</b>'],['行政棟','<b>GL-'+DEP.adm[stage-1]+'m</b>'],['實驗棟','<b>GL-'+DEP.exp[stage-1]+'m</b>']]]}},
+ {c:'#ffc83d',a:()=>excs[0]?new THREE.Vector3(excs[0].c.cx,10,excs[0].c.cz):new THREE.Vector3(),h:()=>['怪手',[['數量','<b>'+excs.length+' 台</b>'],['狀態','<b>開挖中</b>']]]},
+ {c:'#5b6cff',a:()=>workers[0]?new THREE.Vector3(workers[0].w.position.x,9,workers[0].w.position.z):new THREE.Vector3(),h:()=>['移工',[['人數','<b>'+workers.length+' 人</b>'],['作業','<b>樁頭補修</b>']]]},
+ {c:'#c0805f',a:()=>new THREE.Vector3(38.5,12,36.5),h:()=>['歷史建築',[['位置','<b>基地中央</b>'],['模型','<b>示意</b>']]]}];
+cardDef.forEach(d=>{d.el=document.createElement('div');d.el.className='card';d.off=false;d.el.addEventListener('click',e=>{if(e.target.classList.contains('x')){d.off=true;d.el.style.display='none'}});document.body.appendChild(d.el)});
+function cards(){cardDef.forEach(d=>{const[t,r]=d.h();d.el.innerHTML='<span class="x">×</span><h4><i style="background:'+d.c+'"></i>'+t+'</h4>'+r.map(x=>'<div class="r">'+x[0]+'<span>'+x[1]+'</span></div>').join('')})}
+// 相機
+const cam=new THREE.OrthographicCamera(-1,1,1,-1,1,900);let az=-.55,el=.6,zoom=1,halfH=62;const tg=new THREE.Vector3(69,-3,28);
+function place(){const d=300;cam.position.set(tg.x+d*Math.sin(az)*Math.cos(el),tg.y+d*Math.sin(el),tg.z+d*Math.cos(az)*Math.cos(el));cam.lookAt(tg);cam.zoom=zoom;cam.updateProjectionMatrix();cam.updateMatrixWorld()}
+function size(){const a=innerWidth/innerHeight;R.setSize(innerWidth,innerHeight,false);halfH=Math.max(62,108/a);Object.assign(cam,{top:halfH,bottom:-halfH,left:-halfH*a,right:halfH*a})}
+addEventListener('resize',size);size();
+function pan(dx,dy){const s=2*halfH/zoom/innerHeight,m=cam.matrixWorld.elements;tg.x-=m[0]*dx*s;tg.y-=m[1]*dx*s;tg.z-=m[2]*dx*s;tg.x+=m[4]*dy*s;tg.y+=m[5]*dy*s;tg.z+=m[6]*dy*s}
+const ptr=new Map();let lx=0,ly=0,moved=0,pd=0,pcx=0,pcy=0;const clampZ=z=>Math.min(7,Math.max(.6,z));
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+let drag=null,hov=null,goal=null;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY]);lx=e.clientX;ly=e.clientY;moved=0;drag=null;goal=null;
+ if(ptr.size==1&&sceneMode==='view'&&!excRestoreMode){const t=dragTarget(e);if(t&&!(t.kind=='e'&&stage!=1)){drag=t;t.orig=t.kind=='e'?t.x.c:t.x.pi}}
+ if(ptr.size==2){const a=[...ptr.values()];pd=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);pcx=(a[0][0]+a[1][0])/2;pcy=(a[0][1]+a[1][1])/2}});
+cv.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;ptr.set(e.pointerId,[e.clientX,e.clientY]);
+ if(drag){dragMove(e);moved=9;return}
+ if(sceneMode!=='view'&&ptr.size===1){moved+=Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly);lx=e.clientX;ly=e.clientY;return}
+ if(ptr.size==2){const a=[...ptr.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]),cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;zoom=clampZ(zoom*d/pd);pan(cx-pcx,cy-pcy);pd=d;pcx=cx;pcy=cy;moved=9;return}
+ const dx=e.clientX-lx,dy=e.clientY-ly;moved+=Math.abs(dx)+Math.abs(dy);lx=e.clientX;ly=e.clientY;
+ if(e.shiftKey||e.buttons==2)pan(dx,dy);else{az-=dx*.006;el=Math.min(1.5,Math.max(.25,el+dy*.005))}});
+cv.addEventListener('pointerup',e=>{ptr.delete(e.pointerId);if(excRestoreMode){drag=null;if(moved<12)pickAt(e);return}if(drag){dragEnd();return}if(moved<6){if(!sceneEditClick(e))pickAt(e)}});
+cv.addEventListener('pointercancel',e=>ptr.delete(e.pointerId));
+cv.addEventListener('wheel',e=>{e.preventDefault();goal=null;zoom=clampZ(zoom*(1-e.deltaY*.001))},{passive:false});
+
+// ── 視角方塊（ViewCube）：拖曳方塊旋轉、點方塊的面切換視角、下方按鈕適合手機/平板 ──
+(function(){
+ const css=document.createElement('style');css.textContent=`
+ #vc{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:31;width:112px;user-select:none;-webkit-user-select:none;touch-action:none;font:12px sans-serif}
+ #vc .vcs{position:relative;width:112px;height:112px;perspective:420px;touch-action:none;cursor:grab}
+ #vc .ring{position:absolute;inset:4px;border-radius:50%;border:2px solid #aab6c8;background:radial-gradient(circle,#ffffff80,#e8eef7a0);pointer-events:none;transition:none}
+ #vc .ring i{position:absolute;font-style:normal;font-weight:700;color:#5b6a86;font-size:12px;width:16px;text-align:center;left:calc(50% - 8px)}
+ #vc .cube{position:absolute;left:31px;top:31px;width:50px;height:50px;transform-style:preserve-3d}
+ #vc .f{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#2f3d5c;background:#f4f7fcf0;border:1px solid #9fb0cc;box-sizing:border-box;backface-visibility:hidden}
+ #vc .f:hover{background:#cfe0ff}
+ #vc .bar{display:flex;gap:4px;justify-content:center;margin-top:2px}
+ #vc .bar button{flex:1;min-width:0;height:30px;border:1px solid #c5d0e3;border-radius:8px;background:#fffffff2;color:#2f3d5c;font-size:15px;padding:0;cursor:pointer;touch-action:manipulation}
+ #vc .bar button:active{background:#dce8ff}
+ @media(max-width:700px){#vc{transform:scale(.92);transform-origin:top right}}`;
+ document.head.appendChild(css);
+ const box=document.createElement('div');box.id='vc';
+ box.innerHTML='<div class="vcs"><div class="ring"><i style="top:-1px">N</i><i style="bottom:-1px">S</i><i style="top:calc(50% - 8px);left:auto;right:-1px">E</i><i style="top:calc(50% - 8px);left:-1px">W</i></div><div class="cube">'+
+  [['前','translateZ(25px)'],['後','rotateY(180deg) translateZ(25px)'],['右','rotateY(90deg) translateZ(25px)'],['左','rotateY(-90deg) translateZ(25px)'],['上','rotateX(90deg) translateZ(25px)'],['下','rotateX(-90deg) translateZ(25px)']]
+   .map(f=>'<div class="f" data-v="'+f[0]+'" style="transform:'+f[1]+'">'+f[0]+'</div>').join('')+'</div></div>'+
+  '<div class="bar"><button data-a="L" title="向左轉">⟲</button><button data-a="H" title="回到預設視角">⌂</button><button data-a="R" title="向右轉">⟳</button></div>'+
+  '<div class="bar"><button data-a="U" title="俯視更高">▲</button><button data-a="D" title="視角放低">▼</button><button data-a="Z+" title="放大">＋</button><button data-a="Z-" title="縮小">－</button></div>';
+ document.body.appendChild(box);
+ const cube=box.querySelector('.cube'),ring=box.querySelector('.ring'),stage=box.querySelector('.vcs');
+ let tw=null;
+ function to(a2,e2,z2){const a0=az,e0=el,z0=zoom;let da=a2-a0;da=Math.atan2(Math.sin(da),Math.cos(da));const t0=performance.now(),T=420;goal=null;
+  tw=t0;(function f(){if(tw!==t0)return;const k=Math.min(1,(performance.now()-t0)/T),u=k*k*(3-2*k);az=a0+da*u;el=e0+(e2-e0)*u;if(z2!=null)zoom=z0+(z2-z0)*u;if(k<1)requestAnimationFrame(f)})()}
+ const PRE={'前':[0,.45],'後':[Math.PI,.45],'右':[Math.PI/2,.45],'左':[-Math.PI/2,.45],'上':[null,1.5],'下':[null,.25]};
+ let ds=null;
+ stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);ds={x:e.clientX,y:e.clientY,m:0,t:e.target.closest('.f')};tw=null;e.stopPropagation()});
+ stage.addEventListener('pointermove',e=>{if(!ds)return;const dx=e.clientX-ds.x,dy=e.clientY-ds.y;ds.m+=Math.abs(dx)+Math.abs(dy);ds.x=e.clientX;ds.y=e.clientY;if(ds.m>5){az-=dx*.012;el=Math.min(1.5,Math.max(.25,el+dy*.01))}e.stopPropagation()});
+ stage.addEventListener('pointerup',e=>{if(ds&&ds.m<=5&&ds.t){const v=PRE[ds.t.dataset.v];to(v[0]==null?az:v[0],v[1])}ds=null;e.stopPropagation()});
+ stage.addEventListener('pointercancel',()=>{ds=null});
+ box.querySelectorAll('.bar button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.a;
+  if(k==='L')to(az-Math.PI/6,el);else if(k==='R')to(az+Math.PI/6,el);else if(k==='H')to(-.55,.6,1);
+  else if(k==='U')to(az,Math.min(1.5,el+.2));else if(k==='D')to(az,Math.max(.25,el-.2));
+  else if(k==='Z+')to(az,el,clampZ(zoom*1.3));else to(az,el,clampZ(zoom/1.3))}));
+ window.cdcViewCubeSync=function(){cube.style.transform='rotateX('+(-el)+'rad) rotateY('+(-az)+'rad)';ring.style.transform='rotate('+az+'rad)'};
+})();
+const rc=new THREE.Raycaster(),inf=document.getElementById('in'),SN2={0:'–',1:'✓',5:'!',7:'…'};
+const ndc=e=>new THREE.Vector2(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1),gpl=new THREE.Plane(new THREE.Vector3(0,1,0),0),gp=new THREE.Vector3();
+function dragTarget(e){rc.setFromCamera(ndc(e),cam);const objs=[...excs.map(x=>x.e),...workers.map(x=>x.w),...engs.map(x=>x.w)],h=rc.intersectObjects(objs,true)[0];if(!h)return null;let o=h.object;while(o&&!objs.includes(o))o=o.parent;if(!o)return null;
+ const ex=excs.find(x=>x.e===o);if(ex)return{kind:'e',x:ex};const en=engs.find(x=>x.w===o);if(en)return{kind:'g',x:en};return{kind:'w',x:workers.find(x=>x.w===o)}}
+function dragMove(e){rc.setFromCamera(ndc(e),cam);if(!rc.ray.intersectPlane(gpl,gp))return;
+ if(drag.kind=='e'){const c=cells.find(c=>gp.x>c.xa&&gp.x<c.xb&&gp.z>c.za&&gp.z<c.zb);hov=c||null;drag.x.e.position.set(c?c.cx:gp.x,c?-c.d:0,c?c.cz:gp.z)}
+ else if(drag.kind=='g'){drag.x.w.position.x=gp.x;drag.x.w.position.z=gp.z;drag.x.held=true}
+ else{let bi=0,bd=1e9;PILES.forEach((p,i)=>{const d=(p[1]-gp.x)**2+(p[2]-gp.z)**2;if(d<bd){bd=d;bi=i}});drag.pend=bi;placeWorker(drag.x,bi)}}
+function dragEnd(){const d=drag,x=d.x;drag=null;let ch='';if(d.kind=='g'){x.held=false;x.t=null;x.walkTarget=null;x.roamGoal=null;return}
+ if(d.kind=='e'){const c=hov;hov=null;if(c&&c.n!==x.c.n){const pv=x.c.n;setSt(pv,'g');setSt(c.n,'o');x.c=c;ch='怪手 '+pv+' → '+c.n+'(原格完成)'}else if(c)x.c=c;x.e.position.set(x.c.cx,-x.c.d,x.c.cz);recolor()}
+ // 拖曳移工只改變站的位置，不再自動把樁標記為補完（要改狀態請點樁號後按按鈕）
+ saveSt();cards();if(ch)pushH(ch)}
+function showPile(i){const p=PILES[i];inf.style.display='block';
+ inf.innerHTML='<b>P'+p[0]+'</b>('+TN[zt[i]]+')<br>樁底 GL'+(p[4]/100).toFixed(2)+'m・樁頂 GL'+(p[3]/100).toFixed(2)+'m<br>樁身長 '+((p[3]-p[4])/100).toFixed(2)+'m<br>第'+stage+'層：<b>'+SN[LS[stage-1][i]]+'</b><br>'+[[0,'未標記'],[1,'已補完'],[5,'已補兩次']].map(b=>'<span class="b'+(LS[stage-1][i]==b[0]?' on':'')+'" data-k="'+b[0]+'">'+b[1]+'</span>').join('')+'<br>'+(()=>{if(LS[stage-1][i]==0)return'';if(p[0]<=83)return'<span style="color:#2b6b44">補樁日期：<b>2026-10-31</b></span><br>';const m=META[stage+'_'+p[0]];return m&&m[0]?'<span style="color:#2b6b44">補樁日期：<b>'+m[0]+'</b><br>施工組別：<b>'+(m[1]||'—')+'</b></span><br>':''})()+'<small>各層：'+LS.map(l=>SN2[l[i]]).join(' / ')+'</small>';
+ inf.insertAdjacentHTML('beforeend','<div style="margin-top:8px"><button id="cdcOpenPhotos" type="button" style="padding:7px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#edf3ff;color:#2c4266;cursor:pointer">📷 施工前／後照片</button></div>');
+ inf.querySelector('#cdcOpenPhotos').onclick=()=>cdcOpenPilePhotos(p[0]);
+ inf.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{LS[stage-1][i]=+b.dataset.k;try{localStorage.setItem(LK,JSON.stringify(LS))}catch(e){}postSt(stage,i,+b.dataset.k);paint();pushH('P'+PILES[i][0]+' 第'+stage+'層→'+SN[LS[stage-1][i]]);showPile(i)})}
+let excRestoreMode=false;
+function pickAt(e){rc.setFromCamera(new THREE.Vector2(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1),cam);
+ const h=rc.intersectObjects(excRestoreMode?cells.map(c=>c.m):[...segs,...cells.map(c=>c.m)])[0];if(!h){inf.style.display='none';return}
+ if(excRestoreMode){const c=h.object.userData.cell;if(!c)return;const before=c.s;setSt(c.n,'w');saveSt();recolor();cards();if(before!=='w')pushH('開挖範圍 '+c.n+' → 未開挖');inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b><br>已恢復為未開挖（白色）<br><small>繼續點選其他方格，或按「完成開挖編輯」。</small>';return}
+ if(segs.includes(h.object))return showPile(h.instanceId);
+ const c=h.object.userData.cell;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'開挖中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
+document.querySelectorAll('.b[data-s]').forEach(b=>b.onclick=()=>{stage=+b.dataset.s;document.querySelectorAll('.b[data-s]').forEach(x=>x.classList.toggle('on',x==b));cells.forEach(c=>c.tp.color.setHex(stage==1?TOPC[c.s]:TOPC.p));inf.style.display='none';paint();followKey='';followLatest()});
+const $=id=>document.getElementById(id);
+function toggleExcRestore(on){excRestoreMode=on;$('excRestore').classList.toggle('on',on);$('excDone').style.display=on?'inline-block':'none';$('excRestore').textContent=on?'⬜ 未開挖：請點選綠色方格':'⬜ 未開挖（點選方格）';if(!on)inf.style.display='none'}
+$('excRestore').onclick=()=>{if(stage!==1){alert('請先切換至「第一次開挖(現況)」再編輯。');return}toggleExcRestore(!excRestoreMode)};
+$('excDone').onclick=()=>toggleExcRestore(false);
+$('mode').onclick=e=>{mode=mode=='repair'?'depth':'repair';e.target.textContent=mode=='repair'?'顯示：補樁狀態':'顯示：樁底高程';paint()};
+$('tr').onclick=e=>{glass=!glass;e.target.classList.toggle('on',glass)};
+$('cd').onclick=e=>{showCards=!showCards;if(showCards)cardDef.forEach(d=>d.off=false);e.target.classList.toggle('on',showCards)};
+paint();
+let HS=[],hx=0;
+const snapS=()=>JSON.stringify({cs:Object.fromEntries(cells.map(c=>[c.n,c.s])),ex:excs.map(x=>x.c.n),wk:workers.map(x=>x.pi),LS});
+function pushH(l){HS.length=hx+1;HS.push({l,t:new Date().toTimeString().slice(0,5),s:snapS()});if(HS.length>60)HS.shift();hx=HS.length-1;renderH()}
+function restoreH(i){if(i<0||i>=HS.length)return;const o=JSON.parse(HS[i].s);cells.forEach(c=>{if(o.cs[c.n])c.s=o.cs[c.n]});
+ o.ex.forEach((n,k)=>{if(!excs[k])return;const c=cells.find(c=>c.n===n);excs[k].c=c;excs[k].e.position.set(c.cx,-c.d,c.cz)});
+ o.wk.forEach((pi,k)=>placeWorker(workers[k],pi));LS=o.LS;hx=i;
+ try{localStorage.setItem(LK,JSON.stringify(LS))}catch(e){}saveSt();recolor();paint();inf.style.display='none';renderH()}
+function renderH(){const hp=$('hp');$('un').style.opacity=hx>0?1:.4;$('re').style.opacity=hx<HS.length-1?1:.4;
+ hp.innerHTML='<b>步驟紀錄</b><small style="color:#7a87a3">　點選可回到該步驟</small>'+HS.map((h,i)=>({h,i})).reverse().map(({h,i})=>'<div class="hr'+(i==hx?' cur':'')+'" data-i="'+i+'">'+(i?i+'. ':'')+h.l+' <small style="color:#7a87a3">'+h.t+'</small></div>').join('');
+ hp.querySelectorAll('.hr').forEach(r=>r.onclick=()=>restoreH(+r.dataset.i))}
+$('un').onclick=()=>restoreH(hx-1);$('re').onclick=()=>restoreH(hx+1);
+$('hs').onclick=e=>{const hp=$('hp'),on=hp.style.display!='block';hp.style.display=on?'block':'none';e.target.classList.toggle('on',on)};
+addEventListener('keydown',e=>{if(e.target.id=='q')return;const k=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&k=='z'){e.preventDefault();restoreH(e.shiftKey?hx+1:hx-1)}else if((e.ctrlKey||e.metaKey)&&k=='y'){e.preventDefault();restoreH(hx+1)}});
+HS=[{l:'初始狀態',t:'',s:snapS()}];renderH();
+const bea=new THREE.Group();let beaT=0;
+{const r=new THREE.Mesh(new THREE.RingGeometry(1.2,1.8,32).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xffd23f,transparent:true,opacity:.95,depthTest:false}));r.renderOrder=5;r.position.y=.3;
+ const b=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,14,8),new THREE.MeshBasicMaterial({color:0xffd23f,transparent:true,opacity:.55}));b.position.y=7;bea.add(r,b);bea.visible=false;S.add(bea)}
+// 依原有雲端 META 補樁日期查詢；P1～P83 延續原網站固定 2026-10-31 規則。
+// 日期查詢直接讓樁體發光：覆蓋在原樁身表面的透明加色層，不使用地面圓圈。
+const dateGlowLayers=[];
+const dateGlowMaterial=new THREE.MeshBasicMaterial({color:0xffdf4b,transparent:true,opacity:.55,depthWrite:false,depthTest:true,blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
+for(let j=0;j<NL;j++){
+ const glow=new THREE.InstancedMesh(geo,dateGlowMaterial,PILES.length);
+ glow.frustumCulled=false;glow.renderOrder=4;
+ for(let i=0;i<PILES.length;i++){
+  D.position.set(0,0,0);D.scale.set(0,0,0);D.updateMatrix();glow.setMatrixAt(i,D.matrix);
+ }
+ glow.instanceMatrix.needsUpdate=true;S.add(glow);dateGlowLayers.push(glow);
+}
+function updateDateGlow(){
+ const ids=new Set(dateMatches.map(x=>x.i));
+ PILES.forEach((p,i)=>{
+  for(let j=0;j<NL;j++){
+   if(ids.has(i)){
+    segs[j].getMatrixAt(i,D.matrix);D.matrix.decompose(D.position,D.quaternion,D.scale);
+    D.scale.x*=1.32;D.scale.z*=1.32;
+   }else{D.position.set(0,0,0);D.scale.set(0,0,0)}
+   D.updateMatrix();dateGlowLayers[j].setMatrixAt(i,D.matrix);
+  }
+ });
+ dateGlowLayers.forEach(m=>m.instanceMatrix.needsUpdate=true);
+}
+let dateMatches=[],dateFilterActive=false;
+function normRepairDate(d){const m=String(d||'').trim().match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);return m?m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0'):''}
+function pileRepairRecords(i){const n=PILES[i][0],out=[];
+ for(let sg=1;sg<=4;sg++){
+  if(!LS[sg-1]||!LS[sg-1][i])continue;
+  const meta=META[sg+'_'+n],date=n<=83?'2026-10-31':normRepairDate(meta&&meta[0]);
+  if(date)out.push({date,stage:sg,team:n<=83?'':(meta&&meta[1]||'')});
+ }
+ return out;
+}
+function clearDateMarks(){dateMatches=[];updateDateGlow();dateFilterActive=false;document.getElementById('dateResults').innerHTML='';document.getElementById('dateStatus').textContent='已清除樁體發光；原有顏色維持不變。'}
+function dateFind(){
+ const a=document.getElementById('dateFrom').value,b=document.getElementById('dateType').value==='day'?a:document.getElementById('dateTo').value;
+ if(!a||!b||b<a){document.getElementById('dateStatus').textContent='請選擇有效的日期範圍。';return}
+ const matched=[];
+ PILES.forEach((p,i)=>{const records=pileRepairRecords(i).filter(r=>r.date>=a&&r.date<=b);if(!records.length)return;
+  matched.push({i,n:p[0],records});
+ });
+ dateMatches=matched;updateDateGlow();dateFilterActive=true;
+ document.getElementById('dateStatus').textContent='找到 '+matched.length+' 支樁（依目前已儲存的補樁日期）；樁體發光但保留原本顏色。';
+ const box=document.getElementById('dateResults');box.replaceChildren();
+ // 查詢完成後自動移動鏡頭至第一支符合條件的樁；多支結果可在清單逐支定位。
+ if(matched.length){
+  const first=matched[0],p=PILES[first.i];
+  goal={v:new THREE.Vector3(p[1],-2,p[2]),z:5.5};
+  showPile(first.i);
+  document.getElementById('datePanel').classList.remove('open');
+ }else{
+  document.getElementById('datePanel').classList.add('open');
+ }
+ matched.forEach(item=>{const btn=document.createElement('button');btn.type='button';btn.textContent='P'+item.n+'｜'+item.records.map(r=>r.date+'／第'+r.stage+'層'+(r.team?'／'+r.team:'')).join('、');
+ btn.addEventListener('click',()=>{const p=PILES[item.i];goal={v:new THREE.Vector3(p[1],-2,p[2]),z:5.5};bea.position.set(p[1],0,p[2]);bea.visible=true;beaT=performance.now();showPile(item.i);document.getElementById('datePanel').classList.remove('open')});box.appendChild(btn)});
+}
+document.getElementById('dateOpen').addEventListener('click',()=>document.getElementById('datePanel').classList.toggle('open'));
+document.getElementById('dateClose').addEventListener('click',()=>document.getElementById('datePanel').classList.remove('open'));
+document.getElementById('dateType').addEventListener('change',e=>document.getElementById('dateToWrap').style.display=e.target.value==='range'?'block':'none');
+document.getElementById('dateFind').addEventListener('click',dateFind);
+document.getElementById('dateClear').addEventListener('click',clearDateMarks);
+function doSearch(){const raw=$('q').value.trim(),q=raw.toUpperCase().replace(/['’]/g,'′').replace(/\s+/g,'');if(!q)return;
+ const m=q.match(/^P?(\d+)$/);let v,zz;
+ if(m){const n=+m[1];if(n<1||n>PILES.length){inf.style.display='block';inf.textContent='找不到樁號：'+raw;return}
+  const p=PILES[n-1];v=new THREE.Vector3(p[1],-2,p[2]);zz=5.5;bea.position.set(p[1],0,p[2]);bea.visible=true;beaT=performance.now();showPile(n-1)}
+ else{const c=cells.find(c=>c.n.toUpperCase()===q);if(!c){inf.style.display='block';inf.textContent='找不到：'+raw;return}
+  v=new THREE.Vector3(c.cx,-3,c.cz);zz=3.2;bea.visible=false;inf.style.display='block';inf.innerHTML='<b>'+c.n+'</b>('+TN[c.t]+')<br>'+({g:'已完成',o:'開挖中',w:'未開挖'})[c.s]+'<br>目前挖深 '+c.d.toFixed(2)+'m<br>最終 GL-'+DEP[c.t][3]+'m'}
+ goal={v,z:zz};$('q').blur()}
+$('qb').onclick=doSearch;$('q').addEventListener('keydown',e=>{if(e.key=='Enter')doSearch()});
+const v3=new THREE.Vector3();let ttx=0;
+let lastT=0;function loop(t){const k=t/1000,dt=Math.min(.1,(t-lastT)/1000||.016);lastT=t;stepEngs(dt,k);sceneWalk(dt);
+ cells.forEach(c=>{const D=DEP[c.t];const tgt=stage>1?D[stage-1]:c.s=='g'?D[0]:c.s=='o'?D[0]*(.3+.7*(.5+.5*Math.sin(k*.8+c.ph))):0;
+  c.d+=(tgt-c.d)*.06;const h=22-c.d;c.m.scale.y=h;c.m.position.y=-22+h/2;
+  c.sd.opacity=glass?.22:1;c.tp.opacity=glass?.4:1;
+  if(stage==1&&c.s=='o'){c.tp.emissive.setHex(0x663300);c.tp.emissiveIntensity=.4+.4*Math.sin(k*3+c.ph)}else if(c===hov){c.tp.emissive.setHex(0x3a6ab0);c.tp.emissiveIntensity=.7}else c.tp.emissive.setHex(0)});
+ excs.forEach((x,i)=>{const u=x.e.userData;x.e.position.y=drag&&drag.x===x?(hov?-hov.d:0):-x.c.d;u.sw.rotation.y=x.base+Math.sin(k*.5+i*2)*.7;
+  u.bp.rotation.x=-.5+.25*Math.sin(k*1.3+i);u.sp.rotation.x=1+.5*Math.sin(k*1.3+1+i);u.kp.rotation.x=.5+.5*Math.sin(k*1.3+2+i)});
+ workers.forEach(x=>{const u=x.w.userData;x.w.position.y=-(x.c?x.c.d:0);u.arm.rotation.x=-1.1+Math.sin(k*6+x.ph)*.6;u.body.position.y=1.35+Math.abs(Math.sin(k*6+x.ph))*.06});
+ const ex0=excs[0];ringM.visible=stage==1&&!!ex0;if(ex0)ringM.position.set(ex0.e.position.x,.4,ex0.e.position.z);   // 作業半徑圈跟著怪手ringM.scale.setScalar(1+.06*Math.sin(k*2.5));
+ cdcTruckStep(dt);
+ if(goal){tg.lerp(goal.v,.1);zoom+=(goal.z-zoom)*.1;if(tg.distanceTo(goal.v)<.05&&Math.abs(goal.z-zoom)<.02)goal=null}
+ if(bea.visible){bea.scale.setScalar(1+.15*Math.sin(k*5));if(performance.now()>beaT+12000)bea.visible=false}
+ dateGlowMaterial.opacity=dateFilterActive?.40+.20*(.5+.5*Math.sin(k*4)):0;
+ place();if(window.cdcViewCubeSync)cdcViewCubeSync();
+ cardDef.forEach(d=>{v3.copy(d.a()).project(cam);d.el.style.display=showCards&&!d.off&&Math.abs(v3.x)<1.1&&Math.abs(v3.y)<1.1&&!(d===cardDef[3]&&stage>1)?'block':'none';
+  d.el.style.transform='translate('+((v3.x+1)/2*innerWidth)+'px,'+((1-v3.y)/2*innerHeight)+'px) translate(-50%,-100%)'});
+ R.render(S,cam);requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+
+// 移工自動跟進最新補樁進度：找目前層別「補樁日期最新」那天裡樁號最大的那支，移工站到它旁邊。
+// 只有最新進度改變時才移動；手動拖曳移工後，會停在拖曳的位置，直到雲端有新的補樁紀錄。
+let followKey='';
+function followLatest(){
+ const w=workers[0];if(!w||(drag&&drag.x===w))return;
+ let best=null;
+ PILES.forEach((p,i)=>{if(!LS[stage-1]||!LS[stage-1][i])return;const m=META[stage+'_'+p[0]],d=m&&normRepairDate(m[0]);if(!d)return;
+  if(!best||d>best.d||(d===best.d&&p[0]>best.n))best={d,n:p[0],i}});
+ if(!best)return;
+ const k=stage+'_'+best.d+'_'+best.n;if(k===followKey)return;followKey=k;
+ if(w.pi!==best.i){placeWorker(w,best.i);saveSt()}
+}
+const GAS='https://script.google.com/macros/s/AKfycbzE6lblnHTrYXdRrnlYcNJ7gYPXjTW9oaBusMCaqs5dBJy9ce70Z4NsWh11_F8SVZiN/exec';let SRV={},META={},syncOk=null;
+function postSt(sg,i,v){cloudFetch(GAS,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({stage:sg,piles:[PILES[i][0]],status:v,date:new Date().toISOString().slice(0,10),source:'3D'})}).then(r=>r.json()).then(()=>{SRV[sg+'_'+PILES[i][0]]=v}).catch(()=>{})}
+async function pull(){try{const j=await (await cloudFetch(GAS+'?_t='+Date.now()+'_'+Math.random(),{cache:'no-store'})).json();if(!j.ok)throw 0;const idx={};PILES.forEach((p,i)=>idx[p[0]]=i);let ch=false;META=j.meta||{};
+ Object.keys(j.data).forEach(sg=>Object.keys(j.data[sg]).forEach(n=>{const i=idx[n],v=j.data[sg][n],k=sg+'_'+n;if(i==null||sg<1||sg>4)return;if(SRV[k]!==v){SRV[k]=v;if(LS[sg-1][i]!==v){LS[sg-1][i]=v;ch=true}}}));
+ if(ch){try{localStorage.setItem(LK,JSON.stringify(LS))}catch(e){}paint()}if(dateFilterActive)dateFind();followLatest();syncOk=true}catch(e){syncOk=false}
+ const el=document.getElementById('syncpill');if(el){el.textContent=syncOk?'☁ 已連線 Google 試算表':'☁ 未連線（僅本機）';el.style.opacity=syncOk?1:.6}}
+(function(){const d=document.createElement('div');d.id='syncpill';d.style.cssText='position:fixed;left:8px;bottom:8px;z-index:9;font:12px sans-serif;background:rgba(20,30,50,.75);color:#fff;padding:3px 8px;border-radius:10px';document.body.appendChild(d);pull();setInterval(pull,6000)})();
+
+// 施工照片：使用同一個 Apps Script 專案內的 樁號照片管理.gs，避免公開 Google Drive。
+let cdcCurrentPile=null,cdcPhotoRequest=0,cdcPhotoBusy=false;
+const cdcEl=id=>document.getElementById(id);
+function cdcPhotoCall(name,...args){return apiCall(name,...args)}
+function cdcPhotoMessage(message){cdcEl('cdcPhotoStatus').textContent=message}
+async function cdcOpenPilePhotos(pile){
+ cdcCurrentPile='P'+String(pile).replace(/^P/i,'');
+ cdcEl('cdcPhotoTitle').textContent=cdcCurrentPile+'｜施工前後照片';
+ cdcEl('cdcPhotoModal').classList.add('open');
+ await cdcReloadPilePhotos();
+}
+function cdcClosePilePhotos(){cdcPhotoRequest++;cdcCurrentPile=null;cdcEl('cdcPhotoModal').classList.remove('open')}
+async function cdcReloadPilePhotos(){
+ const pile=cdcCurrentPile,req=++cdcPhotoRequest;
+ cdcEl('cdcPhotoBeforeList').replaceChildren();
+ cdcEl('cdcPhotoAfterList').replaceChildren();
+ cdcPhotoMessage('讀取 '+pile+' 的照片中…');
+ try{
+  const rows=await cdcPhotoCall('cdcListPilePhotos',pile);
+  if(req!==cdcPhotoRequest||pile!==cdcCurrentPile)return;
+  for(const category of ['before','after']){
+   const list=cdcEl(category==='before'?'cdcPhotoBeforeList':'cdcPhotoAfterList');
+   const selected=rows.filter(x=>x.category===category);
+   if(!selected.length){list.textContent='尚無照片';continue}
+   for(const item of selected){
+    const card=document.createElement('div');card.className='cdcPhotoItem';
+    const img=document.createElement('img');img.alt=item.fileName||'施工照片';img.loading='lazy';
+    const caption=document.createElement('small');
+    caption.textContent=(item.uploadedAt||'').slice(0,10)+' '+(item.fileName||'');
+    img.addEventListener('click',()=>{if(img.src.startsWith('data:')){
+     cdcEl('cdcPhotoZoom').querySelector('img').src=img.src;
+     cdcEl('cdcPhotoZoom').classList.add('open');
+    }});
+    const del=document.createElement('button');
+    del.type='button';del.textContent='🗑 刪除照片';del.className='cdcDeletePhoto';
+    del.style.cssText='width:100%;margin-top:6px;background:#fff1f1;color:#a32323;border:1px solid #f2b4b4;border-radius:6px;padding:6px;cursor:pointer;font-size:12px';
+    del.addEventListener('click',async()=>{
+      if(cdcPhotoBusy)return;
+      if(!confirm('確定刪除 '+pile+' 的「'+(item.fileName||'這張照片')+'」？\n照片會移到 Google Drive 垃圾桶，並從 3D 照片清單移除。'))return;
+      cdcPhotoBusy=true;del.disabled=true;cdcPhotoMessage('正在刪除照片…');
+      try{
+        await cdcPhotoCall('cdcDeletePilePhoto',item.fileId,pile);
+        if(cdcCurrentPile===pile)await cdcReloadPilePhotos();
+      }catch(err){cdcPhotoMessage('刪除失敗：'+err.message);del.disabled=false}
+      finally{cdcPhotoBusy=false}
+    });
+    card.append(img,caption,del);list.appendChild(card);
+    cdcPhotoCall('cdcGetPilePhoto',item.fileId,pile).then(data=>{
+     if(req!==cdcPhotoRequest||pile!==cdcCurrentPile)return;
+     img.src='data:'+data.mimeType+';base64,'+data.base64;
+    }).catch(err=>{caption.textContent='預覽失敗：'+err.message});
+   }
+  }
+  cdcPhotoMessage('已讀取 '+rows.length+' 張照片');
+ }catch(e){if(req===cdcPhotoRequest)cdcPhotoMessage('讀取失敗：'+e.message)}
+}
+async function cdcPhotoEncode(file){
+ if(!file.type.startsWith('image/'))throw Error('請選擇圖片檔');
+ // 壓縮手機原始照片，避免 Apps Script 傳輸超過 8MB。
+ const dataUrl=await new Promise((resolve,reject)=>{
+  const r=new FileReader();r.onload=()=>resolve(r.result);
+  r.onerror=()=>reject(Error('照片讀取失敗'));r.readAsDataURL(file);
+ });
+ const img=await new Promise((resolve,reject)=>{
+  const im=new Image();im.onload=()=>resolve(im);
+  im.onerror=()=>reject(Error('照片格式無法讀取'));im.src=dataUrl;
+ });
+ const scale=Math.min(1,1800/Math.max(img.width,img.height));
+ const cv=document.createElement('canvas');
+ cv.width=Math.max(1,Math.round(img.width*scale));
+ cv.height=Math.max(1,Math.round(img.height*scale));
+ const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
+ cx.drawImage(img,0,0,cv.width,cv.height);
+ const encoded=cv.toDataURL('image/jpeg',.78);
+ if(encoded.length>10*1024*1024)throw Error('圖片太大，請縮小後再上傳');
+ return {base64:encoded.split(',')[1],mimeType:'image/jpeg'};
+}
+async function cdcUploadFromInput(input,category){
+ const file=input.files&&input.files[0];if(!file||!cdcCurrentPile||cdcPhotoBusy)return;
+ const pile=cdcCurrentPile;cdcPhotoBusy=true;
+ cdcEl('cdcPhotoBefore').disabled=cdcEl('cdcPhotoAfter').disabled=true;
+ cdcPhotoMessage('正在處理並上傳 '+file.name+'，請勿關閉網頁…');
+ try{
+  const image=await cdcPhotoEncode(file);
+  if(cdcCurrentPile!==pile)throw Error('樁號已變更，請重新上傳');
+  await cdcPhotoCall('cdcUploadPilePhoto',{pile,category,...image});
+  cdcPhotoMessage('上傳成功，正在更新照片清單…');
+  await cdcReloadPilePhotos();
+ }catch(e){cdcPhotoMessage('上傳失敗：'+e.message)}
+ finally{cdcPhotoBusy=false;input.value='';cdcEl('cdcPhotoBefore').disabled=cdcEl('cdcPhotoAfter').disabled=false}
+}
+document.getElementById('cdcPhotoQuick').addEventListener('click',()=>{
+ const raw=prompt('請輸入要查看施工照片的樁號，例如 P97：','P97');
+ if(raw===null)return;
+ const m=String(raw).trim().match(/^P?(\d+)$/i);
+ if(!m||!PILES.some(p=>p[0]===Number(m[1]))){alert('找不到此樁號，請輸入有效樁號（例如 P97）');return}
+ cdcOpenPilePhotos(Number(m[1]));
+});
+cdcEl('cdcPhotoBefore').addEventListener('change',e=>cdcUploadFromInput(e.target,'before'));
+cdcEl('cdcPhotoAfter').addEventListener('change',e=>cdcUploadFromInput(e.target,'after'));
+cdcEl('cdcPhotoClose').addEventListener('click',cdcClosePilePhotos);
+cdcEl('cdcPhotoZoom').addEventListener('click',()=>cdcEl('cdcPhotoZoom').classList.remove('open'));
+
+// 僅供視覺診斷；不修改 sceneWalk、stepEngs 或既有避障判斷。
+const walkDiagGroup=new THREE.Group();S.add(walkDiagGroup);walkDiagGroup.visible=false;
+const walkDiagMaterials={
+ ok:new THREE.MeshBasicMaterial({color:0x1684f8,transparent:true,opacity:.38,depthWrite:false,side:THREE.DoubleSide}),
+ blocked:new THREE.MeshBasicMaterial({color:0xf04444,transparent:true,opacity:.48,depthWrite:false,side:THREE.DoubleSide}),
+ excavation:new THREE.MeshBasicMaterial({color:0xffbf36,transparent:true,opacity:.42,depthWrite:false,side:THREE.DoubleSide})
+};
+function walkDiagBuild(){
+ while(walkDiagGroup.children.length){const o=walkDiagGroup.children.pop();if(o.parent)o.parent.remove(o);if(o.geometry)o.geometry.dispose()}
+ const geo=new THREE.PlaneGeometry(1,1);geo.rotateX(-Math.PI/2);
+ const instances={ok:[],blocked:[],excavation:[]};
+ // 對每個現有格子做 2.5 模型單位取樣；使用原本 sceneWalkAllowed 的判斷。
+ cells.forEach(c=>{
+  const xa=Math.min(c.xa,c.xb),xb=Math.max(c.xa,c.xb),za=Math.min(c.za,c.zb),zb=Math.max(c.za,c.zb);
+  const nx=Math.max(1,Math.ceil((xb-xa)/2.5)),nz=Math.max(1,Math.ceil((zb-za)/2.5));
+  for(let i=0;i<nx;i++)for(let j=0;j<nz;j++){
+   const x=xa+(i+.5)*(xb-xa)/nx,z=za+(j+.5)*(zb-za)/nz;
+   const kind=c.s!=='w'?'excavation':sceneWalkAllowed(x,z,null)?'ok':'blocked';
+   instances[kind].push({x,z,w:(xb-xa)/nx,h:(zb-za)/nz});
+  }
+ });
+ const dummy=new THREE.Object3D();
+ for(const kind of Object.keys(instances)){
+  const pts=instances[kind];if(!pts.length)continue;
+  const mesh=new THREE.InstancedMesh(geo,walkDiagMaterials[kind],pts.length);
+  mesh.frustumCulled=false;mesh.renderOrder=15;
+  pts.forEach((p,i)=>{dummy.position.set(p.x,.14,p.z);dummy.scale.set(p.w*.94,1,p.h*.94);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)});
+  mesh.instanceMatrix.needsUpdate=true;walkDiagGroup.add(mesh);
+ }
+ document.getElementById('walkDiagInfo').textContent='取樣點：可通行 '+instances.ok.length+'／白格內阻擋 '+instances.blocked.length+'／開挖禁入 '+instances.excavation.length;
+}
+document.getElementById('walkDiagToggle').onclick=()=>{
+ walkDiagGroup.visible=!walkDiagGroup.visible;
+ if(walkDiagGroup.visible)walkDiagBuild();
+ document.getElementById('walkDiagToggle').textContent=walkDiagGroup.visible?'隱藏通行檢查':'顯示通行檢查';
+};
+document.getElementById('walkDiagRefresh').onclick=()=>{walkDiagBuild();walkDiagGroup.visible=true;document.getElementById('walkDiagToggle').textContent='隱藏通行檢查'};
+
+// 只顯示路線，不改動任何人物位置或自動行走程式。
+const walkRouteGroup=new THREE.Group();S.add(walkRouteGroup);
+let walkRouteShown=false;
+function walkRouteClear(){while(walkRouteGroup.children.length){const o=walkRouteGroup.children[0];walkRouteGroup.remove(o);if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose()}}
+function walkRouteBuild(){
+ walkRouteClear();
+ const info=document.getElementById('walkRouteInfo');
+ // 直接以現有白色格子為節點，避免另造一套與工地不一致的世界座標網格。
+ const nodes=[];
+ for(const c of cells){if(c.s!=='w')continue;
+  const x=(c.xa+c.xb)/2,z=(c.za+c.zb)/2;
+  if(sceneWalkAllowed(x,z,null))nodes.push({x,z});
+ }
+ if(!nodes.length){info.textContent='找不到可通行白色格子中心，請先檢查判定規則';return}
+ // 人員碰撞排除以實際起點計算；路線僅作視覺檢查。
+ const starts=[];
+ for(const v of sceneObjects){if(v.kind!=='tree'&&v.mesh)starts.push({x:v.mesh.position.x,z:v.mesh.position.z})}
+ for(const e of engs){if(e.w)starts.push({x:e.w.position.x,z:e.w.position.z})}
+ const origin=starts[0]||nodes[0];
+ const near=(p)=>{let best=-1,bd=Infinity;for(let i=0;i<nodes.length;i++){const d=Math.hypot(nodes[i].x-p.x,nodes[i].z-p.z);if(d<bd){bd=d;best=i}}return best};
+ const begin=near(origin);
+ // 鄰接距離由實際白色格中心距離推估；每段再做路徑碰撞檢查。
+ const distances=[];
+ for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+  const d=Math.hypot(nodes[i].x-nodes[j].x,nodes[i].z-nodes[j].z);
+  if(d>.1&&d<14)distances.push(d);
+ }
+ distances.sort((a,b)=>a-b);
+ const spacing=distances.length?distances[Math.floor(distances.length*.08)]:5;
+ const reach=Math.min(15,Math.max(4,spacing*1.55));
+ const prev=new Int32Array(nodes.length).fill(-2),queue=[begin];prev[begin]=-1;
+ for(let head=0;head<queue.length;head++){
+  const a=queue[head],pa=nodes[a];
+  for(let b=0;b<nodes.length;b++){
+   if(prev[b]!==-2||a===b)continue;
+   const pb=nodes[b],d=Math.hypot(pa.x-pb.x,pa.z-pb.z);
+   if(d>reach)continue;
+   if(!sceneWalkPathAllowed(pa.x,pa.z,pb.x,pb.z,null))continue;
+   prev[b]=a;queue.push(b);
+  }
+ }
+ let dest=begin,far=-1;
+ for(const k of queue){const d=Math.hypot(nodes[k].x-nodes[begin].x,nodes[k].z-nodes[begin].z);if(d>far){far=d;dest=k}}
+ const route=[];for(let k=dest;k!==-1;k=prev[k])route.push(nodes[k]);route.reverse();
+ const path=[new THREE.Vector3(origin.x,.65,origin.z),...route.map(p=>new THREE.Vector3(p.x,.65,p.z))];
+ if(path.length>1){
+  const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(path),new THREE.LineBasicMaterial({color:0x7c3aed,depthTest:false,linewidth:3}));line.renderOrder=30;walkRouteGroup.add(line);
+ }
+ for(const [idx,pt,color] of [[0,path[0],0x16a34a],[1,path[path.length-1],0x7c3aed]]){
+  const mark=new THREE.Mesh(new THREE.SphereGeometry(idx?1.1:.8,12,8),new THREE.MeshBasicMaterial({color,depthTest:false}));mark.position.copy(pt);mark.renderOrder=31;walkRouteGroup.add(mark);
+ }
+ info.textContent='路線檢查：白格節點 '+nodes.length+'、起點可連通 '+queue.length+'、最遠直線距離 '+far.toFixed(1)+' 模型單位；紫線僅為測試，不會讓人物移動。';
+}
+document.getElementById('walkRouteTest').onclick=()=>{
+ walkRouteShown=!walkRouteShown;
+ if(walkRouteShown)walkRouteBuild();else walkRouteClear();
+ document.getElementById('walkRouteTest').textContent=walkRouteShown?'隱藏跨區路線':'顯示跨區路線';
+};
+</script></body></html>
